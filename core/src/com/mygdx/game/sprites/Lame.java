@@ -11,10 +11,12 @@ public class Lame {
     public Vector3 position;
     public Vector3 velocity;
 
-    public static final int GRAVITY = -15;
+    public int GRAVITY = -15;
     public static final int MOVEMENT = 100;
 
     public Sprite lame;
+    public boolean isOnCloud=true;
+    public boolean lookingLeft;
 
 
 
@@ -22,10 +24,10 @@ public class Lame {
     public Lame (int x, int y) {
         position = new Vector3(x,y,0);
         velocity = new Vector3(0,0,0);
-        lame = new Sprite(new Texture("lama1.PNG"));
-
-
+        lame = new Sprite(new Texture("lameLeftStay.PNG"));
     }
+
+
 
     public void update(float dt) {
         if (position.y>0)
@@ -35,22 +37,52 @@ public class Lame {
         if (position.y<=0)
             position.y=0;
         velocity.scl(1/dt);
-        if (position.x<=0) position.x=0;
-        if (position.x>= Lama.WIDTH/2-lame.getWidth()/2) position.x=Lama.WIDTH/2-lame.getWidth()/2;
+        if (position.x<=0)
+            position.x=0;
+        if (position.x>= Lama.WIDTH/2-lame.getWidth()/2)
+            position.x=Lama.WIDTH/2-lame.getWidth()/2;
     }
+
+
 
     public void jump() {
-        velocity.y=250;
+        if (isOnCloud==true)
+            velocity.y=350;
+        else
+            velocity.y=60;
     }
+
 
     public void left() {
+        lookingLeft=true;
         if (position.x>0)
-            position.x+=-1;
+            position.x+=-2;
+        if (isOnCloud) lame=new Sprite(new Texture("lameLeftStay.PNG"));
+        else lame=new Sprite(new Texture("lameLeftMove.PNG"));
     }
 
+
+
     public void right() {
+        lookingLeft=false;
         if (position.x<Lama.WIDTH/2-lame.getWidth()/2)
-            position.x+= 1;
+            position.x+= 2;
+        if (isOnCloud)
+            lame=new Sprite(new Texture("lameRightStay.PNG"));
+        else
+            lame=new Sprite(new Texture("LameRightMove.PNG"));
+
     }
+
+
+
+    public void onCloud() {
+        isOnCloud=true;
+        if (lookingLeft)
+            lame=new Sprite(new Texture("lameLeftStay.PNG"));
+        else
+            lame=new Sprite(new Texture("lameRightStay.PNG"));
+    }
+
 
 }

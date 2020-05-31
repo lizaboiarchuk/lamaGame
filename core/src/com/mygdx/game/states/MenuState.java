@@ -25,7 +25,6 @@ public class MenuState extends State {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             System.out.println("pressed");
             gsm.set(new PlayState(gsm));
-            dispose();
         }
 
     }

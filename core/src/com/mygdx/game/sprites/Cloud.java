@@ -2,29 +2,74 @@ package com.mygdx.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import java.util.concurrent.ThreadLocalRandom;
+import com.mygdx.game.Lama;
 
 import java.util.Random;
 
 public class Cloud {
     public static final int CLOUD_HEIGHT = 19;
-
+    public static final int CLOUD_WIDTH=50;
     private static final int RANDOMfrom = 10;
     private static final int RANDOMto = 180;
 
+    private int left_or_right ;
+    private int one_or_two_clouds_a_line;
+    public boolean moveable=false;
+    public int velocity=1;
 
     public Texture cloud;
     public Vector2 position;
     public Random rand;
 
 
-    public Cloud(float y) {
+    //constructor
+    public Cloud(float y, Cloud c) {
         cloud= new Texture("cloud1.png");
         rand = new Random();
-        position = new Vector2(rand.nextInt(RANDOMto)+RANDOMfrom, y);
+        if (c==null)
+            position = new Vector2(rand.nextInt(RANDOMto)+RANDOMfrom, y);
+        else {
+            reposition(y,c);
+        }
     }
 
-    public void reposition(float y) {
-        position = new Vector2(rand.nextInt(RANDOMto)+RANDOMfrom, y);
+
+    //creates a new position for a cloud based on a location of a previous cloud
+    public void reposition(float y,Cloud c) {
+            left_or_right = rand.nextInt(2);
+            if ((left_or_right==0) && (c.position.x<40)) left_or_right=1;
+            if ((left_or_right==1) && (c.position.x>165)) left_or_right=0;
+            int xCor;
+            if (left_or_right==0) {
+                if (c.position.x<95)
+                    xCor=ThreadLocalRandom.current().nextInt(5,(int)c.position.x-30+1);
+                else
+                    xCor=ThreadLocalRandom.current().nextInt((int)c.position.x-90,(int)c.position.x-30+1);
+                position = new Vector2(xCor, y);
+            }
+            else {
+                if (c.position.x>115)
+                    xCor=ThreadLocalRandom.current().nextInt( (int)c.position.x+30, 197);
+                else
+                    xCor=ThreadLocalRandom.current().nextInt( (int)c.position.x+30, (int) c.position.x+81);
+                position = new Vector2(xCor, y);
+            }
     }
+
+
+
+    //make a cloud move from side to side
+    public void move() {
+        if (moveable==true) {
+            position.x += velocity;
+            if (position.x >= 200)
+                velocity = -1;
+            if (position.x <= 0)
+                velocity = 1;
+        }
+    }
+
+
 
 }
