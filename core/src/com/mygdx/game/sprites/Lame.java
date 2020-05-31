@@ -33,6 +33,7 @@ public class Lame {
         if (position.y>0)
             velocity.add(0, GRAVITY,0);
         velocity.scl(dt);
+       // position.add(velocity);
         position.add(0,velocity.y+MOVEMENT*dt,0);
         if (position.y<=0)
             position.y=0;
@@ -46,6 +47,7 @@ public class Lame {
 
 
     public void jump() {
+        System.out.println("jump");
         if (isOnCloud==true)
             velocity.y=350;
         else

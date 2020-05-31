@@ -42,6 +42,7 @@ public class PlayState extends State{
         for (int i=1; i<=CLOUDS_COUNT; i++) {
             clouds.add(new Cloud(i*(SPACE_BETWEEN_CLOUDS+Cloud.CLOUD_HEIGHT),lastCloud));
             lastCloud = clouds.get(i-1);
+            System.out.println(lastCloud.position.x + " " + lastCloud.position.y + " cloud");
         }
 
         clouds.get(5).moveable=true;
@@ -70,29 +71,33 @@ public class PlayState extends State{
     public void update(float dt) {
         handleInput();
         lama.update(dt);
-        camera.position.y=lama.position.y+80;
+       camera.position.y=lama.position.y+80; //+80
 
-        for (int i=0; i<clouds.size(); i++)
+        for (int d=0; d<clouds.size(); d++)
         {
-            Cloud cl = clouds.get(i);
+            Cloud cl = clouds.get(d);
             if ((camera.position.y - (camera.viewportHeight/2)) > (cl.position.y+Cloud.CLOUD_HEIGHT+200)) {
                 cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud);
                 lastCloud=cl;
-                System.out.println(cl.position.x + " " + cl.position.y + " cloud");
+             //   System.out.println(cl.position.x + " " + cl.position.y + " cloud");
             }
         }
 
+
+
+
         for (Cloud c:clouds) {
-         //   c.move();
-            if ((lama.position.y<=c.position.y+Cloud.CLOUD_HEIGHT) && (lama.position.y>=Cloud.CLOUD_HEIGHT-5) && (lama.position.x+15>=c.position.x) && (lama.position.x<=c.position.x+Cloud.CLOUD_WIDTH)) {
+
+            if ((lama.position.y<=c.position.y+19) && (lama.position.y>=c.position.y+15) && (lama.position.x+15>=c.position.x) && (lama.position.x<=c.position.x+Cloud.CLOUD_WIDTH)) {
                 lama.velocity.set(new Vector3(0,0,0));
-                lama.position.y=c.position.y+Cloud.CLOUD_HEIGHT-4;
-                System.out.println(lama.position.x + " " + lama.position.y);
-                System.out.println(lama.velocity);
+                System.out.println(c.position + "cl");
+                System.out.println(lama.position + "lama");
+                lama.position.y=c.position.y+15;
+                System.out.println("on cloud");
                 lama.onCloud();
-                break;
             }
         }
+       // lama.isOnCloud=false;
         camera.update();
     }
 
