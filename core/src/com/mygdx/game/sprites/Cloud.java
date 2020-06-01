@@ -21,6 +21,9 @@ public class Cloud {
     public boolean visited;
     public boolean hasCoin;
     public boolean magnit;
+    public boolean canBeMagnit=true;
+
+
 
     public int velocity=1;
 
@@ -46,7 +49,7 @@ public class Cloud {
         mag = new Texture("magnit.png");
         rand = new Random();
         if (c==null)
-            position = new Vector2(rand.nextInt(RANDOMto)+RANDOMfrom, y);
+            position = new Vector2(200, y);
         else {
             reposition(y,c);
         }
@@ -63,9 +66,11 @@ public class Cloud {
             hasCoin=true;
         else
             hasCoin=false;
-        if (r.nextInt(20)==5) {
-            hasCoin=false;
-            magnit=true;
+        if (canBeMagnit) {
+            if (r.nextInt(20) == 5) {
+                hasCoin = false;
+                magnit = true;
+            }
         }
             visited=false;
             bad=false;

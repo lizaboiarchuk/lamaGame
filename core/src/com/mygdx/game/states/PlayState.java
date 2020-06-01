@@ -21,6 +21,7 @@ public class PlayState extends State{
 
     Lame lama; //main character
     Texture background; // background
+    Texture coinPic;
 
     public static final int SPACE_BETWEEN_CLOUDS = 60;
     public static final int CLOUDS_COUNT = 18;
@@ -30,8 +31,10 @@ public class PlayState extends State{
 
     public ArrayList<Cloud> clouds; //all the clouds
     public long score; // current score
+    public long money; //current coins
 
     ScoreBar scoreBar;
+    ScoreBar moneyBar;
 
     float lamePrev;
 
@@ -45,16 +48,19 @@ public class PlayState extends State{
     PlayState(GameStateManager gsm) {
         super(gsm);
         score=0;
-        lama = new Lame(50,400);
+        money=0;
+        lama = new Lame(100,600);
         lamePrev = lama.position.y;
         scoreBar = new ScoreBar();
+        moneyBar = new ScoreBar();
         coinSound = Gdx.audio.newSound(Gdx.files.internal("coin_sound.wav"));
         endSound = Gdx.audio.newSound(Gdx.files.internal("end.wav"));
+        coinPic = new Texture("coin.png");
 
         camera.setToOrtho(false, Lama.WIDTH/2, Lama.HEIGHT/2);
 
         background = new Texture("d.jpg");
-        lastCloud =null;
+
 
         //creating clouds
         clouds = new ArrayList<Cloud>();
@@ -77,7 +83,7 @@ public class PlayState extends State{
         clouds.get(15).moveable=true;
 
 
-        camera.position.y=lama.position.y+120;
+        camera.position.y=lama.position.y+80;
     }
 
 
@@ -87,12 +93,15 @@ public class PlayState extends State{
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             lama.jump();
             lama.isOnCloud=false;
+            score+=3;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             lama.left();
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             lama.right();
+
         }
     }
 
@@ -111,6 +120,8 @@ public class PlayState extends State{
                 cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud);
                 lastCloud=cl;
                 lowestCloud=clouds.get((d+1)%10);
+                score+=5;
+                if ((!cl.canBeMagnit) && (cl.magnit)) cl.magnit=false;
             }
         }
         //checking all the clouds to understand on which lama is staying now
@@ -131,6 +142,8 @@ public class PlayState extends State{
                     if ((lama.position.x+lama.lame.getWidth()>=c.coinPosition.x) && (lama.position.x<=c.coinPosition.x+c.coin.getWidth()))
                         c.hasCoin=false;
                         coinSound.play();
+                        money++;
+                        score+=7;
                 }
 
                 //picking a magnit
@@ -179,6 +192,17 @@ public class PlayState extends State{
         for (int i=0;i<5;i++) {
             sb.draw(scoreBar.show(score).get(i), camera.position.x+ 50+i*9,camera.position.y+camera.viewportHeight/2-13, 8,11);
         }
+
+        //drawing moneybar
+        for (int i=2;i<5;i++) {
+            sb.draw(moneyBar.show(money).get(i), camera.position.x-120+(i-2)*9, camera.position.y+camera.viewportHeight/2-13,8,11);
+        }
+        sb.draw(coinPic,camera.position.x-80-coinPic.getWidth(), camera.position.y+camera.viewportHeight/2-coinPic.getHeight());
+
+
+
+
+
         sb.draw(lama.lame, lama.position.x, lama.position.y, lama.lame.getWidth()/2, lama.lame.getHeight()/2);
         sb.end();
     }
@@ -199,14 +223,17 @@ public class PlayState extends State{
     public void magniting() {
         if (lama.magnitism) {
             for (Cloud cloud: clouds) {
+                cloud.canBeMagnit=false;
                 if ((cloud.hasCoin)&&(camera.position.y+camera.viewportHeight/2>=cloud.position.y+30)) {
                     Vector2 vector = new Vector2((lama.position.x-cloud.coinPosition.x),(lama.position.y-cloud.coinPosition.y));
-                    vector.scl(3/vector.len());
+                    vector.scl(5/vector.len());
                     cloud.coinPosition.x+=vector.x;
                     cloud.coinPosition.y+=vector.y;
                     if ((lama.position.x+lama.lame.getWidth()>=cloud.coinPosition.x) && (lama.position.x<=cloud.coinPosition.x+cloud.coin.getWidth()) && (cloud.coinPosition.y<=lama.position.y+5) && (cloud.coinPosition.y>=lama.position.y)){
                         cloud.hasCoin=false;
                         coinSound.play();
+                        money++;
+                        score+=7;
                     }
                 }
             }
