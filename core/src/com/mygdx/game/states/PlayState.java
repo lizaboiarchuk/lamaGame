@@ -6,10 +6,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Lama;
 import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.sprites.Lame;
+import com.mygdx.game.utilities.Digit;
 import com.mygdx.game.utilities.ScoreBar;
 
 import java.awt.*;
@@ -43,6 +45,7 @@ public class PlayState extends State{
         lamePrev = lama.position.y;
         scoreBar = new ScoreBar();
 
+
         camera.setToOrtho(false, Lama.WIDTH/2, Lama.HEIGHT/2);
 
         background = new Texture("d.jpg");
@@ -69,7 +72,7 @@ public class PlayState extends State{
       //  clouds.get(15).moveable=true;
     //    clouds.get(20).moveable=true;
      //   clouds.get(24).moveable=true;
-        camera.position.y=lama.position.y+80;
+        camera.position.y=lama.position.y+120;
     }
 
 
@@ -96,10 +99,8 @@ public class PlayState extends State{
     public void update(float dt) {
         handleInput();
         lama.update(dt);
-       // camera.position.y=lama.position.y+80; //+80
-     //   camera.position.y+=lama.position.y-lamePrev;
-        camera.position.y+=0.5;
-    //    lamePrev = lama.position.y;
+        camera.position.y+=0.7;
+
         for (int d=0; d<clouds.size(); d++)//repos the clouds
         {
             Cloud cl = clouds.get(d);
@@ -112,16 +113,21 @@ public class PlayState extends State{
 
         for (Cloud c:clouds) {
 
-            if ((lama.position.y<=c.position.y+24) && (lama.position.y>=c.position.y+15) && (lama.position.x+15>=c.position.x) && (lama.position.x<=c.position.x+Cloud.CLOUD_WIDTH)) {
+            if ((lama.position.y<=c.position.y+24) && (lama.position.y>=c.position.y+15) && (lama.position.x+15>=c.position.x) && (lama.position.x<=c.position.x+Cloud.CLOUD_WIDTH-10)) {
                 lama.velocity.set(new Vector3(0,0,0));
                 lama.position.y=c.position.y+17;
-                score = lama.onCloud(score);
+                score = lama.onCloud(score, c.visited);
+                c.visited=true;
+
             }
         }
 
 
-        if (lama.position.y+100<=lowestCloud.position.y) {
-            System.out.println("end");
+
+        //end of game
+        if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
+            gsm.set(new EndState(gsm));
+
         }
 
 
@@ -142,12 +148,20 @@ public class PlayState extends State{
         for (Cloud c:clouds) {
             c.move();
             sb.draw(c.cloud, c.position.x, c.position.y);
+            if (c.hasCoin) sb.draw(c.coin, c.coinPosition.x, c.coinPosition.y);
         }
-        //sb.draw(scoreBar.digits.get(2), 10,200,13,25);
-        sb.draw(scoreBar.digits.get(2), camera.position.x,camera.position.y+camera.viewportHeight/2-28,13,25);
+
+
+
+
+        for (int i=0;i<5;i++) {
+            sb.draw(scoreBar.show(score).get(i), camera.position.x+ 50+i*9,camera.position.y+camera.viewportHeight/2-13, 8,11);
+        }
+
+
 
         sb.draw(lama.lame, lama.position.x, lama.position.y, lama.lame.getWidth()/2, lama.lame.getHeight()/2);
-        System.out.println(score);
+       // System.out.println(score);
 
         sb.end();
     }
