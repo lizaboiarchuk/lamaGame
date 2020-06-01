@@ -16,16 +16,18 @@ public class Cloud {
     private int left_or_right ;
     private int one_or_two_clouds_a_line;
 
-    public boolean moveable=false;
+    public boolean moveable;
     public boolean bad=false;
     public boolean visited;
     public boolean hasCoin;
+    public boolean magnit;
 
-    public int velocity;
+    public int velocity=1;
 
 
     public Texture cloud;
     public Texture coin;
+    public Texture mag;
     public Vector2 position;
     public Random rand;
 
@@ -43,6 +45,7 @@ public class Cloud {
         visited= false;
         cloud= new Texture("cloud1.png");
         coin = new Texture("coin.png");
+        mag = new Texture("magnit.png");
         rand = new Random();
         if (c==null)
             position = new Vector2(rand.nextInt(RANDOMto)+RANDOMfrom, y);
@@ -55,9 +58,15 @@ public class Cloud {
 
     //creates a new position for a cloud based on a location of a previous cloud
     public void reposition(float y,Cloud c) {
+        magnit=false;
         Random r = new Random();
         if (r.nextBoolean()) hasCoin=true;
         else hasCoin=false;
+        if (r.nextInt(20)==5) {
+            hasCoin=false;
+            magnit=true;
+        }
+
             visited=false;
             bad=false;
             cloud = new Texture("cloud1.png");
@@ -81,7 +90,7 @@ public class Cloud {
                 position = new Vector2(xCor, y);
             }
 
-        if (hasCoin) coinPosition = new Vector2(position.x+18, y+20);
+        if ((hasCoin)||(magnit)) coinPosition = new Vector2(position.x+18, y+20);
     }
 
 
@@ -90,6 +99,8 @@ public class Cloud {
     public void move() {
         if (moveable==true) {
             position.x += velocity;
+            if (hasCoin)
+                coinPosition.x+=velocity;
             if (position.x >= 200)
                 velocity = -1;
             if (position.x <= 0)

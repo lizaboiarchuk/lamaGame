@@ -1,5 +1,7 @@
 package com.mygdx.game.sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
@@ -17,11 +19,18 @@ public class Lame {
     public Sprite lame;
     public boolean isOnCloud=true;
     public boolean lookingLeft;
+    public boolean magnitism;
+
+
+
+
+    public Sound jumpSound;
 
 
 
 
     public Lame (int x, int y) {
+        jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
         position = new Vector3(x,y,0);
         velocity = new Vector3(0,0,0);
         lame = new Sprite(new Texture("lameLeftStay.PNG"));
@@ -49,6 +58,8 @@ public class Lame {
     public void jump() {
         System.out.println("jump");
         if (isOnCloud==true) {
+            jumpSound.setVolume(0,0.2f);
+            jumpSound.play();
             velocity.y = 400;
             if (lookingLeft)
                 lame = new Sprite(new Texture("lameLeftMove.PNG"));
