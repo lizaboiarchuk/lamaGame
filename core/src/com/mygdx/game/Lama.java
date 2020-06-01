@@ -27,7 +27,7 @@ public class Lama extends Game {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 		//setScreen(new Menu(this,inf));
-		Gdx.gl.glClearColor(1,1,0,1);
+		Gdx.gl.glClearColor(1,1,1,1);
 		gsm.push(new MenuState(gsm));
 
 	}

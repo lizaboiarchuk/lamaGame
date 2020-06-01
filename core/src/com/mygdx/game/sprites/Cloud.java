@@ -15,8 +15,12 @@ public class Cloud {
 
     private int left_or_right ;
     private int one_or_two_clouds_a_line;
+
     public boolean moveable=false;
-    public int velocity=1;
+    public boolean bad=false;
+
+    public int velocity;
+
 
     public Texture cloud;
     public Vector2 position;
@@ -37,6 +41,8 @@ public class Cloud {
 
     //creates a new position for a cloud based on a location of a previous cloud
     public void reposition(float y,Cloud c) {
+            bad=false;
+            cloud = new Texture("cloud1.png");
             left_or_right = rand.nextInt(2);
             if ((left_or_right==0) && (c.position.x<40)) left_or_right=1;
             if ((left_or_right==1) && (c.position.x>165)) left_or_right=0;
@@ -68,6 +74,19 @@ public class Cloud {
             if (position.x <= 0)
                 velocity = 1;
         }
+    }
+
+    public void setBad() {
+        bad=true;
+       // cloud = new Texture("badCloud.png");
+    }
+
+    public static boolean ran() {
+        boolean res;
+        Random r = new Random();
+        if (r.nextInt(4)==0) res=true;
+        else res=false;
+        return res;
     }
 
 

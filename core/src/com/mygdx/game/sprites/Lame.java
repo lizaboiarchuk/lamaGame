@@ -34,7 +34,7 @@ public class Lame {
             velocity.add(0, GRAVITY,0);
         velocity.scl(dt);
        // position.add(velocity);
-        position.add(0,velocity.y+MOVEMENT*dt,0);
+        position.add(0,velocity.y+MOVEMENT*dt*0.6f,0);
         if (position.y<=0)
             position.y=0;
         velocity.scl(1/dt);
@@ -49,9 +49,7 @@ public class Lame {
     public void jump() {
         System.out.println("jump");
         if (isOnCloud==true)
-            velocity.y=350;
-        else
-            velocity.y=60;
+            velocity.y=400;
     }
 
 
@@ -78,12 +76,16 @@ public class Lame {
 
 
 
-    public void onCloud() {
-        isOnCloud=true;
+    public long onCloud(long score) {
+        if (!isOnCloud) {
+            isOnCloud=true;
+            score+=10;
+        }
         if (lookingLeft)
             lame=new Sprite(new Texture("lameLeftStay.PNG"));
         else
             lame=new Sprite(new Texture("lameRightStay.PNG"));
+        return score;
     }
 
 
