@@ -22,6 +22,12 @@ public class PlayState extends State{
     Lame lama; //main character
     Texture background; // background
     Texture coinPic;
+    Texture magnitPic;
+    Texture redString;
+
+    public static final int bonusTimer = 1000; //(*delta time (0.22sec))
+    public int timeCounter;
+    public boolean drawMagnet=true;
 
     public static final int SPACE_BETWEEN_CLOUDS = 60;
     public static final int CLOUDS_COUNT = 18;
@@ -56,6 +62,8 @@ public class PlayState extends State{
         coinSound = Gdx.audio.newSound(Gdx.files.internal("coin_sound.wav"));
         endSound = Gdx.audio.newSound(Gdx.files.internal("end.wav"));
         coinPic = new Texture("coin.png");
+        magnitPic = new Texture("magnit.png");
+        redString = new Texture("redS.png");
 
         camera.setToOrtho(false, Lama.WIDTH/2, Lama.HEIGHT/2);
 
@@ -183,9 +191,9 @@ public class PlayState extends State{
             if (c.hasCoin) {
                 sb.draw(c.coin, c.coinPosition.x, c.coinPosition.y);
             }
-            if (c.magnit) {
+            if (c.magnit)
                 sb.draw(c.mag, c.magnitPosition.x, c.magnitPosition.y);
-            }
+
         }
 
         //drawing scorebar
@@ -199,7 +207,12 @@ public class PlayState extends State{
         }
         sb.draw(coinPic,camera.position.x-80-coinPic.getWidth(), camera.position.y+camera.viewportHeight/2-coinPic.getHeight());
 
+        if (lama.magnitism) {
+            sb.draw(magnitPic, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20);
+            sb.draw(redString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),15 );
 
+
+        }
 
 
 
@@ -222,23 +235,35 @@ public class PlayState extends State{
     //magniting all the coins
     public void magniting() {
         if (lama.magnitism) {
-            for (Cloud cloud: clouds) {
-                cloud.canBeMagnit=false;
-                if ((cloud.hasCoin)&&(camera.position.y+camera.viewportHeight/2>=cloud.position.y+30)) {
-                    Vector2 vector = new Vector2((lama.position.x-cloud.coinPosition.x),(lama.position.y-cloud.coinPosition.y));
-                    vector.scl(5/vector.len());
-                    cloud.coinPosition.x+=vector.x;
-                    cloud.coinPosition.y+=vector.y;
-                    if ((lama.position.x+lama.lame.getWidth()>=cloud.coinPosition.x) && (lama.position.x<=cloud.coinPosition.x+cloud.coin.getWidth()) && (cloud.coinPosition.y<=lama.position.y+5) && (cloud.coinPosition.y>=lama.position.y)){
-                        cloud.hasCoin=false;
-                        coinSound.play();
-                        money++;
-                        score+=7;
+            timeCounter++;
+            if (timeCounter==bonusTimer) {
+                lama.magnitism=false;
+                timeCounter=0;
+                drawMagnet=true;
+                for (Cloud cloud: clouds)
+                    cloud.canBeMagnit=true;
+            }
+            else {
+                for (Cloud cloud: clouds) {
+                    cloud.canBeMagnit=false;
+                    if ((cloud.hasCoin)&&(camera.position.y+camera.viewportHeight/2>=cloud.position.y+30)) {
+                        Vector2 vector = new Vector2((lama.position.x-cloud.coinPosition.x),(lama.position.y-cloud.coinPosition.y));
+                        vector.scl(5/vector.len());
+                        cloud.coinPosition.x+=vector.x;
+                        cloud.coinPosition.y+=vector.y;
+                        if ((lama.position.x+lama.lame.getWidth()>=cloud.coinPosition.x) && (lama.position.x<=cloud.coinPosition.x+cloud.coin.getWidth()) && (cloud.coinPosition.y<=lama.position.y+5) && (cloud.coinPosition.y>=lama.position.y)){
+                            cloud.hasCoin=false;
+                            coinSound.play();
+                            money++;
+                            score+=7;
+                        }
                     }
                 }
             }
+
         }
     }
+
 
 
 }

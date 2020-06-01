@@ -67,7 +67,7 @@ public class Cloud {
         else
             hasCoin=false;
         if (canBeMagnit) {
-            if (r.nextInt(20) == 5) {
+            if (r.nextInt(10) == 5) {
                 hasCoin = false;
                 magnit = true;
             }
