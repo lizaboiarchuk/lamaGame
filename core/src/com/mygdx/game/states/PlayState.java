@@ -125,7 +125,7 @@ public class PlayState extends State{
         {
             Cloud cl = clouds.get(d);
             if ((camera.position.y - (camera.viewportHeight/2)) > (cl.position.y+Cloud.CLOUD_HEIGHT+200)) {
-                cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud);
+                cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud, lama.magnitism);
                 lastCloud=cl;
                 lowestCloud=clouds.get((d+1)%10);
                 score+=5;
@@ -248,14 +248,16 @@ public class PlayState extends State{
                     cloud.canBeMagnit=false;
                     if ((cloud.hasCoin)&&(camera.position.y+camera.viewportHeight/2>=cloud.position.y+30)) {
                         Vector2 vector = new Vector2((lama.position.x-cloud.coinPosition.x),(lama.position.y-cloud.coinPosition.y));
+                        if (vector.len()<=200) {
                         vector.scl(5/vector.len());
                         cloud.coinPosition.x+=vector.x;
                         cloud.coinPosition.y+=vector.y;
-                        if ((lama.position.x+lama.lame.getWidth()>=cloud.coinPosition.x) && (lama.position.x<=cloud.coinPosition.x+cloud.coin.getWidth()) && (cloud.coinPosition.y<=lama.position.y+5) && (cloud.coinPosition.y>=lama.position.y)){
-                            cloud.hasCoin=false;
+                        if ((lama.position.x+lama.lame.getWidth()>=cloud.coinPosition.x) && (lama.position.x<=cloud.coinPosition.x+cloud.coin.getWidth()) && (cloud.coinPosition.y<=lama.position.y+5) && (cloud.coinPosition.y>=lama.position.y)) {
+                            cloud.hasCoin = false;
                             coinSound.play();
                             money++;
-                            score+=7;
+                            score += 7;
+                        }
                         }
                     }
                 }

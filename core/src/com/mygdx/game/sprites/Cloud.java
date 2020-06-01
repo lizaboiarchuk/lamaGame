@@ -51,7 +51,7 @@ public class Cloud {
         if (c==null)
             position = new Vector2(200, y);
         else {
-            reposition(y,c);
+            reposition(y,c,false);
         }
         if (hasCoin) coinPosition = new Vector2(position.x+18, y+20);
 
@@ -59,14 +59,14 @@ public class Cloud {
 
 
     //creates a new position for a cloud based on a location of a previous cloud
-    public void reposition(float y,Cloud c) {
+    public void reposition(float y,Cloud c, boolean bonus) {
         magnit=false;
         Random r = new Random();
         if (r.nextBoolean())
             hasCoin=true;
         else
             hasCoin=false;
-        if (canBeMagnit) {
+        if ((canBeMagnit) && (!bonus)) {
             if (r.nextInt(10) == 5) {
                 hasCoin = false;
                 magnit = true;
