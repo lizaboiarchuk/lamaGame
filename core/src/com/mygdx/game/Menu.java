@@ -15,6 +15,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 
+
+
+
+
+
+
+// это пока не нужно но удалять тож не нужно
+
+
+
+
+
+
+
 import javax.swing.*;
 
 //Main menu with autorization and registration button

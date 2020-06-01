@@ -16,12 +16,11 @@ public class Lame {
     public int GRAVITY = -15;
     public static final int MOVEMENT = 100;
 
+
     public Sprite lame;
     public boolean isOnCloud=true;
     public boolean lookingLeft;
     public boolean magnitism;
-
-
 
 
     public Sound jumpSound;
@@ -58,6 +57,7 @@ public class Lame {
     public void jump() {
         System.out.println("jump");
         if (isOnCloud==true) {
+            position.y+=5;
             jumpSound.setVolume(0,0.2f);
             jumpSound.play();
             velocity.y = 400;

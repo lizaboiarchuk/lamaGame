@@ -46,7 +46,6 @@ public class ScoreBar {
         this.score.add(region(d3));
         this.score.add(region(d4));
         this.score.add(region(d5));
-
         return this.score;
     }
 

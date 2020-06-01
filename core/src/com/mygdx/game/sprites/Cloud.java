@@ -32,16 +32,14 @@ public class Cloud {
     public Random rand;
 
     public Vector2 coinPosition;
+    public Vector2 magnitPosition;
 
 
     //constructor
     public Cloud(float y, Cloud c) {
-
         Random r = new Random();
         if (r.nextBoolean()) hasCoin=true;
         else hasCoin=false;
-
-
         visited= false;
         cloud= new Texture("cloud1.png");
         coin = new Texture("coin.png");
@@ -53,6 +51,7 @@ public class Cloud {
             reposition(y,c);
         }
         if (hasCoin) coinPosition = new Vector2(position.x+18, y+20);
+
     }
 
 
@@ -60,20 +59,23 @@ public class Cloud {
     public void reposition(float y,Cloud c) {
         magnit=false;
         Random r = new Random();
-        if (r.nextBoolean()) hasCoin=true;
-        else hasCoin=false;
+        if (r.nextBoolean())
+            hasCoin=true;
+        else
+            hasCoin=false;
         if (r.nextInt(20)==5) {
             hasCoin=false;
             magnit=true;
         }
-
             visited=false;
             bad=false;
             cloud = new Texture("cloud1.png");
-        coin = new Texture("coin.png");
+            coin = new Texture("coin.png");
             left_or_right = rand.nextInt(2);
-            if ((left_or_right==0) && (c.position.x<40)) left_or_right=1;
-            if ((left_or_right==1) && (c.position.x>165)) left_or_right=0;
+            if ((left_or_right==0) && (c.position.x<40))
+                left_or_right=1;
+            if ((left_or_right==1) && (c.position.x>165))
+                left_or_right=0;
             int xCor;
             if (left_or_right==0) {
                 if (c.position.x<95)
@@ -90,7 +92,10 @@ public class Cloud {
                 position = new Vector2(xCor, y);
             }
 
-        if ((hasCoin)||(magnit)) coinPosition = new Vector2(position.x+18, y+20);
+        if (hasCoin)
+            coinPosition = new Vector2(position.x+18, y+20);
+        if (magnit)
+            magnitPosition = new Vector2(position.x+17, y+20);
     }
 
 
@@ -101,6 +106,8 @@ public class Cloud {
             position.x += velocity;
             if (hasCoin)
                 coinPosition.x+=velocity;
+            if (magnit)
+                magnitPosition.x+=velocity;
             if (position.x >= 200)
                 velocity = -1;
             if (position.x <= 0)
@@ -108,11 +115,16 @@ public class Cloud {
         }
     }
 
+
+
+    //make a cloud bad
     public void setBad() {
         bad=true;
        // cloud = new Texture("badCloud.png");
     }
 
+
+    //true with probability 1:4
     public static boolean ran() {
         boolean res;
         Random r = new Random();
