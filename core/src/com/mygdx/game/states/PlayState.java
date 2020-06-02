@@ -141,6 +141,7 @@ public class PlayState extends State{
         for (int d=0; d<clouds.size(); d++)//repos the clouds when they are out of camera viewport
         {
             Cloud cl = clouds.get(d);
+            if (lama.magnitism || lama.fly) { cl.magnit=false; cl.hasJetpack=false;}
             if ((camera.position.y - (camera.viewportHeight/2)) > (cl.position.y+Cloud.CLOUD_HEIGHT+200)) {
                 cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud, lama.magnitism);
                 lastCloud=cl;
@@ -172,19 +173,20 @@ public class PlayState extends State{
                 }
 
                 //picking a magnit
-                if ((c.magnit) && (!lama.fly) && (!lama.magnitism)){
-                    if ((lama.position.x+lama.lame.getWidth()>=c.magnitPosition.x) && (lama.position.x<=c.magnitPosition.x+c.mag.getWidth())) {
-                        c.magnit = false;
-                        lama.magnitism = true;
-                        coinSound.play(); //new sound here for a bonus
-                    }
+                if (c.magnit) {
+                        if ((lama.position.x + lama.lame.getWidth() >= c.magnitPosition.x) && (lama.position.x <= c.magnitPosition.x + c.mag.getWidth())) {
+                            c.magnit = false;
+                            lama.magnitism = true;
+                            coinSound.play(); //new sound here for a bonus
+                        }
+
                 }
-                if ((c.hasJetpack)&& (!lama.fly) && (!lama.magnitism)) {
-                    if ((lama.position.x+lama.lame.getWidth()>=c.jetpackPosition.x) && (lama.position.x<=c.jetpackPosition.x+c.mag.getWidth())) {
-                        c.hasJetpack = false;
-                        lama.fly = true;
-                        coinSound.play(); //new sound here for a bonus
-                    }
+                if (c.hasJetpack) {
+                        if ((lama.position.x + lama.lame.getWidth() >= c.jetpackPosition.x) && (lama.position.x <= c.jetpackPosition.x + c.mag.getWidth())) {
+                            c.hasJetpack = false;
+                            lama.fly = true;
+                            coinSound.play(); //new sound here for a bonus
+                        }
                 }
             }
         }
