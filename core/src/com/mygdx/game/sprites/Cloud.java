@@ -22,6 +22,7 @@ public class Cloud {
     public boolean hasCoin;
     public boolean magnit;
     public boolean canBeMagnit=true;
+    public boolean toDraw=true;
 
 
 
@@ -60,6 +61,7 @@ public class Cloud {
 
     //creates a new position for a cloud based on a location of a previous cloud
     public void reposition(float y,Cloud c, boolean bonus) {
+        toDraw=true;
         magnit=false;
         Random r = new Random();
         if (r.nextBoolean())

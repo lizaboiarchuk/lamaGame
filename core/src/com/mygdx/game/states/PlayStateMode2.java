@@ -15,9 +15,9 @@ import com.mygdx.game.utilities.ScoreBar;
 import java.util.ArrayList;
 
 
+//ALL MOVABLE
 
-
-public class PlayState extends State{
+public class PlayStateMode2 extends State{
 
     Lame lama; //main character
     Texture background; // background
@@ -54,13 +54,11 @@ public class PlayState extends State{
 
 
 
-    PlayState(GameStateManager gsm) {
+    PlayStateMode2(GameStateManager gsm) {
         super(gsm);
 
         score=0;
         money=0;
-
-
         scoreBar = new ScoreBar();
         moneyBar = new ScoreBar();
         coinSound = Gdx.audio.newSound(Gdx.files.internal("coin_sound.wav"));
@@ -71,7 +69,7 @@ public class PlayState extends State{
 
         camera.setToOrtho(false, Lama.WIDTH/2, Lama.HEIGHT/2);
 
-        background = new Texture("d.jpg");
+        background = new Texture("pinkBackGround.jpg");
 
 
         //creating clouds
@@ -82,15 +80,14 @@ public class PlayState extends State{
             lastCloud = cll;
             if (Cloud.ran()) {
                 clouds.add(new Cloud(i*(SPACE_BETWEEN_CLOUDS+Cloud.CLOUD_HEIGHT)+30,null));
-                clouds.get(clouds.size()-1).setBad();
+
             }
         }
-
-
-        lowestCloud=clouds.get(0);
         lama=new Lame(clouds.get(2).position.x+10, clouds.get(2).position.y+17);
         lamePrev = lama.position.y;
 
+
+        lowestCloud=clouds.get(0);
 
 
 
@@ -127,6 +124,7 @@ public class PlayState extends State{
         for (int d=0; d<clouds.size(); d++)//repos the clouds when they are out of camera viewport
         {
             Cloud cl = clouds.get(d);
+            cl.moveable=true;
             if ((camera.position.y - (camera.viewportHeight/2)) > (cl.position.y+Cloud.CLOUD_HEIGHT+200)) {
                 cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud, lama.magnitism);
                 lastCloud=cl;
@@ -152,9 +150,9 @@ public class PlayState extends State{
                 if (c.hasCoin) {
                     if ((lama.position.x+lama.lame.getWidth()>=c.coinPosition.x) && (lama.position.x<=c.coinPosition.x+c.coin.getWidth()))
                         c.hasCoin=false;
-                        coinSound.play();
-                        money++;
-                        score+=7;
+                    coinSound.play();
+                    money++;
+                    score+=7;
                 }
 
                 //picking a magnit
@@ -185,7 +183,7 @@ public class PlayState extends State{
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.setProjectionMatrix(camera.combined);
-        sb.draw(background, camera.position.x-camera.viewportWidth/2, camera.position.y-camera.viewportHeight/2, background.getWidth(),background.getHeight());
+        sb.draw(background, camera.position.x-camera.viewportWidth/2, camera.position.y-camera.viewportHeight/2, background.getWidth()+50,background.getHeight()+150);
 
         //drawing clouds with coins/bonuses on them
         for (Cloud c:clouds) {
@@ -229,7 +227,7 @@ public class PlayState extends State{
     public void dispose() {
         background.dispose();
         for (Cloud c: clouds) {
-           // c.dispose(); ??????????
+            // c.dispose(); ??????????
         }
     }
 
@@ -252,15 +250,15 @@ public class PlayState extends State{
                     if ((cloud.hasCoin)&&(camera.position.y+camera.viewportHeight/2>=cloud.position.y+30)) {
                         Vector2 vector = new Vector2((lama.position.x-cloud.coinPosition.x),(lama.position.y-cloud.coinPosition.y));
                         if (vector.len()<=200) {
-                        vector.scl(5/vector.len());
-                        cloud.coinPosition.x+=vector.x;
-                        cloud.coinPosition.y+=vector.y;
-                        if ((lama.position.x+lama.lame.getWidth()>=cloud.coinPosition.x) && (lama.position.x<=cloud.coinPosition.x+cloud.coin.getWidth()) && (cloud.coinPosition.y<=lama.position.y+5) && (cloud.coinPosition.y>=lama.position.y)) {
-                            cloud.hasCoin = false;
-                            coinSound.play();
-                            money++;
-                            score += 7;
-                        }
+                            vector.scl(5/vector.len());
+                            cloud.coinPosition.x+=vector.x;
+                            cloud.coinPosition.y+=vector.y;
+                            if ((lama.position.x+lama.lame.getWidth()>=cloud.coinPosition.x) && (lama.position.x<=cloud.coinPosition.x+cloud.coin.getWidth()) && (cloud.coinPosition.y<=lama.position.y+5) && (cloud.coinPosition.y>=lama.position.y)) {
+                                cloud.hasCoin = false;
+                                coinSound.play();
+                                money++;
+                                score += 7;
+                            }
                         }
                     }
                 }

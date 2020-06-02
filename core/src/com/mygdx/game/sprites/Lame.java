@@ -25,10 +25,13 @@ public class Lame {
 
     public Sound jumpSound;
 
+    public Cloud currentCloud=null;
 
 
 
-    public Lame (int x, int y) {
+
+
+    public Lame (float x, float y) {
         jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
         position = new Vector3(100,700,0);
         velocity = new Vector3(0,0,0);

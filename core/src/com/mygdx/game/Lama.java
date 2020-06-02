@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.states.GameStateManager;
 import com.mygdx.game.states.MenuState;
 
@@ -20,6 +21,7 @@ public class Lama extends Game {
 	private GameStateManager gsm;
 	private SpriteBatch batch;
 	public static Music music;
+
 	Texture img;
 	Info inf = new Info();
 
