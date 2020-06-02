@@ -119,7 +119,7 @@ public class PlayStateMode3 extends State{
     public void update(float dt) {
         handleInput();
         lama.update(dt);
-        camera.position.y+=0.7; //change this value to make camera move faster/slower
+        camera.position.y+=0.95; //change this value to make camera move faster/slower
 
         for (int d=0; d<clouds.size(); d++)//repos the clouds when they are out of camera viewport
         {

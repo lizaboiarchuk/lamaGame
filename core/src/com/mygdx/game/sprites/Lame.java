@@ -21,6 +21,7 @@ public class Lame {
     public boolean isOnCloud=true;
     public boolean lookingLeft;
     public boolean magnitism;
+    public boolean fly;
 
 
     public Sound jumpSound;

@@ -21,26 +21,37 @@ public class Cloud {
     public boolean visited;
     public boolean hasCoin;
     public boolean magnit;
+    public boolean hasJetpack;
     public boolean canBeMagnit=true;
     public boolean toDraw=true;
 
 
 
-    public int velocity=1;
+    public float velocity=1;
+    public float velocityY=1;
+
 
 
     public Texture cloud;
     public Texture coin;
     public Texture mag;
+    public Texture jetpack;
+
     public Vector2 position;
     public Random rand;
 
+    public float yMoveTo;
+    public boolean yMoveable;
+
+
     public Vector2 coinPosition;
     public Vector2 magnitPosition;
+    public Vector2 jetpackPosition;
 
 
     //constructor
     public Cloud(float y, Cloud c) {
+        yMoveTo=y+70;
         Random r = new Random();
         if (r.nextBoolean()) hasCoin=true;
         else hasCoin=false;
@@ -48,6 +59,7 @@ public class Cloud {
         cloud= new Texture("cloud1.png");
         coin = new Texture("coin.png");
         mag = new Texture("magnit.png");
+        jetpack = new Texture("jetpack.png");
         rand = new Random();
         if (c==null)
             position = new Vector2(200, y);
@@ -61,6 +73,7 @@ public class Cloud {
 
     //creates a new position for a cloud based on a location of a previous cloud
     public void reposition(float y,Cloud c, boolean bonus) {
+        yMoveTo=y+70;
         toDraw=true;
         magnit=false;
         Random r = new Random();
@@ -72,7 +85,13 @@ public class Cloud {
             if (r.nextInt(10) == 5) {
                 hasCoin = false;
                 magnit = true;
+            } else {
+                if (r.nextInt(10) == 4) {
+                    hasCoin = false;
+                    hasJetpack = true;
+                }
             }
+
         }
             visited=false;
             bad=false;
@@ -103,11 +122,27 @@ public class Cloud {
             coinPosition = new Vector2(position.x+18, y+20);
         if (magnit)
             magnitPosition = new Vector2(position.x+17, y+20);
+        if (hasJetpack)
+            jetpackPosition = new Vector2(position.x+17, y+20);
     }
 
 
 
     //make a cloud move from side to side
+    public void moveY() {
+        if (yMoveable==true) {
+            position.y += velocityY;
+            if (hasCoin)
+                coinPosition.y+=velocityY;
+            if (magnit)
+                magnitPosition.y+=velocityY;
+            if (position.y >= yMoveTo)
+                velocityY = -1;
+            if (position.y <= yMoveTo-100)
+                velocityY = 1.5f;
+        }
+    }
+
     public void move() {
         if (moveable==true) {
             position.x += velocity;

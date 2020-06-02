@@ -24,6 +24,7 @@ public class PlayState extends State{
     Texture coinPic;
     Texture magnitPic;
     Texture redString;
+    Texture jetpack;
 
 
 
@@ -68,6 +69,7 @@ public class PlayState extends State{
         coinPic = new Texture("coin.png");
         magnitPic = new Texture("magnit.png");
         redString = new Texture("redS.png");
+        jetpack = new Texture("jetpack.png");
 
         camera.setToOrtho(false, Lama.WIDTH/2, Lama.HEIGHT/2);
 
@@ -122,7 +124,19 @@ public class PlayState extends State{
     public void update(float dt) {
         handleInput();
         lama.update(dt);
-        camera.position.y+=0.7; //change this value to make camera move faster/slower
+        float plus=0.86f;
+    /*    if (score>=200) plus=0.8f;
+        if (score>=400) plus=1f;
+        if (score>=700) plus=1.2f;
+        if (score>=1000) plus=1.5f;
+        if (score>=1300) plus=2f;*/
+
+        if (!lama.fly) camera.position.y+=plus;//change this value to make camera move faster/slower
+        else {
+            camera.position.y = lama.position.y+80;
+        }
+
+
 
         for (int d=0; d<clouds.size(); d++)//repos the clouds when they are out of camera viewport
         {
@@ -158,16 +172,24 @@ public class PlayState extends State{
                 }
 
                 //picking a magnit
-                if (c.magnit) {
+                if ((c.magnit) && (!lama.fly) && (!lama.magnitism)){
                     if ((lama.position.x+lama.lame.getWidth()>=c.magnitPosition.x) && (lama.position.x<=c.magnitPosition.x+c.mag.getWidth())) {
                         c.magnit = false;
                         lama.magnitism = true;
                         coinSound.play(); //new sound here for a bonus
                     }
                 }
+                if ((c.hasJetpack)&& (!lama.fly) && (!lama.magnitism)) {
+                    if ((lama.position.x+lama.lame.getWidth()>=c.jetpackPosition.x) && (lama.position.x<=c.jetpackPosition.x+c.mag.getWidth())) {
+                        c.hasJetpack = false;
+                        lama.fly = true;
+                        coinSound.play(); //new sound here for a bonus
+                    }
+                }
             }
         }
         magniting();
+        jetpack();
 
         //end of game
         if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
@@ -194,8 +216,10 @@ public class PlayState extends State{
             if (c.hasCoin) {
                 sb.draw(c.coin, c.coinPosition.x, c.coinPosition.y);
             }
-            if (c.magnit)
+            if ((c.magnit) && (!lama.fly) && (!lama.magnitism))
                 sb.draw(c.mag, c.magnitPosition.x, c.magnitPosition.y);
+            if ((c.hasJetpack)  && (!lama.fly) && (!lama.magnitism))
+                sb.draw(c.jetpack, c.jetpackPosition.x, c.jetpackPosition.y);
 
         }
 
@@ -212,6 +236,13 @@ public class PlayState extends State{
 
         if (lama.magnitism) {
             sb.draw(magnitPic, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20);
+            sb.draw(redString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),15 );
+
+
+        }
+
+        if (lama.fly) {
+            sb.draw(jetpack, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20);
             sb.draw(redString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),15 );
 
 
@@ -266,6 +297,21 @@ public class PlayState extends State{
                 }
             }
 
+        }
+    }
+
+
+
+
+    public void jetpack() {
+        if (lama.fly) {
+            timeCounter++;
+            if (timeCounter == bonusTimer) {
+                lama.fly = false;
+                timeCounter = 0;
+                lama.velocity.y=0;
+            }
+            lama.velocity.y=400;
         }
     }
 

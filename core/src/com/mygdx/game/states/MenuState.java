@@ -5,11 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Lama;
+import com.mygdx.game.User;
 
 public class MenuState extends State {
 
     private Texture back;
     private Texture playBtn;
+    public User user;
 
 
 
@@ -23,12 +25,12 @@ public class MenuState extends State {
     @Override
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            System.out.println("pressed");
+       //     System.out.println("pressed");
            gsm.set(new PlayState(gsm));
            // gsm.set(new PlayStateMode2(gsm));
-       //     gsm.set(new PlayStateMode3(gsm));
-       //     gsm.set(new PlayStateMode4(gsm));
-         //   gsm.set(new PlayStateMode5(gsm));
+        //    gsm.set(new PlayStateMode3(gsm));
+         //  gsm.set(new PlayStateMode4(gsm));
+          //gsm.set(new PlayStateMode5(gsm));
 
 
         }
