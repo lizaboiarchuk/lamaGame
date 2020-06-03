@@ -102,13 +102,13 @@ public class Cloud {
                     hasCoin = false;
                     hasJetpack = true;
                     hasPampers=false;
-                    magnit = true;
+                    magnit = false;
                 }
                 if (r.nextInt(10) == 3) {
                     hasCoin = false;
                     hasPampers = true;
                     hasJetpack=false;
-                    magnit = true;
+                    magnit = false;
                 }
             }
 
