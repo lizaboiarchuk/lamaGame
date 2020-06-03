@@ -5,7 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.Lama;
+import com.mygdx.game.StartClass;
 import com.mygdx.game.states.GameStateManager;
 
 public class Lame {
@@ -52,8 +52,8 @@ public class Lame {
         velocity.scl(1/dt);
         if (position.x<=0)
             position.x=0;
-        if (position.x>= Lama.WIDTH/2-lame.getWidth()/2)
-            position.x=Lama.WIDTH/2-lame.getWidth()/2;
+        if (position.x>= StartClass.WIDTH/2-lame.getWidth()/2)
+            position.x=StartClass.WIDTH/2-lame.getWidth()/2;
     }
 
 
@@ -86,7 +86,7 @@ public class Lame {
 
     public void right() {
         lookingLeft=false;
-        if (position.x<Lama.WIDTH/2-lame.getWidth()/2)
+        if (position.x<StartClass.WIDTH/2-lame.getWidth()/2)
             position.x+= 2;
         if (isOnCloud)
             lame=new Sprite(new Texture("lameRightStay.PNG"));

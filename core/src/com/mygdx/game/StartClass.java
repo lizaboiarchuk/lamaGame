@@ -11,7 +11,7 @@ import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.states.GameStateManager;
 import com.mygdx.game.states.MenuState;
 
-public class Lama extends Game {
+public class StartClass extends Game {
 
 	public final static int WIDTH = 500;
 	public final static int HEIGHT = 700;
@@ -21,6 +21,7 @@ public class Lama extends Game {
 	private GameStateManager gsm;
 	private SpriteBatch batch;
 	public static Music music;
+	UserBase userBase;
 
 	Texture img;
 	Info inf = new Info();
@@ -28,8 +29,9 @@ public class Lama extends Game {
 
 	@Override
 	public void create () {
+		userBase = new UserBase();
 		batch = new SpriteBatch();
-		gsm = new GameStateManager();
+		gsm = new GameStateManager(userBase);
 		//setScreen(new Menu(this,inf));
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 		music.setLooping(true);
