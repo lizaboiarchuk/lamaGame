@@ -41,5 +41,4 @@ public class Lama extends Game {
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.render(batch);
 	}
-
 }
