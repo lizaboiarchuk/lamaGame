@@ -22,6 +22,9 @@ public class Lame {
     public boolean lookingLeft;
     public boolean magnitism;
     public boolean fly;
+    public boolean hasPampers=false;
+
+    public float width, height;
 
 
     public Sound jumpSound;
@@ -37,6 +40,9 @@ public class Lame {
         position = new Vector3(x,y,0);
         velocity = new Vector3(0,0,0);
         lame = new Sprite(new Texture("lameLeftStay.PNG"));
+        width =  lame.getWidth();
+        height = lame.getHeight();
+
     }
 
 

@@ -30,6 +30,8 @@ public class PlayState extends State{
     Texture background;
     Texture jetpack;
     Texture blueString;
+    Texture pampers;
+    Texture whiteS;
 
 
     public int gameMode;
@@ -87,6 +89,8 @@ public class PlayState extends State{
         redString = new Texture("redS.jpg");
         blueString = new Texture("blueS.png");
         jetpack = new Texture("jetpack.png");
+        pampers = new Texture("pampers.png");
+        whiteS = new Texture("whiteS.png");
 
         camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
 
@@ -172,7 +176,7 @@ public class PlayState extends State{
             }
 
 
-            if (lama.magnitism || lama.fly) { cl.magnit=false; cl.hasJetpack=false;}
+            if (lama.magnitism || lama.fly || lama.hasPampers) { cl.magnit=false; cl.hasJetpack=false; cl.hasPampers=false;}
             if ((camera.position.y - (camera.viewportHeight/2)) > (cl.position.y+Cloud.CLOUD_HEIGHT+200)) {
                 cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud, lama.magnitism);
                 lastCloud=cl;
@@ -184,9 +188,9 @@ public class PlayState extends State{
         //checking all the clouds to understand on which lama is staying now
         for (Cloud c:clouds) {
             if (c.toDraw || gameMode!=3) {
-                if ((lama.position.y<=c.position.y+c.height+3) && (lama.position.y>=c.position.y+c.height-4) && (lama.position.x+c.height-2>=c.position.x) && (lama.position.x<=c.position.x+c.width-10)) {
+                if ((lama.position.y<=c.position.y+c.height+3) && (lama.position.y>=c.position.y+c.height-4) && (lama.position.x+lama.width/4>=c.position.x) && (lama.position.x<=c.position.x+c.width-lama.width/6)) {
                     lama.velocity.set(new Vector3(0, 0, 0));
-                    lama.position.y = c.position.y + c.height - 2;
+                    if (!lama.fly) lama.position.y = c.position.y + c.height - 2;
                     if (gameMode == 4 && !lama.fly) lama.jump();
 
                     score = lama.onCloud(score, c.visited); //if this cloud wasn't visited earlier - score++
@@ -222,11 +226,19 @@ public class PlayState extends State{
                             coinSound.play(); //new sound here for a bonus
                         }
                     }
+                    if (c.hasPampers) {
+                        if ((lama.position.x + lama.lame.getWidth() >= c.pampersPosition.x) && (lama.position.x <= c.pampersPosition.x + 20)) {
+                            c.hasPampers = false;
+                            lama.hasPampers = true;
+                            coinSound.play(); //new sound here for a bonus
+                        }
+                    }
                 }
             }
         }
         magniting();
         jetpack();
+        pampers();
 
         //end of game
         if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
@@ -261,6 +273,8 @@ public class PlayState extends State{
                     sb.draw(c.mag, c.magnitPosition.x, c.magnitPosition.y);
                 if (c.hasJetpack)
                     sb.draw(c.jetpack, c.jetpackPosition.x, c.jetpackPosition.y);
+                if (c.hasPampers)
+                    sb.draw(c.pampers, c.pampersPosition.x, c.pampersPosition.y, 20,20);
 
             }
         }
@@ -288,7 +302,13 @@ public class PlayState extends State{
             sb.draw(blueString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
         }
 
-        sb.draw(lama.lame, lama.position.x, lama.position.y, lama.lame.getWidth()/2, lama.lame.getHeight()/2);
+        if (lama.hasPampers) {
+            sb.draw(pampers, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20, 20 ,20);
+            sb.draw(whiteS, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
+        }
+
+
+        sb.draw(lama.lame, lama.position.x, lama.position.y, lama.width/2, lama.height/2);
         sb.end();
     }
 
@@ -350,6 +370,21 @@ public class PlayState extends State{
                 lama.velocity.y=0;
             }
             lama.velocity.y=400;
+        }
+    }
+
+    public void pampers() {
+        if (lama.hasPampers) {
+            timeCounter++;
+            if (timeCounter == bonusTimer) {
+                lama.hasPampers = false;
+                timeCounter = 0;
+                lama.width = 57;
+                lama.height=80;
+            } else {
+                lama.height = 40;
+                lama.width = 30;
+            }
         }
     }
 

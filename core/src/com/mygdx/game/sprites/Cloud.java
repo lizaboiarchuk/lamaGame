@@ -25,6 +25,7 @@ public class Cloud {
     public boolean canBeMagnit=true;
     public boolean toDraw=true;
     public boolean resizable=false;
+    public boolean hasPampers;
     public float width, height;
     public boolean smaller=false;
     public float sizeVel = 0.1f;
@@ -40,6 +41,7 @@ public class Cloud {
     public Texture coin;
     public Texture mag;
     public Texture jetpack;
+    public Texture pampers;
 
     public Vector2 position;
     public Random rand;
@@ -51,6 +53,7 @@ public class Cloud {
     public Vector2 coinPosition;
     public Vector2 magnitPosition;
     public Vector2 jetpackPosition;
+    public Vector2 pampersPosition;
 
 
     //constructor
@@ -66,6 +69,7 @@ public class Cloud {
         coin = new Texture("coin.png");
         mag = new Texture("magnit.png");
         jetpack = new Texture("jetpack.png");
+        pampers = new Texture("pampers.png");
         rand = new Random();
         if (c==null)
             position = new Vector2(200, y);
@@ -90,11 +94,21 @@ public class Cloud {
         if ((canBeMagnit) && (!bonus)) {
             if (r.nextInt(10) == 5) {
                 hasCoin = false;
+                hasJetpack=false;
+                hasPampers=false;
                 magnit = true;
             } else {
                 if (r.nextInt(10) == 4) {
                     hasCoin = false;
                     hasJetpack = true;
+                    hasPampers=false;
+                    magnit = true;
+                }
+                if (r.nextInt(10) == 3) {
+                    hasCoin = false;
+                    hasPampers = true;
+                    hasJetpack=false;
+                    magnit = true;
                 }
             }
 
@@ -130,6 +144,8 @@ public class Cloud {
             magnitPosition = new Vector2(position.x+17, y+20);
         if (hasJetpack)
             jetpackPosition = new Vector2(position.x+17, y+20);
+        if (hasPampers)
+            pampersPosition = new Vector2(position.x+17, y+20);
     }
 
 
