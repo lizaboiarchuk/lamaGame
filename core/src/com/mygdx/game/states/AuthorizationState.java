@@ -19,6 +19,7 @@ public class AuthorizationState extends State {
     public Texture grass;
     public Texture sittingLama;
     private Texture loginButton;
+    private Texture loginButtonPressed;
     private FreeTypeFontGenerator fontGenerator;
     private FreeTypeFontGenerator.FreeTypeFontParameter fontParameter;
     private FreeTypeFontGenerator.FreeTypeFontParameter fontParameter2;
@@ -41,6 +42,7 @@ public class AuthorizationState extends State {
         grass = new Texture("grass.JPEG");
         sittingLama = new Texture("sittingLama.png");
         loginButton = new Texture("uiskins/loginButton.png");
+        loginButtonPressed = new Texture("uiskins/loginButtonPressed.png");
         defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Modulus-Bold.otf"));
         fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -89,22 +91,26 @@ public class AuthorizationState extends State {
         passwordTextField.setSize(250, 25);
         passwordTextField.draw(sb, 60);
         stage.act();
-
         if(Gdx.input.getX() > 185 &&
         Gdx.input.getX() < 320 &&
         Gdx.input.getY() > 405 &&
         Gdx.input.getY() < 438) {
             if (Gdx.input.isTouched()) {
                 this.dispose();
-                gsm.set(new PlayState(gsm, 1));
+                gsm.set(new MenuState(gsm));
             }
         }
-
         sb.end();
     }
 
     @Override
     public void dispose() {
         background.dispose();
+        grass.dispose();
+        sittingLama.dispose();
+        usernameTextField.cut();
+        passwordTextField.cut();
+        fontGenerator.dispose();
     }
+
 }
