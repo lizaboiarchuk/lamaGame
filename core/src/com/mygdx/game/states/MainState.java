@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.game.Lama;
+import com.mygdx.game.StartClass;
 
 public class MainState extends State {
     public Texture background;
@@ -38,9 +38,9 @@ public class MainState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
-        sb.draw(background,0,0, Lama.WIDTH,Lama.HEIGHT);
+        sb.draw(background,0,0, StartClass.WIDTH,StartClass.HEIGHT);
         sb.draw(grass, 0, -50);
-        sb.draw(sittingLama, Lama.WIDTH/2-sittingLama.getWidth()/2, 70);
+        sb.draw(sittingLama, StartClass.WIDTH/2-sittingLama.getWidth()/2, 70);
         sb.end();
     }
 
