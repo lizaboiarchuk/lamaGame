@@ -34,7 +34,7 @@ public class Lame {
 
     public Lame (float x, float y) {
         jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
-        position = new Vector3(100,700,0);
+        position = new Vector3(x,y,0);
         velocity = new Vector3(0,0,0);
         lame = new Sprite(new Texture("lameLeftStay.PNG"));
     }

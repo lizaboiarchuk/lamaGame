@@ -24,6 +24,10 @@ public class Cloud {
     public boolean hasJetpack;
     public boolean canBeMagnit=true;
     public boolean toDraw=true;
+    public boolean resizable=false;
+    public float width, height;
+    public boolean smaller=false;
+    public float sizeVel = 0.1f;
 
 
 
@@ -57,6 +61,8 @@ public class Cloud {
         else hasCoin=false;
         visited= false;
         cloud= new Texture("cloud1.png");
+        width= cloud.getWidth();
+        height = cloud.getHeight();
         coin = new Texture("coin.png");
         mag = new Texture("magnit.png");
         jetpack = new Texture("jetpack.png");
@@ -128,20 +134,7 @@ public class Cloud {
 
 
 
-    //make a cloud move from side to side
-    public void moveY() {
-        if (yMoveable==true) {
-            position.y += velocityY;
-            if (hasCoin)
-                coinPosition.y+=velocityY;
-            if (magnit)
-                magnitPosition.y+=velocityY;
-            if (position.y >= yMoveTo)
-                velocityY = -1;
-            if (position.y <= yMoveTo-100)
-                velocityY = 1.5f;
-        }
-    }
+
 
     public void move() {
         if (moveable==true) {
@@ -150,6 +143,8 @@ public class Cloud {
                 coinPosition.x+=velocity;
             if (magnit)
                 magnitPosition.x+=velocity;
+            if (hasJetpack)
+                jetpackPosition.x+=velocity;
             if (position.x >= 200)
                 velocity = -1;
             if (position.x <= 0)
@@ -173,6 +168,26 @@ public class Cloud {
         if (r.nextInt(4)==0) res=true;
         else res=false;
         return res;
+    }
+
+    public void resize() {
+        if (resizable) {
+            if (smaller) {
+                if (height >= 10) {
+                    height -= sizeVel;
+                    width -= 2.5*sizeVel;
+                }
+                else
+                    smaller = false;
+            } else {
+                if (height <= 25) {
+                    height += sizeVel;
+                    width += 2.5*sizeVel;
+                }
+                else
+                    smaller = true;
+            }
+        }
     }
 
 
