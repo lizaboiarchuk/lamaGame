@@ -26,7 +26,7 @@ public class MainState extends State {
     @Override
     public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            gsm.set(new PlayState(gsm, 5));
+            gsm.set(new PlayState(gsm, 1));
         }
     }
 

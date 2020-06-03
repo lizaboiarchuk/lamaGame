@@ -29,6 +29,7 @@ public class PlayState extends State{
     Texture redString;
     Texture background;
     Texture jetpack;
+    Texture blueString;
 
 
     public int gameMode;
@@ -83,7 +84,8 @@ public class PlayState extends State{
 
         coinPic = new Texture("coin.png");
         magnitPic = new Texture("magnit.png");
-        redString = new Texture("redS.png");
+        redString = new Texture("redS.jpg");
+        blueString = new Texture("blueS.png");
         jetpack = new Texture("jetpack.png");
 
         camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
@@ -127,7 +129,7 @@ public class PlayState extends State{
     @Override
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-           if (gameMode!=4) {
+           if (gameMode!=4 && !lama.fly) {
                lama.jump();
                lama.isOnCloud = false;
            }
@@ -182,7 +184,7 @@ public class PlayState extends State{
         //checking all the clouds to understand on which lama is staying now
         for (Cloud c:clouds) {
             if (c.toDraw || gameMode!=3) {
-                if ((lama.position.y<=c.position.y+c.height+2) && (lama.position.y>=c.position.y+c.height-3) && (lama.position.x+c.height-2>=c.position.x) && (lama.position.x<=c.position.x+c.width-10)) {
+                if ((lama.position.y<=c.position.y+c.height+3) && (lama.position.y>=c.position.y+c.height-4) && (lama.position.x+c.height-2>=c.position.x) && (lama.position.x<=c.position.x+c.width-10)) {
                     lama.velocity.set(new Vector3(0, 0, 0));
                     lama.position.y = c.position.y + c.height - 2;
                     if (gameMode == 4 && !lama.fly) lama.jump();
@@ -278,12 +280,12 @@ public class PlayState extends State{
 
         if (lama.magnitism) {
             sb.draw(magnitPic, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20);
-            sb.draw(redString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),15 );
+            sb.draw(redString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
         }
 
         if (lama.fly) {
             sb.draw(jetpack, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20);
-            sb.draw(redString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),15 );
+            sb.draw(blueString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
         }
 
         sb.draw(lama.lame, lama.position.x, lama.position.y, lama.lame.getWidth()/2, lama.lame.getHeight()/2);
