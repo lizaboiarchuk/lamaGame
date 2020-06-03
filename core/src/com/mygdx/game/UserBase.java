@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class UserBase {
 
 
-    ArrayList<User> users;
+    public ArrayList<User> users;
 
 
     UserBase() {

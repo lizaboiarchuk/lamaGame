@@ -1,14 +1,20 @@
 package com.mygdx.game.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.User;
+import com.mygdx.game.UserBase;
 
 import java.util.Stack;
 
 public class GameStateManager {
 
     public Stack<State> states;
+    public User currentUser;
+    public UserBase userbase;
 
-    public GameStateManager() {
+
+    public GameStateManager(UserBase ub) {
+        userbase=ub;
         states = new Stack<State>();
     }
 

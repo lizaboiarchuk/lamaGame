@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.Lama;
+import com.mygdx.game.StartClass;
+import com.mygdx.game.User;
 import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.sprites.Lame;
 import com.mygdx.game.utilities.ScoreBar;
@@ -18,6 +19,9 @@ import java.util.ArrayList;
 
 
 public class PlayState extends State{
+
+
+
 
     Lame lama; //main character
     Texture coinPic;
@@ -82,7 +86,7 @@ public class PlayState extends State{
         redString = new Texture("redS.png");
         jetpack = new Texture("jetpack.png");
 
-        camera.setToOrtho(false, Lama.WIDTH/2, Lama.HEIGHT/2);
+        camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
 
         backgrounds = new ArrayList<Texture>();
         backgrounds.add(new Texture("d.jpg"));
@@ -154,8 +158,6 @@ public class PlayState extends State{
             camera.position.y = lama.position.y+80;
         }
 
-
-
         for (int d=0; d<clouds.size(); d++)//repos the clouds when they are out of camera viewport
         {
             Cloud cl = clouds.get(d);
@@ -226,8 +228,8 @@ public class PlayState extends State{
 
         //end of game
         if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
-            gsm.set(new EndState(gsm));
-            Lama.music.stop();
+            gsm.set(new EndState(gsm, score, money));
+            StartClass.music.stop();
             endSound.play();
         }
 
@@ -248,7 +250,7 @@ public class PlayState extends State{
             if (lama.isOnCloud && lama.currentCloud==c) c.toDraw=true;
             c.move();
             c.resize();
-            if (c.toDraw && gameMode == 3) {
+            if (c.toDraw || gameMode != 3) {
                 sb.draw(c.cloud, c.position.x, c.position.y, c.width, c.height);
                 if (c.hasCoin) {
                     sb.draw(c.coin, c.coinPosition.x, c.coinPosition.y);
