@@ -111,7 +111,9 @@ public class GameScreen implements Screen {
             lastCloud = cll;
             if (Cloud.ran()) {
                 clouds.add(new Cloud(i*(SPACE_BETWEEN_CLOUDS+Cloud.CLOUD_HEIGHT)+30,null));
-                clouds.get(clouds.size()-1).setBad();
+                clouds.get(clouds.size()-1).isInter=true;
+                System.out.println("intercloud");
+
             }
         }
 
@@ -282,6 +284,10 @@ public class GameScreen implements Screen {
         for (Cloud c:clouds) {
             if (c.toDraw || gameMode!=3) {
                 if ((lama.position.y<=c.position.y+c.height+3) && (lama.position.y>=c.position.y+c.height-4) && (lama.position.x+lama.width/4>=c.position.x) && (lama.position.x<=c.position.x+c.width-lama.width/6)) {
+                    if (c.bad && !lama.fly) {
+                        gameOver();
+                        System.out.println("on bad");
+                    }
                     lama.velocity.set(new Vector3(0, 0, 0));
                     if (!lama.fly) lama.position.y = c.position.y + c.height - 2;
                     if (gameMode == 4 && !lama.fly) lama.jump();
@@ -335,9 +341,7 @@ public class GameScreen implements Screen {
 
         //end of game
         if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
-            game.setScreen(new AuthorizationScreen(game));
-            StartClass.music.stop();
-            endSound.play();
+            gameOver();
         }
 
         camera.update();
@@ -407,6 +411,12 @@ public class GameScreen implements Screen {
                 lama.width = 30;
             }
         }
+    }
+
+    public void gameOver() {
+        game.setScreen(new AuthorizationScreen(game));
+        StartClass.music.stop();
+        endSound.play();
     }
 
 

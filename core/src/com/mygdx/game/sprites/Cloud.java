@@ -29,6 +29,7 @@ public class Cloud {
     public float width, height;
     public boolean smaller=false;
     public float sizeVel = 0.1f;
+    public boolean isInter=false;
 
 
 
@@ -83,6 +84,12 @@ public class Cloud {
 
     //creates a new position for a cloud based on a location of a previous cloud
     public void reposition(float y,Cloud c, boolean bonus) {
+        if (isInter) {
+            if (Cloud.ran()) {
+                setBad();
+                System.out.println("bad clous");
+            }
+        }
         yMoveTo=y+70;
         toDraw=true;
         magnit=false;
@@ -114,8 +121,6 @@ public class Cloud {
 
         }
             visited=false;
-            bad=false;
-            cloud = new Texture("cloud1.png");
             coin = new Texture("coin.png");
             left_or_right = rand.nextInt(2);
             if ((left_or_right==0) && (c.position.x<40))
@@ -161,6 +166,9 @@ public class Cloud {
                 magnitPosition.x+=velocity;
             if (hasJetpack)
                 jetpackPosition.x+=velocity;
+            if (hasPampers)
+                pampersPosition.x+=velocity;
+
             if (position.x >= 200)
                 velocity = -1;
             if (position.x <= 0)
@@ -173,7 +181,7 @@ public class Cloud {
     //make a cloud bad
     public void setBad() {
         bad=true;
-       // cloud = new Texture("badCloud.png");
+        cloud = new Texture("badCloud.png");
     }
 
 
