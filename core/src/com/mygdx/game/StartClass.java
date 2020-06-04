@@ -42,7 +42,9 @@ public class StartClass extends Game implements ApplicationListener {
 	private ChoiceScreen choiceScreen;
 	private GameScreen gameScreen;
 	private GameOverScreen gameOverScreen;
+	private ShopScreen shopScreen;
 
+	public boolean musicOn;
 	@Override
 	public void create () {
 		userBase = new UserBase();
@@ -64,10 +66,11 @@ public class StartClass extends Game implements ApplicationListener {
 		countFontParameter.size = 18;
 		countFontParameter.color = Color.WHITE;
 		countFont = fontGenerator.generateFont(countFontParameter);
+		musicOn = true;
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 		music.setLooping(true);
 		music.setVolume(0.1f);
-		music.play();
+		//music.play();
 		setAuthorizationScreen();
 		//	gsm = new GameStateManager(userBase);
 	//	gsm.push(new AuthorizationState(gsm));
@@ -110,12 +113,25 @@ public class StartClass extends Game implements ApplicationListener {
 		gameOverScreen = new GameOverScreen(this, score);
 		setScreen(gameOverScreen);
 	}
+	public void setShopScreen(){
+		shopScreen = new ShopScreen(this);
+		setScreen(shopScreen);
+	}
 
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
+		if(musicOn){
+			music.play();
+		} else{
+			music.dispose();
+		}
+	}
+
+	public void manageMusic(boolean musicOn){
+		this.musicOn = musicOn;
 	}
 
 	public void setGameMode(int gameMode){

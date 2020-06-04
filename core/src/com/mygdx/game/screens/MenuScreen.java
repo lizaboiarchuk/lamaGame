@@ -27,6 +27,7 @@ public class MenuScreen implements Screen {
     ImageButton musicOnButton;
     ImageButton musicOffButton;
     ImageButton backButton;
+    ImageButton shopButton;
     int musicCount = 0;
 
     public MenuScreen(final StartClass startClass){
@@ -53,9 +54,15 @@ public class MenuScreen implements Screen {
             }
         });
 
-        Drawable musicOnDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOn.png")));
-        musicOnButton = new ImageButton(musicOnDrawable);
-        musicOnButton.setPosition(StartClass.WIDTH/2-musicOnButton.getWidth()/2, StartClass.HEIGHT/2-musicOnButton.getHeight());
+        Drawable shopDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/shopButton.png")));
+        shopButton = new ImageButton(shopDrawable);
+        shopButton.setPosition(StartClass.WIDTH/2-shopButton.getWidth()/2, StartClass.HEIGHT/2);
+        shopButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                dispose();
+                startClass.setShopScreen();
+            }
+        });
 
         Drawable backDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/authButton.png")));
         backButton = new ImageButton(backDrawable);
@@ -66,35 +73,34 @@ public class MenuScreen implements Screen {
                 startClass.setAuthorizationScreen();
             }
         });
-//
-//        musicOnButton.addListener(new ClickListener() {
-//            public void clicked(InputEvent event, float x, float y){
-//                musicCount++;
-//                musicOnButton.clear();
-//                stage.addActor(musicOffButton);
-//                startClass.music.play();
-//            }
-//        });
-//
-//        Drawable musicOffDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOff.png")));
-//        musicOffButton = new ImageButton(musicOffDrawable);
-//        musicOffButton.setPosition(StartClass.WIDTH/2-musicOffButton.getWidth()/2, StartClass.HEIGHT/2-musicOffButton.getHeight());
-//        musicOffButton.addListener(new ClickListener() {
-//            public void clicked(InputEvent event, float x, float y){
-//                musicCount++;
-//                musicOffButton.clear();
-//                stage.addActor(musicOnButton);
-//                startClass.music.dispose();
-//            }
-//        });
+
+        Drawable musicOnDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOn.png")));
+        musicOnButton = new ImageButton(musicOnDrawable);
+        musicOnButton.setPosition(StartClass.WIDTH/2-musicOnButton.getWidth()/2, StartClass.HEIGHT/2-musicOnButton.getHeight());
+        musicOnButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+               startClass.musicOn = true;
+            }
+        });
+
+        Drawable musicOffDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOff.png")));
+        musicOffButton = new ImageButton(musicOffDrawable);
+        musicOffButton.setPosition(StartClass.WIDTH/2-musicOffButton.getWidth()/2, StartClass.HEIGHT/2-musicOffButton.getHeight());
+        musicOffButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                startClass.musicOn = false;
+            }
+        });
 
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
         stage.addActor(sittingLamaImage);
         stage.addActor(playButton);
         stage.addActor(backButton);
-      //  stage.addActor(musicOffButton);
-
+        stage.addActor(shopButton);
+        stage.addActor(musicOffButton);
+        stage.addActor(musicOnButton);
+        musicOnButton.setVisible(false);
     }
 
     @Override
@@ -108,6 +114,13 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
+        if(startClass.musicOn){
+            musicOnButton.setVisible(false);
+            musicOffButton.setVisible(true);
+        } else{
+            musicOnButton.setVisible(true);
+            musicOffButton.setVisible(false);
+        }
     }
 
     @Override
