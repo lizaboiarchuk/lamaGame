@@ -22,6 +22,7 @@ public class ChoiceState extends State {
     private Texture threeLevel;
     private Texture fourLevel;
     private Texture fiveLevel;
+    private Texture backButton;
 
     public ChoiceState(GameStateManager gsm) {
         super(gsm);
@@ -37,6 +38,7 @@ public class ChoiceState extends State {
         threeLevel = new Texture("uiskins/threeLevel.png");
         fourLevel = new Texture("uiskins/fourLevel.png");
         fiveLevel = new Texture("uiskins/fiveLevel.png");
+        backButton = new Texture("uiskins/backButton.png");
         fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Modulus-Bold.otf"));
         fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontParameter.size = 35;
@@ -65,6 +67,7 @@ public class ChoiceState extends State {
         sb.draw(threeLevel, 224, 350);
         sb.draw(fourLevel, 286, 350);
         sb.draw(fiveLevel, 348, 350);
+        sb.draw(backButton, 5, StartClass.HEIGHT-backButton.getHeight()-5);
         font.draw(sb, "Choose difficulty", 120, StartClass.HEIGHT/2+150);
        /*
         if (Gdx.input.isTouched()) {
@@ -119,11 +122,22 @@ public class ChoiceState extends State {
         }
 
 
+        if(Gdx.input.getX() > 5 &&
+                Gdx.input.getX() < 45 &&
+                Gdx.input.getY() > 5 &&
+                Gdx.input.getY() < 48) {
+            if (Gdx.input.isTouched()) {
+                this.dispose();
+                gsm.set(new MenuState(gsm));
+            }
+        }
+
         sb.end();
     }
 
     @Override
     public void dispose() {
+        backButton.dispose();
         background.dispose();
         grass.dispose();
         sittingLama.dispose();
