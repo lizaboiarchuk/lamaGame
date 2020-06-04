@@ -338,8 +338,10 @@ public class GameScreen implements Screen {
             game.setScreen(new AuthorizationScreen(game));
             StartClass.music.stop();
             endSound.play();
+            this.dispose();
+            game.setScore(this.score);
+            game.setGameOverScreen();
         }
-
         camera.update();
     }
 
