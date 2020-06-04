@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.StartClass;
 import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.sprites.Lame;
@@ -33,6 +35,8 @@ public class GameScreen implements Screen {
     Texture pampers;
     Texture whiteS;
     SpriteBatch sb;
+    Label scoreLabel;
+    Label coinsLabel;
 
 
     public int gameMode;
@@ -89,6 +93,15 @@ public class GameScreen implements Screen {
         jetpack = new Texture("jetpack.png");
         pampers = new Texture("pampers.png");
         whiteS = new Texture("whiteS.png");
+/*
+        scoreLabel = new Label("Score: " + String.format("%d", this.score) , new Label.LabelStyle(game.countFont, Color.WHITE));
+        scoreLabel.setPosition(StartClass.WIDTH-scoreLabel.getWidth()-7, StartClass.HEIGHT-scoreLabel.getHeight()-7);
+
+        coinsLabel = new Label("Score: " + String.format("%d", this.money) , new Label.LabelStyle(game.countFont, Color.WHITE));
+        coinsLabel.setPosition(StartClass.WIDTH/2-scoreLabel.getWidth()/2, StartClass.HEIGHT/2+2*scoreLabel.getHeight()+10);
+
+
+ */
 
         camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
 

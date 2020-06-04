@@ -33,6 +33,8 @@ public class StartClass extends Game implements ApplicationListener {
 	public BitmapFont whiteFont;
 	public FreeTypeFontGenerator.FreeTypeFontParameter buttonsFontParameter;
 	public BitmapFont buttonsFont;
+	public FreeTypeFontGenerator.FreeTypeFontParameter countFontParameter;
+	public BitmapFont countFont;
 
 	private AuthorizationScreen authorizationScreen;
 	private RegistrationScreen registrationScreen;
@@ -58,6 +60,10 @@ public class StartClass extends Game implements ApplicationListener {
 		buttonsFontParameter.size = 30;
 		buttonsFontParameter.color = Color.WHITE;
 		buttonsFont = fontGenerator.generateFont(whiteFontParameter);
+		countFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		countFontParameter.size = 18;
+		countFontParameter.color = Color.WHITE;
+		countFont = fontGenerator.generateFont(countFontParameter);
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 		music.setLooping(true);
 		music.setVolume(0.1f);
