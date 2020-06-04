@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.AuthorizationScreen;
+import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.ScreenEnum;
 import com.mygdx.game.screens.ScreenManager;
 import com.mygdx.game.states.AuthorizationState;
 import com.mygdx.game.states.GameStateManager;
 import com.mygdx.game.states.MainState;
+import com.mygdx.game.states.PlayState;
 
 public class StartClass extends Game  {
 
@@ -31,7 +33,7 @@ public class StartClass extends Game  {
 	public void create () {
 		userBase = new UserBase();
 		batch = new SpriteBatch();
-		setScreen(new AuthorizationScreen(this));
+		setScreen(new GameScreen(this,1));
 	//	gsm = new GameStateManager(userBase);
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 		music.setLooping(true);

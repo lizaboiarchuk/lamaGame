@@ -24,11 +24,11 @@ public enum ScreenEnum {
             return new ChoiceScreen();
         }
     },
-    GAME_SCREEN {
+ /*   GAME_SCREEN {
         public AbstractScreen getScreen(Object... params) {
             return new GameScreen();
         }
-    },
+    },*/
     GAME_OVER_SCREEN {
         public AbstractScreen getScreen(Object... params) {
             return new GameOverScreen();
