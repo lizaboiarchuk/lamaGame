@@ -119,7 +119,7 @@ public class PlayState extends State{
 
 
         lowestCloud=clouds.get(0);
-        lama=new Lame(clouds.get(5).position.x+10, clouds.get(5).position.y+35);
+       // lama=new Lame(clouds.get(5).position.x+10, clouds.get(5).position.y+35, );
         lamePrev = lama.position.y;
 
 

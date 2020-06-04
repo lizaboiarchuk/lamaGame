@@ -31,11 +31,12 @@ public class Lame {
 
     public Cloud currentCloud=null;
 
+    private StartClass startClass;
 
 
 
-
-    public Lame (float x, float y) {
+    public Lame (float x, float y, StartClass startClass) {
+        this.startClass = startClass;
         jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
         position = new Vector3(x,y,0);
         velocity = new Vector3(0,0,0);
@@ -68,7 +69,7 @@ public class Lame {
         if (isOnCloud==true) {
             position.y+=5;
             jumpSound.setVolume(0,0.2f);
-            jumpSound.play();
+           if(startClass.musicOn) jumpSound.play();
             velocity.y = 400;
             if (lookingLeft)
                 lame = new Sprite(new Texture("lameLeftMove.PNG"));

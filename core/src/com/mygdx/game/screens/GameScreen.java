@@ -35,6 +35,7 @@ public class GameScreen implements Screen {
     Texture pampers;
     Texture whiteS;
     SpriteBatch sb;
+
     Label scoreLabel;
     Label coinsLabel;
 
@@ -130,7 +131,7 @@ public class GameScreen implements Screen {
 
 
         lowestCloud=clouds.get(0);
-        lama=new Lame(clouds.get(5).position.x+10, clouds.get(5).position.y+35);
+        lama=new Lame(clouds.get(5).position.x+10, clouds.get(5).position.y+35, game);
         lamePrev = lama.position.y;
 
 
@@ -311,7 +312,7 @@ public class GameScreen implements Screen {
                     if (c.hasCoin) {
                         if ((lama.position.x + lama.lame.getWidth() >= c.coinPosition.x) && (lama.position.x <= c.coinPosition.x + c.coin.getWidth()))
                             c.hasCoin = false;
-                        coinSound.play();
+                       if(game.musicOn) coinSound.play();
                         money++;
                         score += 7;
                     }
@@ -321,7 +322,7 @@ public class GameScreen implements Screen {
                         if ((lama.position.x + lama.lame.getWidth() >= c.magnitPosition.x) && (lama.position.x <= c.magnitPosition.x + c.mag.getWidth())) {
                             c.magnit = false;
                             lama.magnitism = true;
-                            coinSound.play(); //new sound here for a bonus
+                           if(game.musicOn) coinSound.play(); //new sound here for a bonus
                         }
 
                     }
@@ -329,14 +330,14 @@ public class GameScreen implements Screen {
                         if ((lama.position.x + lama.lame.getWidth() >= c.jetpackPosition.x) && (lama.position.x <= c.jetpackPosition.x + c.mag.getWidth())) {
                             c.hasJetpack = false;
                             lama.fly = true;
-                            coinSound.play(); //new sound here for a bonus
+                           if(game.musicOn) coinSound.play(); //new sound here for a bonus
                         }
                     }
                     if (c.hasPampers) {
                         if ((lama.position.x + lama.lame.getWidth() >= c.pampersPosition.x) && (lama.position.x <= c.pampersPosition.x + 20)) {
                             c.hasPampers = false;
                             lama.hasPampers = true;
-                            coinSound.play(); //new sound here for a bonus
+                           if(game.musicOn) coinSound.play(); //new sound here for a bonus
                         }
                     }
                 }
@@ -350,7 +351,7 @@ public class GameScreen implements Screen {
         if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
             game.setScreen(new AuthorizationScreen(game));
             StartClass.music.stop();
-            endSound.play();
+           if(game.musicOn) endSound.play();
             this.dispose();
             game.setScore(this.score);
             game.setGameOverScreen();
@@ -382,7 +383,7 @@ public class GameScreen implements Screen {
                             cloud.coinPosition.y+=vector.y;
                             if ((lama.position.x+lama.lame.getWidth()>=cloud.coinPosition.x) && (lama.position.x<=cloud.coinPosition.x+cloud.coin.getWidth()) && (cloud.coinPosition.y<=lama.position.y+5) && (cloud.coinPosition.y>=lama.position.y)) {
                                 cloud.hasCoin = false;
-                                coinSound.play();
+                               if(game.musicOn) coinSound.play();
                                 money++;
                                 score += 7;
                             }
