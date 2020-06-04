@@ -36,7 +36,7 @@ public class StartClass extends Game implements ApplicationListener {
 	public void create () {
 		userBase = new UserBase();
 		batch = new SpriteBatch();
-		setAuthorizationScreen();
+		setGameScreen();
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 		music.setLooping(true);
 		music.setVolume(0.1f);
@@ -66,7 +66,7 @@ public class StartClass extends Game implements ApplicationListener {
 		setScreen(choiceScreen);
 	}
 	public void setGameScreen() {
-		gameScreen = new GameScreen(this);
+		gameScreen = new GameScreen(this,1);
 		setScreen(gameScreen);
 	}
 	public void setGameOverScreen() {
