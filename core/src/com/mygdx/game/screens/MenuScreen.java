@@ -1,14 +1,19 @@
 package com.mygdx.game.screens;
 
-public class MenuScreen extends AbstractScreen {
-    @Override
-    public void show() {
+import com.badlogic.gdx.Screen;
+import com.mygdx.game.StartClass;
 
+public class MenuScreen implements Screen {
+
+    private StartClass startClass;
+
+    public MenuScreen(StartClass startClass){
+        this.startClass = startClass;
     }
 
     @Override
-    public void buildStage() {
-        System.out.println("menu");
+    public void show() {
+
     }
 
     @Override

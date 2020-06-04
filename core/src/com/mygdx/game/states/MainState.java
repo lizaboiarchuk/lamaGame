@@ -1,15 +1,8 @@
 package com.mygdx.game.states;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.StartClass;
-import com.mygdx.game.screens.ScreenEnum;
-import com.mygdx.game.screens.ScreenManager;
 
 public class MainState extends State{
 

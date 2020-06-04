@@ -1,13 +1,18 @@
 package com.mygdx.game.screens;
 
-public class RegistrationScreen extends AbstractScreen {
-    @Override
-    public void show() {
+import com.badlogic.gdx.Screen;
+import com.mygdx.game.StartClass;
 
+public class RegistrationScreen implements Screen {
+
+    private StartClass startClass;
+
+    public RegistrationScreen(StartClass startClass){
+        this.startClass = startClass;
     }
 
     @Override
-    public void buildStage() {
+    public void show() {
 
     }
 
