@@ -65,7 +65,6 @@ public class Lame {
 
 
     public void jump() {
-        System.out.println("jump");
         if (isOnCloud==true) {
             position.y+=5;
             jumpSound.setVolume(0,0.2f);
