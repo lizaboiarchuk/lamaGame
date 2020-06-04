@@ -335,7 +335,7 @@ public class GameScreen implements Screen {
 
         //end of game
         if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
-           // gsm.set(new EndState(gsm, score, money));
+            game.setScreen(new AuthorizationScreen(game));
             StartClass.music.stop();
             endSound.play();
         }
