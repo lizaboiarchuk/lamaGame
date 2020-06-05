@@ -55,6 +55,7 @@ public class ChoiceScreen implements Screen {
         oneLevel.setPosition(50, StartClass.HEIGHT/2-oneLevel.getHeight());
         oneLevel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setGameMode(1);
                 startClass.setGameScreen();
@@ -66,6 +67,7 @@ public class ChoiceScreen implements Screen {
         twoLevel.setPosition(133, StartClass.HEIGHT/2-twoLevel.getHeight());
         twoLevel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setGameMode(2);
                 startClass.setGameScreen();
@@ -77,6 +79,7 @@ public class ChoiceScreen implements Screen {
         threeLevel.setPosition(216, StartClass.HEIGHT/2-threeLevel.getHeight());
         threeLevel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setGameMode(3);
                 startClass.setGameScreen();
@@ -88,6 +91,7 @@ public class ChoiceScreen implements Screen {
         fourLevel.setPosition(299, StartClass.HEIGHT/2-fourLevel.getHeight());
         fourLevel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setGameMode(4);
                 startClass.setGameScreen();
@@ -99,6 +103,7 @@ public class ChoiceScreen implements Screen {
         fiveLevel.setPosition(382, StartClass.HEIGHT/2-fiveLevel.getHeight());
         fiveLevel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setGameMode(5);
                 startClass.setGameScreen();
@@ -110,6 +115,7 @@ public class ChoiceScreen implements Screen {
         backButton.setPosition(7, StartClass.HEIGHT-7-backButton.getHeight());
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setMenuScreen();
             }

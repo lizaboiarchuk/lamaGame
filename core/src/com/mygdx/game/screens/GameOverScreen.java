@@ -69,6 +69,7 @@ public class GameOverScreen implements Screen {
         restartButton.setPosition(StartClass.WIDTH/2-restartButton.getWidth()/2, StartClass.HEIGHT/2-20);
         restartButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setGameScreen();
             }
@@ -79,6 +80,7 @@ public class GameOverScreen implements Screen {
         mainMenuButton.setPosition(StartClass.WIDTH/2-mainMenuButton.getWidth()/2, StartClass.HEIGHT/2-mainMenuButton.getHeight()-40);
         mainMenuButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setMenuScreen();
             }

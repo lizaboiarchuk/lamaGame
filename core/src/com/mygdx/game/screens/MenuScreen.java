@@ -49,6 +49,7 @@ public class MenuScreen implements Screen {
         playButton.setPosition(StartClass.WIDTH/2-playButton.getWidth()/2, StartClass.HEIGHT/2+playButton.getHeight());
         playButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setChoiceScreen();
             }
@@ -59,6 +60,7 @@ public class MenuScreen implements Screen {
         shopButton.setPosition(StartClass.WIDTH/2-shopButton.getWidth()/2, StartClass.HEIGHT/2);
         shopButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setShopScreen();
             }
@@ -69,6 +71,7 @@ public class MenuScreen implements Screen {
         backButton.setPosition(7, StartClass.HEIGHT-7-backButton.getHeight());
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setAuthorizationScreen();
             }
@@ -79,6 +82,7 @@ public class MenuScreen implements Screen {
         musicOnButton.setPosition(StartClass.WIDTH/2-musicOnButton.getWidth()/2, StartClass.HEIGHT/2-musicOnButton.getHeight());
         musicOnButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                startClass.musicOn = true;
             }
         });
@@ -88,6 +92,7 @@ public class MenuScreen implements Screen {
         musicOffButton.setPosition(StartClass.WIDTH/2-musicOffButton.getWidth()/2, StartClass.HEIGHT/2-musicOffButton.getHeight());
         musicOffButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 startClass.musicOn = false;
             }
         });

@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,6 +36,10 @@ public class StartClass extends Game implements ApplicationListener {
 	public BitmapFont buttonsFont;
 	public FreeTypeFontGenerator.FreeTypeFontParameter countFontParameter;
 	public BitmapFont countFont;
+	public FreeTypeFontGenerator.FreeTypeFontParameter moneyFontParameter;
+	public BitmapFont moneyFont;
+	public Sound clickSound;
+	public boolean clicksoundbool = false;
 
 	private AuthorizationScreen authorizationScreen;
 	private RegistrationScreen registrationScreen;
@@ -63,31 +68,20 @@ public class StartClass extends Game implements ApplicationListener {
 		buttonsFontParameter.color = Color.WHITE;
 		buttonsFont = fontGenerator.generateFont(whiteFontParameter);
 		countFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		countFontParameter.size = 18;
-		countFontParameter.color = Color.WHITE;
+		countFontParameter.size = 15;
+		countFontParameter.color = Color.BLACK;
 		countFont = fontGenerator.generateFont(countFontParameter);
+		moneyFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		moneyFontParameter.size = 10;
+		moneyFontParameter.color = Color.YELLOW;
+		moneyFont = fontGenerator.generateFont(moneyFontParameter);
 		musicOn = true;
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 		music.setLooping(true);
 		music.setVolume(0.1f);
-		//music.play();
+		clickSound = Gdx.audio.newSound(Gdx.files.internal("clickSound.wav"));
 		setAuthorizationScreen();
-		//	gsm = new GameStateManager(userBase);
-	//	gsm.push(new AuthorizationState(gsm));
-	//	ScreenManager.getInstance().initialize(this);
-	//	ScreenManager.getInstance().showScreen( ScreenEnum.AUTHORIZATION_SCREEN );
-	//	Gdx.gl.glClearColor(1,1,1,1);
-	//	gsm.push(new MainState(gsm, this));
 	}
-
-	public void setFontParameterSize(int size){
-		this.welcomeFontParameter.size = size;
-	}
-
-	public void setFontParameterColor(Color color){
-		this.welcomeFontParameter.color = color;
-	}
-
 
 	public void setAuthorizationScreen() {
 		authorizationScreen = new AuthorizationScreen(this);
@@ -118,6 +112,10 @@ public class StartClass extends Game implements ApplicationListener {
 		setScreen(shopScreen);
 	}
 
+	public void clickSound(){
+		this.clickSound.play(1f);
+	}
+
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -125,6 +123,10 @@ public class StartClass extends Game implements ApplicationListener {
 		super.render();
 		if(musicOn){
 			music.play();
+			if(clicksoundbool) {
+				clickSound.play(1f);
+				clicksoundbool = false;
+			}
 		} else{
 			music.dispose();
 		}

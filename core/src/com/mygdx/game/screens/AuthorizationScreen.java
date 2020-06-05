@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,6 +38,7 @@ public class AuthorizationScreen implements Screen {
     TextField passwordTextField;
     String loginInput;
     String passwordInput;
+    boolean clicked = false;
 
     public AuthorizationScreen(final StartClass startClass){
         this.startClass = startClass;
@@ -90,6 +92,7 @@ public class AuthorizationScreen implements Screen {
         loginButtonImage.setPosition(StartClass.WIDTH/2-loginButtonImage.getWidth()/2, StartClass.HEIGHT/2-100);
         loginButtonImage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 loginInput = loginTextField.getText();
                 passwordInput = passwordTextField.getText();
                 System.out.println("login: " + loginInput + " ; password = " + passwordInput);
@@ -105,6 +108,7 @@ public class AuthorizationScreen implements Screen {
 
         loginButtonLabel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 loginInput = loginTextField.getText();
                 passwordInput = passwordTextField.getText();
                 System.out.println("login: " + loginInput + " ; password = " + passwordInput);
@@ -123,6 +127,7 @@ public class AuthorizationScreen implements Screen {
         registerButtonImage.setPosition(StartClass.WIDTH/2-registerButtonImage.getWidth()/2, StartClass.HEIGHT/2-160);
         registerButtonImage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setRegistrationScreen();
             }
@@ -130,6 +135,7 @@ public class AuthorizationScreen implements Screen {
 
         registerButtonLabel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setRegistrationScreen();
             }

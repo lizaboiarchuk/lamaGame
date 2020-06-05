@@ -35,6 +35,7 @@ public class GameScreen implements Screen {
     Texture pampers;
     Texture whiteS;
     SpriteBatch sb;
+    Texture moneyBag;
 
     Label scoreLabel;
     Label coinsLabel;
@@ -94,6 +95,7 @@ public class GameScreen implements Screen {
         jetpack = new Texture("jetpack.png");
         pampers = new Texture("pampers.png");
         whiteS = new Texture("whiteS.png");
+        moneyBag = new Texture("moneybag.png");
 /*
         scoreLabel = new Label("Score: " + String.format("%d", this.score) , new Label.LabelStyle(game.countFont, Color.WHITE));
         scoreLabel.setPosition(StartClass.WIDTH-scoreLabel.getWidth()-7, StartClass.HEIGHT-scoreLabel.getHeight()-7);
@@ -178,7 +180,7 @@ public class GameScreen implements Screen {
 
             }
         }
-
+/*
         //drawing scorebar
         for (int i=0;i<5;i++) {
             sb.draw(scoreBar.show(score).get(i), camera.position.x+ 50+i*9,camera.position.y+camera.viewportHeight/2-13, 8,11);
@@ -189,7 +191,16 @@ public class GameScreen implements Screen {
             sb.draw(moneyBar.show(money).get(i), camera.position.x-120+(i-2)*9, camera.position.y+camera.viewportHeight/2-13,8,11);
         }
 
-        sb.draw(coinPic,camera.position.x-80-coinPic.getWidth(), camera.position.y+camera.viewportHeight/2-coinPic.getHeight());
+            sb.draw(coinPic,camera.position.x-80-coinPic.getWidth(), camera.position.y+camera.viewportHeight/2-coinPic.getHeight());
+
+
+ */
+
+        String coincounterString = String.format("%d", this.money);
+        sb.draw(moneyBag,camera.position.x+camera.viewportWidth/2-moneyBag.getWidth(), camera.position.y+camera.viewportHeight/2-moneyBag.getHeight());
+        game.moneyFont.draw(sb, coincounterString, camera.position.x+camera.viewportWidth/2-moneyBag.getWidth()-coincounterString.length()-5, camera.position.y+camera.viewportHeight/2-10);
+        String pointscounterString = String.format("%d", this.score);
+        game.countFont.draw(sb, pointscounterString, camera.position.x-pointscounterString.length(), camera.position.y+camera.viewportHeight/2-8);
 
 
         if (lama.magnitism) {

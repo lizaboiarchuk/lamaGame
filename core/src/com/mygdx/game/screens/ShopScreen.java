@@ -43,6 +43,7 @@ public class ShopScreen implements Screen {
         backButton.setPosition(7, StartClass.HEIGHT-7-backButton.getHeight());
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setMenuScreen();
             }

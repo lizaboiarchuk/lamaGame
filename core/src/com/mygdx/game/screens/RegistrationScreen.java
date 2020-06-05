@@ -104,6 +104,7 @@ public class RegistrationScreen implements Screen {
         registerButtonImage.setPosition(StartClass.WIDTH/2-registerButtonImage.getWidth()/2, StartClass.HEIGHT/2-160);
         registerButtonImage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setMenuScreen();
             }
@@ -111,6 +112,7 @@ public class RegistrationScreen implements Screen {
 
         registerButtonLabel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 nameInput = nameTextField.getText();
                 loginInput = loginTextField.getText();
                 passwordInput = passwordTextField.getText();
@@ -134,6 +136,7 @@ public class RegistrationScreen implements Screen {
         backButton.setPosition(7, StartClass.HEIGHT-7-backButton.getHeight());
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
                 dispose();
                 startClass.setAuthorizationScreen();
             }
