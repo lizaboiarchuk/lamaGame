@@ -34,6 +34,7 @@ public class GameScreen implements Screen {
     Texture blueString;
     Texture wingsPic;
     Texture whiteS;
+    boolean multi = false;
 
 
     SpriteBatch sb;
@@ -262,6 +263,7 @@ public class GameScreen implements Screen {
                 lama.isOnCloud = false;
             }
             score+=3;
+            if (bonusesOn[3]) score+=3;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             lama.left();
@@ -361,6 +363,7 @@ public class GameScreen implements Screen {
     public void doubleOn() {
         tubesGrey.get(3).tube = new Image(new Texture("tube.png"));
         bonusesOn[3] = true;
+        bonusesNumber[2]--;
     }
 
     public void doubleOf() {
@@ -461,6 +464,7 @@ public class GameScreen implements Screen {
                 lastCloud=cl;
                 lowestCloud=clouds.get((d+1)%10);
                 score+=5;
+                if (bonusesOn[3]) score+=5;
                 if ((!cl.canBeMagnit) && (cl.magnit)) cl.magnit=false;
             }
         }
@@ -487,7 +491,9 @@ public class GameScreen implements Screen {
                             c.hasCoin = false;
                        if(game.musicOn) coinSound.play();
                         money++;
+                        if (bonusesOn[3]) money++;
                         score += 7;
+                        if (bonusesOn[3]) score+=7;
                     }
 
                     //picking a magnit
@@ -522,8 +528,8 @@ public class GameScreen implements Screen {
         }
         magniting();
         jetpack();
-
         wings();
+        doubleSc();
 
         //end of game
         if (lama.position.y+20<camera.position.y-camera.viewportHeight/2 && !lama.hasWings) {
@@ -607,6 +613,20 @@ public class GameScreen implements Screen {
 
         }
     }
+
+    public void doubleSc() {
+        if (bonusesOn[3]) {
+            timeCounter++;
+            if (timeCounter == bonusTimer) {
+                doubleOf();
+                timeCounter = 0;
+                lama.GRAVITY=-15;
+
+            }
+
+        }
+    }
+
 
 
 
