@@ -22,16 +22,21 @@ public class InfoScreen implements Screen {
     Image backgroundImage;
     Image grassImage;
     Image sittingLamaImage;
-    ImageButton backButton;
-    ImageButton musicOnSmallButton;
-    ImageButton musicOffSmallButton;
     Image boardImage;
     Image topBoardImage;
     Image bottomBoardImage;
+    ImageButton backButton;
+    ImageButton musicOnSmallButton;
+    ImageButton musicOffSmallButton;
+    ImageButton slideLeftButton;
+    ImageButton slideRightButton;
+    private int countPage;
+
 
     public InfoScreen(final StartClass startClass){
         this.startClass = startClass;
         stage = new Stage(new ScreenViewport());
+        countPage = 0;
 
         backgroundImage = new Image(new Texture("blueBackGround.jpg"));
         backgroundImage.setPosition(0, 0);
@@ -83,6 +88,24 @@ public class InfoScreen implements Screen {
             }
         });
 
+        Drawable slideLeftDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/slideLeft.png")));
+        slideLeftButton = new ImageButton(slideLeftDrawable);
+        slideLeftButton.setPosition(boardImage.getX()/2-slideLeftButton.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-slideLeftButton.getHeight()/2);
+        slideLeftButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                countPage--;
+            }
+        });
+
+        Drawable slideRightDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/slideRight.png")));
+        slideRightButton = new ImageButton(slideRightDrawable);
+        slideRightButton.setPosition(boardImage.getX()+boardImage.getX()/2+boardImage.getWidth()-slideRightButton.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-slideRightButton.getHeight()/2);
+        slideRightButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                countPage++;
+            }
+        });
+
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
         stage.addActor(sittingLamaImage);
@@ -90,10 +113,12 @@ public class InfoScreen implements Screen {
         stage.addActor(boardImage);
         stage.addActor(topBoardImage);
         stage.addActor(bottomBoardImage);
+        stage.addActor(slideLeftButton);
+        stage.addActor(slideRightButton);
         stage.addActor(musicOnSmallButton);
         stage.addActor(musicOffSmallButton);
         musicOnSmallButton.setVisible(false);
-
+        slideLeftButton.setVisible(false);
     }
 
 
@@ -115,6 +140,13 @@ public class InfoScreen implements Screen {
             musicOnSmallButton.setVisible(true);
             musicOffSmallButton.setVisible(false);
         }
+        if(countPage==0){
+            slideLeftButton.setVisible(false);
+        } else {
+            slideRightButton.setVisible(true);
+        }
+
+
     }
 
     @Override
