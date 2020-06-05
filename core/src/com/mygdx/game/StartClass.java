@@ -12,21 +12,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.game.screens.*;
-import com.mygdx.game.states.GameStateManager;
 
 public class StartClass extends Game implements ApplicationListener {
 
 	public final static int WIDTH = 500;
 	public final static int HEIGHT = 700;
-	final static String title = "Jumping Lama";
-	public GameStateManager gsm;
-	public int gameMode;
-	public long score;
-	public SpriteBatch batch;
-	public static Music music;
-	UserBase userBase;
-	Texture img;
-	Info inf = new Info();
 	public FreeTypeFontGenerator fontGenerator;
 	public FreeTypeFontGenerator.FreeTypeFontParameter welcomeFontParameter;
 	public BitmapFont welcomeFont;
@@ -39,7 +29,15 @@ public class StartClass extends Game implements ApplicationListener {
 	public FreeTypeFontGenerator.FreeTypeFontParameter moneyFontParameter;
 	public BitmapFont moneyFont;
 	public Sound clickSound;
+	final static String title = "Jumping Lama";
 	public boolean clicksoundbool = false;
+	public SpriteBatch batch;
+	public static Music music;
+	public int gameMode;
+	public long score;
+	UserBase userBase;
+	Info inf = new Info();
+	Texture img;
 
 	private AuthorizationScreen authorizationScreen;
 	private RegistrationScreen registrationScreen;
@@ -48,8 +46,8 @@ public class StartClass extends Game implements ApplicationListener {
 	private GameScreen gameScreen;
 	private GameOverScreen gameOverScreen;
 	private ShopScreen shopScreen;
-
 	public boolean musicOn;
+
 	@Override
 	public void create () {
 		userBase = new UserBase();
@@ -112,10 +110,6 @@ public class StartClass extends Game implements ApplicationListener {
 		setScreen(shopScreen);
 	}
 
-	public void clickSound(){
-		this.clickSound.play(1f);
-	}
-
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -130,10 +124,6 @@ public class StartClass extends Game implements ApplicationListener {
 		} else{
 			music.dispose();
 		}
-	}
-
-	public void manageMusic(boolean musicOn){
-		this.musicOn = musicOn;
 	}
 
 	public void setGameMode(int gameMode){

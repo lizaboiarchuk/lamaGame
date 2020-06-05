@@ -4,26 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.StartClass;
 import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.sprites.Lame;
-import com.mygdx.game.states.EndState;
-import com.mygdx.game.utilities.ScoreBar;
 
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
     StartClass game;
-
-
 
     Lame lama; //main character
     Texture coinPic;
@@ -37,12 +31,7 @@ public class GameScreen implements Screen {
     SpriteBatch sb;
     Texture moneyBag;
 
-    Label scoreLabel;
-    Label coinsLabel;
-
-
     public int gameMode;
-
 
     public static final int bonusTimer = 1000; //(*delta time (0.22sec))
     public int timeCounter;
@@ -58,20 +47,14 @@ public class GameScreen implements Screen {
     public long score; // current score
     public long money; //current coins
 
-    ScoreBar scoreBar;
-    ScoreBar moneyBar;
-
     float lamePrev;
-
 
     //sounds
     public Sound coinSound;
     public Sound endSound;
     public OrthographicCamera camera;
 
-
     public ArrayList<Texture> backgrounds;
-
 
     public GameScreen(StartClass game, int gameMode) {
         this.game = game;
@@ -81,9 +64,6 @@ public class GameScreen implements Screen {
         score=0;
         money=0;
         camera = new OrthographicCamera();
-
-        scoreBar = new ScoreBar();
-        moneyBar = new ScoreBar();
 
         coinSound = Gdx.audio.newSound(Gdx.files.internal("coin_sound.wav"));
         endSound = Gdx.audio.newSound(Gdx.files.internal("end.wav"));
@@ -96,15 +76,6 @@ public class GameScreen implements Screen {
         pampers = new Texture("pampers.png");
         whiteS = new Texture("whiteS.png");
         moneyBag = new Texture("moneybag.png");
-/*
-        scoreLabel = new Label("Score: " + String.format("%d", this.score) , new Label.LabelStyle(game.countFont, Color.WHITE));
-        scoreLabel.setPosition(StartClass.WIDTH-scoreLabel.getWidth()-7, StartClass.HEIGHT-scoreLabel.getHeight()-7);
-
-        coinsLabel = new Label("Score: " + String.format("%d", this.money) , new Label.LabelStyle(game.countFont, Color.WHITE));
-        coinsLabel.setPosition(StartClass.WIDTH/2-scoreLabel.getWidth()/2, StartClass.HEIGHT/2+2*scoreLabel.getHeight()+10);
-
-
- */
 
         camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
 
@@ -116,8 +87,6 @@ public class GameScreen implements Screen {
         backgrounds.add(new Texture("greenBackGround.jpg"));
 
         background = backgrounds.get(gameMode-1);
-
-
 
         //creating clouds
         clouds = new ArrayList<Cloud>();
@@ -131,22 +100,11 @@ public class GameScreen implements Screen {
             }
         }
 
-
         lowestCloud=clouds.get(0);
         lama=new Lame(clouds.get(5).position.x+10, clouds.get(5).position.y+35, game);
         lamePrev = lama.position.y;
 
-
-
-
         camera.position.y=lama.position.y+80;
-
-    }
-
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -177,30 +135,14 @@ public class GameScreen implements Screen {
                     sb.draw(c.jetpack, c.jetpackPosition.x, c.jetpackPosition.y);
                 if (c.hasPampers)
                     sb.draw(c.pampers, c.pampersPosition.x, c.pampersPosition.y, 20,20);
-
             }
         }
-/*
-        //drawing scorebar
-        for (int i=0;i<5;i++) {
-            sb.draw(scoreBar.show(score).get(i), camera.position.x+ 50+i*9,camera.position.y+camera.viewportHeight/2-13, 8,11);
-        }
-
-        //drawing moneybar
-        for (int i=2;i<5;i++) {
-            sb.draw(moneyBar.show(money).get(i), camera.position.x-120+(i-2)*9, camera.position.y+camera.viewportHeight/2-13,8,11);
-        }
-
-            sb.draw(coinPic,camera.position.x-80-coinPic.getWidth(), camera.position.y+camera.viewportHeight/2-coinPic.getHeight());
-
-
- */
 
         String coincounterString = String.format("%d", this.money);
         sb.draw(moneyBag,camera.position.x+camera.viewportWidth/2-moneyBag.getWidth(), camera.position.y+camera.viewportHeight/2-moneyBag.getHeight());
         game.moneyFont.draw(sb, coincounterString, camera.position.x+camera.viewportWidth/2-moneyBag.getWidth()-coincounterString.length()-5, camera.position.y+camera.viewportHeight/2-10);
         String pointscounterString = String.format("%d", this.score);
-        game.countFont.draw(sb, pointscounterString, camera.position.x-pointscounterString.length(), camera.position.y+camera.viewportHeight/2-8);
+        game.countFont.draw(sb, pointscounterString, camera.position.x-pointscounterString.length(), camera.position.y+camera.viewportHeight/2-7);
 
 
         if (lama.magnitism) {
@@ -218,37 +160,11 @@ public class GameScreen implements Screen {
             sb.draw(whiteS, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
         }
 
-
         sb.draw(lama.lame, lama.position.x, lama.position.y, lama.width/2, lama.height/2);
         sb.end();
-
-
     }
 
-    @Override
-    public void resize(int width, int height) {
 
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
 
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
@@ -267,8 +183,6 @@ public class GameScreen implements Screen {
 
         }
     }
-
-
 
     public void update(float dt) {
         handleInput();
@@ -436,6 +350,35 @@ public class GameScreen implements Screen {
         }
     }
 
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
 
 
 }

@@ -5,19 +5,13 @@ import com.badlogic.gdx.Screen;
 import java.util.ArrayList;
 
 public class UserBase {
-
-
     public ArrayList<User> users;
-
 
     UserBase() {
         users = new ArrayList<>();
         users.add(new User("login","password"));
         users.add(new User("user1","pass"));
     }
-
-
-
 
     public boolean checkUser(User u) {
         boolean res = false;
@@ -29,8 +23,4 @@ public class UserBase {
         }
         return res;
     }
-
-
-
-
 }

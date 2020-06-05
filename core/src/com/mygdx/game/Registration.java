@@ -3,21 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 
-
-
-
-
-
-
-
-
-
 // это пока не нужно но удалять тож не нужно
-
-
-
-
-
 
 public class Registration implements Screen {
 

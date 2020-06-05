@@ -28,7 +28,6 @@ public class MenuScreen implements Screen {
     ImageButton musicOffButton;
     ImageButton backButton;
     ImageButton shopButton;
-    int musicCount = 0;
 
     public MenuScreen(final StartClass startClass){
         this.startClass = startClass;

@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.StartClass;
-import com.mygdx.game.states.GameStateManager;
 
 public class Lame {
 
@@ -16,24 +15,16 @@ public class Lame {
     public int GRAVITY = -15;
     public static final int MOVEMENT = 100;
 
-
     public Sprite lame;
     public boolean isOnCloud=true;
     public boolean lookingLeft;
     public boolean magnitism;
     public boolean fly;
     public boolean hasPampers=false;
-
     public float width, height;
-
-
     public Sound jumpSound;
-
     public Cloud currentCloud=null;
-
     private StartClass startClass;
-
-
 
     public Lame (float x, float y, StartClass startClass) {
         this.startClass = startClass;
@@ -45,8 +36,6 @@ public class Lame {
         height = lame.getHeight();
 
     }
-
-
 
     public void update(float dt) {
         if (position.y>0)
@@ -63,8 +52,6 @@ public class Lame {
             position.x=StartClass.WIDTH/2-lame.getWidth()/2;
     }
 
-
-
     public void jump() {
         if (isOnCloud==true) {
             position.y+=5;
@@ -79,7 +66,6 @@ public class Lame {
 
     }
 
-
     public void left() {
         lookingLeft=true;
         if (position.x>0)
@@ -87,8 +73,6 @@ public class Lame {
         if (isOnCloud) lame=new Sprite(new Texture("lameLeftStay.PNG"));
         else lame=new Sprite(new Texture("lameLeftMove.PNG"));
     }
-
-
 
     public void right() {
         lookingLeft=false;
@@ -101,8 +85,6 @@ public class Lame {
 
     }
 
-
-
     public long onCloud(long score, boolean v) {
         if (!isOnCloud) {
             isOnCloud=true;
@@ -114,6 +96,4 @@ public class Lame {
             lame=new Sprite(new Texture("lameRightStay.PNG"));
         return score;
     }
-
-
 }

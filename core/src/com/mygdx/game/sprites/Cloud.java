@@ -31,12 +31,8 @@ public class Cloud {
     public float sizeVel = 0.1f;
     public boolean isInter=false;
 
-
-
     public float velocity=1;
     public float velocityY=1;
-
-
 
     public Texture cloud;
     public Texture coin;
@@ -50,12 +46,10 @@ public class Cloud {
     public float yMoveTo;
     public boolean yMoveable;
 
-
     public Vector2 coinPosition;
     public Vector2 magnitPosition;
     public Vector2 jetpackPosition;
     public Vector2 pampersPosition;
-
 
     //constructor
     public Cloud(float y, Cloud c) {
@@ -78,9 +72,7 @@ public class Cloud {
             reposition(y,c,false);
         }
         if (hasCoin) coinPosition = new Vector2(position.x+18, y+20);
-
     }
-
 
     //creates a new position for a cloud based on a location of a previous cloud
     public void reposition(float y,Cloud c, boolean bonus) {
@@ -118,7 +110,6 @@ public class Cloud {
                     magnit = false;
                 }
             }
-
         }
             visited=false;
             coin = new Texture("coin.png");
@@ -153,10 +144,6 @@ public class Cloud {
             pampersPosition = new Vector2(position.x+17, y+20);
     }
 
-
-
-
-
     public void move() {
         if (moveable==true) {
             position.x += velocity;
@@ -176,14 +163,11 @@ public class Cloud {
         }
     }
 
-
-
     //make a cloud bad
     public void setBad() {
         bad=true;
         cloud = new Texture("badCloud.png");
     }
-
 
     //true with probability 1:4
     public static boolean ran() {
@@ -213,7 +197,4 @@ public class Cloud {
             }
         }
     }
-
-
-
 }
