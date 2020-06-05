@@ -23,6 +23,11 @@ public class InfoScreen implements Screen {
     Image grassImage;
     Image sittingLamaImage;
     Image boardImage;
+    Image firstImage;
+    Image secondImage;
+    Image thirdImage;
+    Image fourthImage;
+    Image fifthImage;
     Image topBoardImage;
     Image bottomBoardImage;
     ImageButton backButton;
@@ -31,6 +36,7 @@ public class InfoScreen implements Screen {
     ImageButton slideLeftButton;
     ImageButton slideRightButton;
     private int countPage;
+
 
 
     public InfoScreen(final StartClass startClass){
@@ -56,6 +62,21 @@ public class InfoScreen implements Screen {
 
         bottomBoardImage = new Image(new Texture("uiskins/bottomBoard.png"));
         bottomBoardImage.setPosition(StartClass.WIDTH/2-bottomBoardImage.getWidth()/2, boardImage.getY());
+
+        firstImage = new Image(new Texture("uiskins/oneLevel.png"));
+        firstImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
+
+        secondImage = new Image(new Texture("uiskins/twoLevel.png"));
+        secondImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
+
+        thirdImage = new Image(new Texture("uiskins/threeLevel.png"));
+        thirdImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
+
+        fourthImage = new Image(new Texture("uiskins/fourLevel.png"));
+        fourthImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
+
+        fifthImage = new Image(new Texture("uiskins/fiveLevel.png"));
+        fifthImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
 
         Drawable backDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/homeButton.png")));
         backButton = new ImageButton(backDrawable);
@@ -117,8 +138,18 @@ public class InfoScreen implements Screen {
         stage.addActor(slideRightButton);
         stage.addActor(musicOnSmallButton);
         stage.addActor(musicOffSmallButton);
+        stage.addActor(firstImage);
+        stage.addActor(secondImage);
+        stage.addActor(thirdImage);
+        stage.addActor(fourthImage);
+        stage.addActor(fifthImage);
         musicOnSmallButton.setVisible(false);
         slideLeftButton.setVisible(false);
+        firstImage.setVisible(true);
+        secondImage.setVisible(false);
+        thirdImage.setVisible(false);
+        fourthImage.setVisible(false);
+        fifthImage.setVisible(false);
     }
 
 
@@ -141,12 +172,46 @@ public class InfoScreen implements Screen {
             musicOffSmallButton.setVisible(false);
         }
         if(countPage==0){
-            slideLeftButton.setVisible(false);
-        } else {
             slideRightButton.setVisible(true);
+            slideLeftButton.setVisible(false);
+            firstImage.setVisible(true);
+            secondImage.setVisible(false);
+            thirdImage.setVisible(false);
+            fourthImage.setVisible(false);
+            fifthImage.setVisible(false);
+        } else if(countPage==1){
+            slideLeftButton.setVisible(true);
+            slideRightButton.setVisible(true);
+            firstImage.setVisible(false);
+            secondImage.setVisible(true);
+            thirdImage.setVisible(false);
+            fourthImage.setVisible(false);
+            fifthImage.setVisible(false);
+        } else if(countPage==2){
+            slideLeftButton.setVisible(true);
+            slideRightButton.setVisible(true);
+            firstImage.setVisible(false);
+            secondImage.setVisible(false);
+            thirdImage.setVisible(true);
+            fourthImage.setVisible(false);
+            fifthImage.setVisible(false);
+        } else if(countPage==3){
+            slideLeftButton.setVisible(true);
+            slideRightButton.setVisible(true);
+            firstImage.setVisible(false);
+            secondImage.setVisible(false);
+            thirdImage.setVisible(false);
+            fourthImage.setVisible(true);
+            fifthImage.setVisible(false);
+        } else if(countPage==4){
+            slideRightButton.setVisible(false);
+            slideLeftButton.setVisible(true);
+            firstImage.setVisible(false);
+            secondImage.setVisible(false);
+            thirdImage.setVisible(false);
+            fourthImage.setVisible(false);
+            fifthImage.setVisible(true);
         }
-
-
     }
 
     @Override

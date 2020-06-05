@@ -36,7 +36,6 @@ public class GameScreen implements Screen {
     Texture whiteS;
     boolean multi = false;
 
-
     SpriteBatch sb;
 
     boolean begins=true;
