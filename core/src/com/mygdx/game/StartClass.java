@@ -46,6 +46,7 @@ public class StartClass extends Game implements ApplicationListener {
 	private GameScreen gameScreen;
 	private GameOverScreen gameOverScreen;
 	private ShopScreen shopScreen;
+	private InfoScreen infoScreen;
 	public boolean musicOn;
 
 	@Override
@@ -108,6 +109,10 @@ public class StartClass extends Game implements ApplicationListener {
 	public void setShopScreen(){
 		shopScreen = new ShopScreen(this);
 		setScreen(shopScreen);
+	}
+	public void setInfoScreen(){
+		infoScreen = new InfoScreen(this);
+		setScreen(infoScreen);
 	}
 
 	@Override

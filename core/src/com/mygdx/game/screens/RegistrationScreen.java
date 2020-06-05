@@ -43,6 +43,8 @@ public class RegistrationScreen implements Screen {
     String loginInput;
     String passwordInput;
     String checkPasswordInput;
+    ImageButton musicOnSmallButton;
+    ImageButton musicOffSmallButton;
 
     public RegistrationScreen(final StartClass startClass){
         this.startClass = startClass;
@@ -142,6 +144,26 @@ public class RegistrationScreen implements Screen {
             }
         });
 
+        Drawable musicOnSmallDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOnSmallButton.png")));
+        musicOnSmallButton = new ImageButton(musicOnSmallDrawable);
+        musicOnSmallButton.setPosition(StartClass.WIDTH-musicOnSmallButton.getWidth()-7, StartClass.HEIGHT-musicOnSmallButton.getHeight()-7);
+        musicOnSmallButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
+                startClass.musicOn = true;
+            }
+        });
+
+        Drawable musicOffSmallDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOffSmallButton.png")));
+        musicOffSmallButton = new ImageButton(musicOffSmallDrawable);
+        musicOffSmallButton.setPosition(StartClass.WIDTH-musicOffSmallButton.getWidth()-7, StartClass.HEIGHT-musicOffSmallButton.getHeight()-7);
+        musicOffSmallButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
+                startClass.musicOn = false;
+            }
+        });
+
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
         stage.addActor(sittingLamaImage);
@@ -156,6 +178,9 @@ public class RegistrationScreen implements Screen {
         stage.addActor(passwordTextField);
         stage.addActor(loginTextField);
         stage.addActor(checkPasswordTextField);
+        stage.addActor(musicOnSmallButton);
+        stage.addActor(musicOffSmallButton);
+        musicOnSmallButton.setVisible(false);
     }
 
     @Override
@@ -169,6 +194,13 @@ public class RegistrationScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
+        if(startClass.musicOn){
+            musicOnSmallButton.setVisible(false);
+            musicOffSmallButton.setVisible(true);
+        } else{
+            musicOnSmallButton.setVisible(true);
+            musicOffSmallButton.setVisible(false);
+        }
     }
 
     @Override

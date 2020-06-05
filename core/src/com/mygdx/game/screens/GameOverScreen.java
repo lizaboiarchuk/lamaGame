@@ -50,7 +50,7 @@ public class GameOverScreen implements Screen {
         sittingLamaImage.setPosition(StartClass.WIDTH/2-sittingLamaImage.getWidth()/2, 70);
 
         boardImage = new Image(new Texture("uiskins/board.png"));
-        boardImage.setPosition(StartClass.WIDTH/2-boardImage.getWidth()/2, grassImage.getHeight()+sittingLamaImage.getHeight()/3);
+        boardImage.setPosition(StartClass.WIDTH/2-boardImage.getWidth()/2, StartClass.HEIGHT/2-boardImage.getHeight()/2);
 
         topBoardImage = new Image(new Texture("uiskins/topBoard.png"));
         topBoardImage.setPosition(StartClass.WIDTH/2-topBoardImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()-topBoardImage.getHeight());
@@ -62,11 +62,11 @@ public class GameOverScreen implements Screen {
         gameOver.setPosition(StartClass.WIDTH/2-gameOver.getWidth()/2, topBoardImage.getY()-2*gameOver.getHeight());
 
         scoreLabel = new Label("Score: " + String.format("%d", this.score) , new Label.LabelStyle(startClass.welcomeFont, Color.PINK));
-        scoreLabel.setPosition(StartClass.WIDTH/2-scoreLabel.getWidth()/2, StartClass.HEIGHT/2+2*scoreLabel.getHeight()+10);
+        scoreLabel.setPosition(StartClass.WIDTH/2-scoreLabel.getWidth()/2, StartClass.HEIGHT/2+scoreLabel.getHeight());
 
         Drawable restartDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/restartButton.png")));
         restartButton = new ImageButton(restartDrawable);
-        restartButton.setPosition(StartClass.WIDTH/2-restartButton.getWidth()/2, StartClass.HEIGHT/2-20);
+        restartButton.setPosition(StartClass.WIDTH/2-restartButton.getWidth()/2, StartClass.HEIGHT/2-70);
         restartButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
@@ -77,7 +77,7 @@ public class GameOverScreen implements Screen {
 
         Drawable mainMenuDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/mainMenuButton.png")));
         mainMenuButton = new ImageButton(mainMenuDrawable);
-        mainMenuButton.setPosition(StartClass.WIDTH/2-mainMenuButton.getWidth()/2, StartClass.HEIGHT/2-mainMenuButton.getHeight()-40);
+        mainMenuButton.setPosition(StartClass.WIDTH/2-mainMenuButton.getWidth()/2, StartClass.HEIGHT/2-mainMenuButton.getHeight()-90);
         mainMenuButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
@@ -87,8 +87,8 @@ public class GameOverScreen implements Screen {
         });
 
         stage.addActor(backgroundImage);
-        stage.addActor(grassImage);
-        stage.addActor(sittingLamaImage);
+//        stage.addActor(grassImage);
+//        stage.addActor(sittingLamaImage);
         stage.addActor(boardImage);
         stage.addActor(topBoardImage);
         stage.addActor(bottomBoardImage);
