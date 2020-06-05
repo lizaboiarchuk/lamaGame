@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.StartClass;
 import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.sprites.Lame;
+import com.mygdx.game.sprites.Tube;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,24 @@ public class GameScreen implements Screen {
 
     public Texture siitingLama = new Texture("sittingLama.png");
     public Texture grass = new Texture("grass.JPEG");
+
+
+    public ArrayList<Tube> tubesGrey;
+    public boolean bonusesOn[];
+
+    public int bonusesNumber[];
+    public Label bonusesNumberLabel[];
+
+
+
+    public Image tubePink;
+    public Image magnitBonus;
+    public Image jetPackBonus;
+    public Image wingsBonus;
+    public Image doubleBonus;
+
+
+
 
 
     Image moneyBag;
@@ -96,6 +115,29 @@ public class GameScreen implements Screen {
         wingsPic = new Texture("wings.png");
         whiteS = new Texture("whiteS.png");
         moneyBag = new Image(new Texture("moneybag.png"));
+        doubleBonus = new Image(new Texture("doubleBonus.png"));
+
+        tubesGrey = new ArrayList<Tube>();
+        bonusesOn = new boolean[4];
+        bonusesNumber = new int[4];
+        bonusesNumberLabel = new Label[4];
+
+        for (int i=0;i<4;i++) {
+            bonusesNumber[i]=99;
+            bonusesOn[i]=false;
+            Image t = new Image(new Texture("tubeGrey.png"));
+            Tube tu = new Tube();
+            tu.tube=t;
+            tubesGrey.add(tu);
+        }
+        tubePink = new Image(new Texture("tube.png"));
+
+        magnitBonus = new Image(new Texture("magnit.png"));
+        jetPackBonus = new Image(new Texture("jetpack.png"));
+        wingsBonus = new Image( new Texture("wings.png"));
+
+
+
 
         camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
 
@@ -116,6 +158,9 @@ public class GameScreen implements Screen {
         moneyCount.setPosition(game.WIDTH-moneyBag.getWidth()-10, game.HEIGHT-moneyBag.getHeight());
 
         moneyBag.setPosition(game.WIDTH-moneyBag.getWidth(), game.HEIGHT-moneyBag.getHeight());
+
+
+
 
 
         stage.addActor(moneyBag);
@@ -232,9 +277,62 @@ public class GameScreen implements Screen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             lama.right();
-
         }
+
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            if(!bonusesOn[0]) {
+                tubesGrey.get(0).tube = new Image(new Texture("tube.png"));
+                bonusesOn[0]=true;
+            }
+            else {
+                tubesGrey.get(0).tube = new Image(new Texture("tubeGrey.png"));
+                bonusesOn[0]=false;
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            if(!bonusesOn[1]) {
+                tubesGrey.get(1).tube = new Image(new Texture("tube.png"));
+                bonusesOn[1]=true;
+            }
+            else {
+                tubesGrey.get(1).tube = new Image(new Texture("tubeGrey.png"));
+                bonusesOn[1]=false;
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            if(!bonusesOn[2]) {
+                tubesGrey.get(2).tube = new Image(new Texture("tube.png"));
+                bonusesOn[2]=true;
+            }
+            else {
+                tubesGrey.get(2).tube = new Image(new Texture("tubeGrey.png"));
+                bonusesOn[2]=false;
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+            if(!bonusesOn[3]) {
+                tubesGrey.get(3).tube = new Image(new Texture("tube.png"));
+                bonusesOn[3]=true;
+            }
+            else {
+                tubesGrey.get(3).tube = new Image(new Texture("tubeGrey.png"));
+                bonusesOn[3]=false;
+            }
+        }
+
     }
+
+
+
+
+
+
+
+
 
     public void update(float dt) {
         if (!begins) handleInput();
@@ -246,19 +344,51 @@ public class GameScreen implements Screen {
         scoreCount = new Label(String.format("%04d", this.score), new Label.LabelStyle(game.countFont, Color.BLACK));
 
         scoreCount.setPosition(game.WIDTH/2-scoreCount.getWidth()/2, game.HEIGHT-8-scoreCount.getHeight());
-        System.out.println(scoreCount.getHeight());
 
         moneyCount = new Label(String.format("%03d", this.money), new Label.LabelStyle(game.moneyFont, game.moneyFont.getColor()));
-        //moneyCount.setColor(0.97f, 0.85f,0,1);
-        System.out.println(moneyCount.getHeight());
+
         moneyCount.setPosition(game.WIDTH-moneyCount.getWidth()-45, game.HEIGHT-14.5f-moneyCount.getHeight());
         moneyBag.setBounds(game.WIDTH-47, game.HEIGHT-17-moneyCount.getHeight(), 40, 40);
 
+        tubesGrey.get(0).tube.setBounds(game.WIDTH/2 - 100,0,50,50 );
+        tubesGrey.get(1).tube.setBounds(game.WIDTH/2 - 50,0, 50,50);
+        tubesGrey.get(2).tube.setBounds(game.WIDTH/2,0,50,50);
+        tubesGrey.get(3).tube.setBounds(game.WIDTH/2 +50,0,50,50);
+
+        magnitBonus.setBounds(game.WIDTH/2 - 90,14,30,28);
+        wingsBonus.setBounds(game.WIDTH/2 - 50,20,50,20);
+        jetPackBonus.setBounds(game.WIDTH/2+5  ,18,40,28);
+        doubleBonus.setBounds(game.WIDTH/2+60, 16,30,30);
+
+
+
+        bonusesNumberLabel[0] = new Label(String.format("%02d", bonusesNumber[0]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+        bonusesNumberLabel[1] = new Label(String.format("%02d", bonusesNumber[1]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+        bonusesNumberLabel[2] = new Label(String.format("%02d", bonusesNumber[2]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+        bonusesNumberLabel[3] = new Label(String.format("%02d", bonusesNumber[3]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+
+
+        bonusesNumberLabel[0].setPosition(game.WIDTH/2 - 78,2);
+        bonusesNumberLabel[1].setPosition(game.WIDTH/2 - 28,2);
+        bonusesNumberLabel[2].setPosition(game.WIDTH/2 + 21,2);
+        bonusesNumberLabel[3].setPosition(game.WIDTH/2 + 71,2);
+
+
+
 
         stage.clear();
+
+
+        for (int i=0;i<4;i++) stage.addActor(tubesGrey.get(i).tube);
+        stage.addActor(magnitBonus);
+        stage.addActor(jetPackBonus);
+        stage.addActor(wingsBonus);
+        stage.addActor(doubleBonus);
         stage.addActor(moneyBag);
         stage.addActor(scoreCount);
         stage.addActor(moneyCount);
+        for (int i=0;i<4;i++) stage.addActor(bonusesNumberLabel[i]);
+
 
 
 
@@ -454,11 +584,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
+        System.out.println("pause");
 
     }
 
     @Override
     public void resume() {
+        System.out.println("resume");
 
     }
 

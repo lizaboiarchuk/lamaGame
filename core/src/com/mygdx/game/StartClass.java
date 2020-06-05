@@ -26,6 +26,8 @@ public class StartClass extends Game implements ApplicationListener {
 	public BitmapFont buttonsFont;
 	public FreeTypeFontGenerator.FreeTypeFontParameter countFontParameter;
 	public BitmapFont countFont;
+	public FreeTypeFontGenerator.FreeTypeFontParameter bonusFontParameter;
+	public BitmapFont bonusFont;
 	public FreeTypeFontGenerator.FreeTypeFontParameter moneyFontParameter;
 	public BitmapFont moneyFont;
 	public Sound clickSound;
@@ -70,6 +72,12 @@ public class StartClass extends Game implements ApplicationListener {
 		countFontParameter.size = 30;
 		countFontParameter.color = Color.BLACK;
 		countFont = fontGenerator.generateFont(countFontParameter);
+
+		bonusFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		bonusFontParameter.size = 10;
+		bonusFontParameter.color = Color.BLACK;
+		bonusFont = fontGenerator.generateFont(bonusFontParameter);
+
 		moneyFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		moneyFontParameter.size = 20;
 		moneyFontParameter.color = Color.YELLOW;

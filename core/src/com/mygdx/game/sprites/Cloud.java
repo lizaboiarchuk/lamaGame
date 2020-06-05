@@ -45,6 +45,9 @@ public class Cloud {
     public Texture pampers;
     public Texture wings;
 
+
+
+
     public Vector2 position;
     public Random rand;
 
