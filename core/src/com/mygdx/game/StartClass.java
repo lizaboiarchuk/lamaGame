@@ -66,11 +66,11 @@ public class StartClass extends Game implements ApplicationListener {
 		buttonsFontParameter.color = Color.WHITE;
 		buttonsFont = fontGenerator.generateFont(whiteFontParameter);
 		countFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		countFontParameter.size = 15;
+		countFontParameter.size = 30;
 		countFontParameter.color = Color.BLACK;
 		countFont = fontGenerator.generateFont(countFontParameter);
 		moneyFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		moneyFontParameter.size = 10;
+		moneyFontParameter.size = 20;
 		moneyFontParameter.color = Color.YELLOW;
 		moneyFont = fontGenerator.generateFont(moneyFontParameter);
 		musicOn = true;

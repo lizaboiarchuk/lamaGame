@@ -4,12 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.StartClass;
 import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.sprites.Lame;
@@ -29,7 +33,12 @@ public class GameScreen implements Screen {
     Texture pampers;
     Texture whiteS;
     SpriteBatch sb;
-    Texture moneyBag;
+
+
+    Image moneyBag;
+    Label moneyCount, scoreCount;
+
+    Stage stage;
 
     public int gameMode;
 
@@ -60,6 +69,8 @@ public class GameScreen implements Screen {
         this.game = game;
         this.gameMode=gameMode;
         sb = new SpriteBatch();
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
 
         score=0;
         money=0;
@@ -75,7 +86,7 @@ public class GameScreen implements Screen {
         jetpack = new Texture("jetpack.png");
         pampers = new Texture("pampers.png");
         whiteS = new Texture("whiteS.png");
-        moneyBag = new Texture("moneybag.png");
+        moneyBag = new Image(new Texture("moneybag.png"));
 
         camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
 
@@ -87,6 +98,26 @@ public class GameScreen implements Screen {
         backgrounds.add(new Texture("greenBackGround.jpg"));
 
         background = backgrounds.get(gameMode-1);
+
+
+        scoreCount = new Label(String.format("%05d", this.score), new Label.LabelStyle(game.welcomeFont, Color.PINK));
+        scoreCount.setPosition(game.WIDTH-moneyBag.getWidth(), game.HEIGHT-moneyBag.getHeight());
+
+        moneyCount = new Label(String.format("%03d", this.money), new Label.LabelStyle(game.welcomeFont, Color.PINK));
+        moneyCount.setPosition(game.WIDTH-moneyBag.getWidth()-10, game.HEIGHT-moneyBag.getHeight());
+
+        moneyBag.setPosition(game.WIDTH-moneyBag.getWidth(), game.HEIGHT-moneyBag.getHeight());
+
+
+        stage.addActor(moneyBag);
+        stage.addActor(scoreCount);
+        stage.addActor(moneyCount);
+
+
+
+
+
+
 
         //creating clouds
         clouds = new ArrayList<Cloud>();
@@ -101,7 +132,7 @@ public class GameScreen implements Screen {
         }
 
         lowestCloud=clouds.get(0);
-        lama=new Lame(clouds.get(5).position.x+10, clouds.get(5).position.y+35, game);
+        lama=new Lame(clouds.get(0).position.x+10, clouds.get(0).position.y+35, game);
         lamePrev = lama.position.y;
 
         camera.position.y=lama.position.y+80;
@@ -138,11 +169,6 @@ public class GameScreen implements Screen {
             }
         }
 
-        String coincounterString = String.format("%d", this.money);
-        sb.draw(moneyBag,camera.position.x+camera.viewportWidth/2-moneyBag.getWidth(), camera.position.y+camera.viewportHeight/2-moneyBag.getHeight());
-        game.moneyFont.draw(sb, coincounterString, camera.position.x+camera.viewportWidth/2-moneyBag.getWidth()-coincounterString.length()-5, camera.position.y+camera.viewportHeight/2-10);
-        String pointscounterString = String.format("%d", this.score);
-        game.countFont.draw(sb, pointscounterString, camera.position.x-pointscounterString.length(), camera.position.y+camera.viewportHeight/2-7);
 
 
         if (lama.magnitism) {
@@ -162,6 +188,10 @@ public class GameScreen implements Screen {
 
         sb.draw(lama.lame, lama.position.x, lama.position.y, lama.width/2, lama.height/2);
         sb.end();
+
+
+        stage.act();
+        stage.draw();
     }
 
 
@@ -189,6 +219,27 @@ public class GameScreen implements Screen {
         lama.update(dt);
         float plus=0.86f;
         if (gameMode==4) plus=0.95f;
+
+
+        scoreCount = new Label(String.format("%04d", this.score), new Label.LabelStyle(game.countFont, Color.BLACK));
+
+        scoreCount.setPosition(game.WIDTH/2-scoreCount.getWidth()/2, game.HEIGHT-8-scoreCount.getHeight());
+        System.out.println(scoreCount.getHeight());
+
+        moneyCount = new Label(String.format("%03d", this.money), new Label.LabelStyle(game.moneyFont, game.moneyFont.getColor()));
+        //moneyCount.setColor(0.97f, 0.85f,0,1);
+        System.out.println(moneyCount.getHeight());
+        moneyCount.setPosition(game.WIDTH-moneyCount.getWidth()-45, game.HEIGHT-14.5f-moneyCount.getHeight());
+        moneyBag.setBounds(game.WIDTH-47, game.HEIGHT-17-moneyCount.getHeight(), 40, 40);
+
+
+        stage.clear();
+        stage.addActor(moneyBag);
+        stage.addActor(scoreCount);
+        stage.addActor(moneyCount);
+
+
+
 
 
         if (!lama.fly) camera.position.y+=plus;//change this value to make camera move faster/slower
@@ -221,6 +272,7 @@ public class GameScreen implements Screen {
         for (Cloud c:clouds) {
             if (c.toDraw || gameMode!=3) {
                 if ((lama.position.y<=c.position.y+c.height+3) && (lama.position.y>=c.position.y+c.height-4) && (lama.position.x+lama.width/4>=c.position.x) && (lama.position.x<=c.position.x+c.width-lama.width/6)) {
+                    if (c.bad && !lama.fly) gameOver();
                     lama.velocity.set(new Vector3(0, 0, 0));
                     if (!lama.fly) lama.position.y = c.position.y + c.height - 2;
                     if (gameMode == 4 && !lama.fly) lama.jump();
@@ -274,12 +326,7 @@ public class GameScreen implements Screen {
 
         //end of game
         if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
-            game.setScreen(new AuthorizationScreen(game));
-            StartClass.music.stop();
-           if(game.musicOn) endSound.play();
-            this.dispose();
-            game.setScore(this.score);
-            game.setGameOverScreen();
+            gameOver();
         }
         camera.update();
     }
@@ -348,6 +395,16 @@ public class GameScreen implements Screen {
                 lama.width = 30;
             }
         }
+    }
+
+    public void gameOver() {
+        game.setScreen(new AuthorizationScreen(game));
+        StartClass.music.stop();
+        if(game.musicOn) endSound.play();
+        this.dispose();
+        game.setScore(this.score);
+        game.setGameOverScreen();
+
     }
 
     @Override
