@@ -37,6 +37,8 @@ public class AuthorizationScreen implements Screen {
     TextField passwordTextField;
     String loginInput;
     String passwordInput;
+    ImageButton musicOnSmallButton;
+    ImageButton musicOffSmallButton;
 
     public AuthorizationScreen(final StartClass startClass){
         this.startClass = startClass;
@@ -53,7 +55,7 @@ public class AuthorizationScreen implements Screen {
         sittingLamaImage.setPosition(StartClass.WIDTH/2-sittingLamaImage.getWidth()/2, 70);
 
         welcomeLabel = new Label("Welcome to Jumping Lama", new Label.LabelStyle(startClass.welcomeFont, Color.PINK));
-        welcomeLabel.setPosition(35, StartClass.HEIGHT-100);
+        welcomeLabel.setPosition(35, StartClass.HEIGHT-130);
 
         loginLabel = new Label("Enter your login", new Label.LabelStyle(startClass.whiteFont, Color.WHITE));
         loginLabel.setPosition(StartClass.WIDTH/2-loginLabel.getWidth()/2, StartClass.HEIGHT/2+120);
@@ -139,6 +141,26 @@ public class AuthorizationScreen implements Screen {
             }
         });
 
+        Drawable musicOnSmallDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOnSmallButton.png")));
+        musicOnSmallButton = new ImageButton(musicOnSmallDrawable);
+        musicOnSmallButton.setPosition(StartClass.WIDTH-musicOnSmallButton.getWidth()-7, StartClass.HEIGHT-musicOnSmallButton.getHeight()-7);
+        musicOnSmallButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
+                startClass.musicOn = true;
+            }
+        });
+
+        Drawable musicOffSmallDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOffSmallButton.png")));
+        musicOffSmallButton = new ImageButton(musicOffSmallDrawable);
+        musicOffSmallButton.setPosition(StartClass.WIDTH-musicOffSmallButton.getWidth()-7, StartClass.HEIGHT-musicOffSmallButton.getHeight()-7);
+        musicOffSmallButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
+                startClass.musicOn = false;
+            }
+        });
+
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
         stage.addActor(sittingLamaImage);
@@ -151,6 +173,9 @@ public class AuthorizationScreen implements Screen {
         stage.addActor(registerButtonLabel);
         stage.addActor(loginTextField);
         stage.addActor(passwordTextField);
+        stage.addActor(musicOnSmallButton);
+        stage.addActor(musicOffSmallButton);
+        musicOnSmallButton.setVisible(false);
     }
 
     @Override
@@ -164,6 +189,13 @@ public class AuthorizationScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
+        if(startClass.musicOn){
+            musicOnSmallButton.setVisible(false);
+            musicOffSmallButton.setVisible(true);
+        } else{
+            musicOnSmallButton.setVisible(true);
+            musicOffSmallButton.setVisible(false);
+        }
     }
 
     @Override

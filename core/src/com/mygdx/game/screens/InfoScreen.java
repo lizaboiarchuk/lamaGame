@@ -15,22 +15,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 
-public class MenuScreen implements Screen {
-
+public class InfoScreen implements Screen {
     private StartClass startClass;
     private Stage stage;
 
     Image backgroundImage;
     Image grassImage;
     Image sittingLamaImage;
-    ImageButton playButton;
-    ImageButton infoButton;
     ImageButton backButton;
-    ImageButton shopButton;
     ImageButton musicOnSmallButton;
     ImageButton musicOffSmallButton;
+    Image boardImage;
+    Image topBoardImage;
+    Image bottomBoardImage;
 
-    public MenuScreen(final StartClass startClass){
+    public InfoScreen(final StartClass startClass){
         this.startClass = startClass;
         stage = new Stage(new ScreenViewport());
 
@@ -44,47 +43,23 @@ public class MenuScreen implements Screen {
         sittingLamaImage = new Image(new Texture("sittingLama.png"));
         sittingLamaImage.setPosition(StartClass.WIDTH/2-sittingLamaImage.getWidth()/2, 70);
 
-        Drawable registerDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/playButton.png")));
-        playButton = new ImageButton(registerDrawable);
-        playButton.setPosition(StartClass.WIDTH/2-playButton.getWidth()/2, StartClass.HEIGHT/2+playButton.getHeight());
-        playButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y){
-                startClass.clicksoundbool = true;
-                dispose();
-                startClass.setChoiceScreen();
-            }
-        });
+        boardImage = new Image(new Texture("uiskins/board.png"));
+        boardImage.setPosition(StartClass.WIDTH/2-boardImage.getWidth()/2, grassImage.getHeight()+sittingLamaImage.getHeight()/3);
 
-        Drawable shopDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/shopButton.png")));
-        shopButton = new ImageButton(shopDrawable);
-        shopButton.setPosition(StartClass.WIDTH/2-shopButton.getWidth()/2, StartClass.HEIGHT/2);
-        shopButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y){
-                startClass.clicksoundbool = true;
-                dispose();
-                startClass.setShopScreen();
-            }
-        });
+        topBoardImage = new Image(new Texture("uiskins/topBoard.png"));
+        topBoardImage.setPosition(StartClass.WIDTH/2-topBoardImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()-topBoardImage.getHeight());
 
-        Drawable backDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/authButton.png")));
+        bottomBoardImage = new Image(new Texture("uiskins/bottomBoard.png"));
+        bottomBoardImage.setPosition(StartClass.WIDTH/2-bottomBoardImage.getWidth()/2, boardImage.getY());
+
+        Drawable backDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/homeButton.png")));
         backButton = new ImageButton(backDrawable);
         backButton.setPosition(7, StartClass.HEIGHT-7-backButton.getHeight());
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
                 dispose();
-                startClass.setAuthorizationScreen();
-            }
-        });
-
-        Drawable infoDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/infoButton.png")));
-        infoButton = new ImageButton(infoDrawable);
-        infoButton.setPosition(StartClass.WIDTH/2-infoButton.getWidth()/2, StartClass.HEIGHT/2-infoButton.getHeight());
-        infoButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y){
-                startClass.clicksoundbool = true;
-                dispose();
-                startClass.setInfoScreen();
+                startClass.setMenuScreen();
             }
         });
 
@@ -111,14 +86,16 @@ public class MenuScreen implements Screen {
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
         stage.addActor(sittingLamaImage);
-        stage.addActor(playButton);
         stage.addActor(backButton);
-        stage.addActor(shopButton);
-        stage.addActor(infoButton);
+        stage.addActor(boardImage);
+        stage.addActor(topBoardImage);
+        stage.addActor(bottomBoardImage);
         stage.addActor(musicOnSmallButton);
         stage.addActor(musicOffSmallButton);
         musicOnSmallButton.setVisible(false);
+
     }
+
 
     @Override
     public void show() {
