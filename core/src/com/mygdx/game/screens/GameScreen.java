@@ -229,20 +229,12 @@ public class GameScreen implements Screen {
 
 
 
-        if (lama.magnitism) {
-            sb.draw(magnitPic, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20);
-            sb.draw(redString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
-        }
 
-        if (lama.fly) {
-            sb.draw(jetpack, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20);
-            sb.draw(blueString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
-        }
 
-        if (lama.hasWings) {
-            sb.draw(wingsPic, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20, 22 ,10);
-            sb.draw(whiteS, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
-        }
+
+        if (lama.hasWings || lama.fly || lama.magnitism)
+            sb.draw(whiteS, camera.position.x -20, camera.position.y - camera.viewportHeight / 2 + 30, 40*(timeCounter*1.0f/bonusTimer),4 );
+
 
 
 
@@ -282,49 +274,100 @@ public class GameScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             if(!bonusesOn[0]) {
-                tubesGrey.get(0).tube = new Image(new Texture("tube.png"));
-                bonusesOn[0]=true;
+                magnitOn();
             }
             else {
-                tubesGrey.get(0).tube = new Image(new Texture("tubeGrey.png"));
-                bonusesOn[0]=false;
+                magnitOf();
             }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
             if(!bonusesOn[1]) {
-                tubesGrey.get(1).tube = new Image(new Texture("tube.png"));
-                bonusesOn[1]=true;
+                wingsOn();
             }
             else {
-                tubesGrey.get(1).tube = new Image(new Texture("tubeGrey.png"));
-                bonusesOn[1]=false;
+                wingsOf();
             }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
             if(!bonusesOn[2]) {
-                tubesGrey.get(2).tube = new Image(new Texture("tube.png"));
-                bonusesOn[2]=true;
+                jetpackOn();
             }
             else {
-                tubesGrey.get(2).tube = new Image(new Texture("tubeGrey.png"));
-                bonusesOn[2]=false;
+                jetpackOf();
             }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
             if(!bonusesOn[3]) {
-                tubesGrey.get(3).tube = new Image(new Texture("tube.png"));
-                bonusesOn[3]=true;
+                doubleOn();
             }
             else {
-                tubesGrey.get(3).tube = new Image(new Texture("tubeGrey.png"));
-                bonusesOn[3]=false;
+               doubleOf();
+
             }
         }
 
     }
+
+
+
+    public void magnitOn() {
+        tubesGrey.get(0).tube = new Image(new Texture("tube.png"));
+        bonusesOn[0]=true;
+        lama.magnitism=true;
+        bonusesNumber[0]--;
+    }
+
+
+
+    public void magnitOf() {
+        tubesGrey.get(0).tube = new Image(new Texture("tubeGrey.png"));
+        bonusesOn[0]=false;
+        timeCounter=bonusTimer-1;
+    }
+    public void wingsOn() {
+        tubesGrey.get(1).tube = new Image(new Texture("tube.png"));
+        bonusesOn[1]=true;
+        lama.hasWings=true;
+        bonusesNumber[1]--;
+
+    }
+    public void wingsOf() {
+        tubesGrey.get(1).tube = new Image(new Texture("tubeGrey.png"));
+        bonusesOn[1]=false;
+        timeCounter=bonusTimer-1;
+
+    }
+
+
+    public void jetpackOn() {
+        tubesGrey.get(2).tube = new Image(new Texture("tube.png"));
+        bonusesOn[2]=true;
+        lama.fly=true;
+        bonusesNumber[2]--;
+
+    }
+
+
+    public void jetpackOf () {
+        tubesGrey.get(2).tube = new Image(new Texture("tubeGrey.png"));
+        bonusesOn[2]=false;
+        timeCounter=bonusTimer-1;
+
+    }
+
+    public void doubleOn() {
+        tubesGrey.get(3).tube = new Image(new Texture("tube.png"));
+        bonusesOn[3] = true;
+    }
+
+    public void doubleOf() {
+        tubesGrey.get(3).tube = new Image(new Texture("tubeGrey.png"));
+        bonusesOn[3]=false;
+    }
+
 
 
 
@@ -450,6 +493,7 @@ public class GameScreen implements Screen {
                     //picking a magnit
                     if (c.magnit) {
                         if ((lama.position.x + lama.lame.getWidth() >= c.magnitPosition.x) && (lama.position.x <= c.magnitPosition.x + c.mag.getWidth())) {
+                            magnitOn();
                             c.magnit = false;
                             lama.magnitism = true;
                            if(game.musicOn) coinSound.play(); //new sound here for a bonus
@@ -457,6 +501,7 @@ public class GameScreen implements Screen {
 
                     }
                     if (c.hasJetpack) {
+                        jetpackOn();
                         if ((lama.position.x + lama.lame.getWidth() >= c.jetpackPosition.x) && (lama.position.x <= c.jetpackPosition.x + c.mag.getWidth())) {
                             c.hasJetpack = false;
                             lama.fly = true;
@@ -465,6 +510,7 @@ public class GameScreen implements Screen {
                     }
 
                     if (c.hasWings) {
+                        wingsOn();
                         if ((lama.position.x + lama.lame.getWidth() >= c.wingsPosition.x) && (lama.position.x <= c.wingsPosition.x + 20)) {
                             c.hasWings = false;
                             lama.hasWings = true;
@@ -503,6 +549,7 @@ public class GameScreen implements Screen {
             timeCounter++;
             if (timeCounter==bonusTimer) {
                 lama.magnitism=false;
+                magnitOf();
                 timeCounter=0;
                 drawMagnet=true;
                 for (Cloud cloud: clouds)
@@ -539,6 +586,7 @@ public class GameScreen implements Screen {
             timeCounter++;
             if (timeCounter == bonusTimer) {
                 lama.fly = false;
+                jetpackOf();
                 timeCounter = 0;
                 lama.velocity.y=0;
             }
@@ -551,6 +599,7 @@ public class GameScreen implements Screen {
             timeCounter++;
             if (timeCounter == bonusTimer) {
                 lama.hasWings = false;
+                wingsOf();
                 timeCounter = 0;
                 lama.GRAVITY=-15;
 
