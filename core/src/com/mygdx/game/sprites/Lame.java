@@ -21,6 +21,8 @@ public class Lame {
     public boolean magnitism;
     public boolean fly;
     public boolean hasPampers=false;
+
+    public boolean hasWings=false;
     public float width, height;
     public Sound jumpSound;
     public Cloud currentCloud=null;
@@ -59,6 +61,7 @@ public class Lame {
     }
 
     public void jump() {
+        GRAVITY=-15;
         if (isOnCloud==true) {
             position.y+=5;
             jumpSound.setVolume(0,0.2f);

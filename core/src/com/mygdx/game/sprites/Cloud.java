@@ -31,6 +31,10 @@ public class Cloud {
     public float sizeVel = 0.1f;
     public boolean isInter=false;
 
+    public boolean hasWings=false;
+
+
+
     public float velocity=1;
     public float velocityY=1;
 
@@ -39,6 +43,7 @@ public class Cloud {
     public Texture mag;
     public Texture jetpack;
     public Texture pampers;
+    public Texture wings;
 
     public Vector2 position;
     public Random rand;
@@ -50,6 +55,7 @@ public class Cloud {
     public Vector2 magnitPosition;
     public Vector2 jetpackPosition;
     public Vector2 pampersPosition;
+    public Vector2 wingsPosition;
 
     //constructor
     public Cloud(float y, Cloud c) {
@@ -65,6 +71,10 @@ public class Cloud {
         mag = new Texture("magnit.png");
         jetpack = new Texture("jetpack.png");
         pampers = new Texture("pampers.png");
+        wings = new Texture("wings.png");
+
+
+
         rand = new Random();
         if (c==null)
             position = new Vector2(200, y);
@@ -77,10 +87,10 @@ public class Cloud {
     //creates a new position for a cloud based on a location of a previous cloud
     public void reposition(float y,Cloud c, boolean bonus) {
         if (isInter) {
-            if (Cloud.ran()) {
+          //  if (Cloud.ran()) {
                 setBad();
                 System.out.println("bad clous");
-            }
+            //}
         }
         yMoveTo=y+70;
         toDraw=true;
@@ -96,18 +106,36 @@ public class Cloud {
                 hasJetpack=false;
                 hasPampers=false;
                 magnit = true;
+                hasWings=false;
             } else {
                 if (r.nextInt(10) == 4) {
                     hasCoin = false;
                     hasJetpack = true;
                     hasPampers=false;
                     magnit = false;
+                    hasWings=false;
                 }
                 if (r.nextInt(10) == 3) {
                     hasCoin = false;
                     hasPampers = true;
                     hasJetpack=false;
                     magnit = false;
+                    hasWings=false;
+                }
+                if (r.nextInt(10) == 4) {
+                    hasCoin = false;
+                    hasJetpack = true;
+                    hasPampers=false;
+                    magnit = false;
+                    hasWings=false;
+                }
+                if (r.nextInt(10) == 2) {
+                    hasCoin = false;
+                    hasPampers = false;
+                    hasJetpack=false;
+                    magnit = false;
+                    hasWings=true;
+
                 }
             }
         }
@@ -142,6 +170,8 @@ public class Cloud {
             jetpackPosition = new Vector2(position.x+17, y+20);
         if (hasPampers)
             pampersPosition = new Vector2(position.x+17, y+20);
+        if (hasWings)
+            wingsPosition = new Vector2(position.x+16, y+23);
     }
 
     public void move() {

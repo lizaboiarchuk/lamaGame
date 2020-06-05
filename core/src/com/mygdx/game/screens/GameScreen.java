@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -30,8 +31,10 @@ public class GameScreen implements Screen {
     Texture background;
     Texture jetpack;
     Texture blueString;
-    Texture pampers;
+    Texture wingsPic;
     Texture whiteS;
+
+
     SpriteBatch sb;
 
     boolean begins=true;
@@ -90,7 +93,7 @@ public class GameScreen implements Screen {
         redString = new Texture("redS.jpg");
         blueString = new Texture("blueS.png");
         jetpack = new Texture("jetpack.png");
-        pampers = new Texture("pampers.png");
+        wingsPic = new Texture("wings.png");
         whiteS = new Texture("whiteS.png");
         moneyBag = new Image(new Texture("moneybag.png"));
 
@@ -132,8 +135,10 @@ public class GameScreen implements Screen {
             clouds.add(cll);
             lastCloud = cll;
             if (Cloud.ran()) {
-                clouds.add(new Cloud(i*(SPACE_BETWEEN_CLOUDS+Cloud.CLOUD_HEIGHT)+30,null));
-                clouds.get(clouds.size()-1).setBad();
+                Cloud pr = new Cloud(i*(SPACE_BETWEEN_CLOUDS+Cloud.CLOUD_HEIGHT)+30,null);
+                pr.isInter=true;
+                clouds.add(pr);
+               if (i*(SPACE_BETWEEN_CLOUDS+Cloud.CLOUD_HEIGHT)<230) clouds.get(clouds.size()-1).bad=false;
             }
         }
 
@@ -172,8 +177,8 @@ public class GameScreen implements Screen {
                     sb.draw(c.mag, c.magnitPosition.x, c.magnitPosition.y);
                 if (c.hasJetpack)
                     sb.draw(c.jetpack, c.jetpackPosition.x, c.jetpackPosition.y);
-                if (c.hasPampers)
-                    sb.draw(c.pampers, c.pampersPosition.x, c.pampersPosition.y, 20,20);
+                if (c.hasWings)
+                    sb.draw(c.wings, c.wingsPosition.x, c.wingsPosition.y, 22,10);
             }
         }
 
@@ -189,15 +194,16 @@ public class GameScreen implements Screen {
             sb.draw(blueString, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
         }
 
-        if (lama.hasPampers) {
-            sb.draw(pampers, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20, 20 ,20);
+        if (lama.hasWings) {
+            sb.draw(wingsPic, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20, 20 ,20);
             sb.draw(whiteS, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
         }
 
 
+
         if (!begins) sb.draw(lama.lame, lama.position.x, lama.position.y, lama.width/2, lama.height/2);
         else {
-            sb.draw(siitingLama, lama.position.x, lama.position.y-3,lama.width/2, lama.height/2);
+            sb.draw(siitingLama, lama.position.x, lama.position.y-10,lama.width/2, lama.height/2);
             if (timer==80) {
                 begins=false;
             }
@@ -276,7 +282,7 @@ public class GameScreen implements Screen {
             }
 
 
-            if (lama.magnitism || lama.fly || lama.hasPampers) { cl.magnit=false; cl.hasJetpack=false; cl.hasPampers=false;}
+            if (lama.magnitism || lama.fly || lama.hasPampers || lama.hasWings) { cl.magnit=false; cl.hasJetpack=false; cl.hasPampers=false; cl.hasWings=false;}
             if ((camera.position.y - (camera.viewportHeight/2)) > (cl.position.y+Cloud.CLOUD_HEIGHT+200)) {
                 cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud, lama.magnitism);
                 lastCloud=cl;
@@ -289,7 +295,7 @@ public class GameScreen implements Screen {
         for (Cloud c:clouds) {
             if (c.toDraw || gameMode!=3) {
                 if ((lama.position.y<=c.position.y+c.height+3) && (lama.position.y>=c.position.y+c.height-4) && (lama.position.x+lama.width/4>=c.position.x) && (lama.position.x<=c.position.x+c.width-lama.width/6)) {
-                    if (c.bad && !lama.fly) gameOver();
+                    if (c.bad && !lama.fly && !lama.hasWings) gameOver();
                     lama.velocity.set(new Vector3(0, 0, 0));
                     if (!lama.fly) lama.position.y = c.position.y + c.height - 2;
                     if (gameMode == 4 && !lama.fly && !begins) lama.jump();
@@ -327,11 +333,12 @@ public class GameScreen implements Screen {
                            if(game.musicOn) coinSound.play(); //new sound here for a bonus
                         }
                     }
-                    if (c.hasPampers) {
-                        if ((lama.position.x + lama.lame.getWidth() >= c.pampersPosition.x) && (lama.position.x <= c.pampersPosition.x + 20)) {
-                            c.hasPampers = false;
-                            lama.hasPampers = true;
-                           if(game.musicOn) coinSound.play(); //new sound here for a bonus
+
+                    if (c.hasWings) {
+                        if ((lama.position.x + lama.lame.getWidth() >= c.wingsPosition.x) && (lama.position.x <= c.wingsPosition.x + 20)) {
+                            c.hasWings = false;
+                            lama.hasWings = true;
+                            if(game.musicOn) coinSound.play(); //new sound here for a bonus
                         }
                     }
                 }
@@ -339,11 +346,21 @@ public class GameScreen implements Screen {
         }
         magniting();
         jetpack();
-        pampers();
+
+        wings();
 
         //end of game
-        if (lama.position.y+45<camera.position.y-camera.viewportHeight/2) {
+        if (lama.position.y+20<camera.position.y-camera.viewportHeight/2 && !lama.hasWings) {
             gameOver();
+        }
+        else {
+            if (lama.hasWings && lama.position.y<camera.position.y-camera.viewportHeight/2) {
+                lama.isOnCloud=true;
+                lama.position.y=camera.position.y-camera.viewportHeight/2;
+                lama.GRAVITY=0;
+                if (lama.lookingLeft) lama.lame=new Sprite(new Texture("lameLeftStay.PNG"));
+                else lama.lame=new Sprite(new Texture("lameRightStay.PNG"));
+            }
         }
         camera.update();
     }
@@ -399,20 +416,21 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void pampers() {
-        if (lama.hasPampers) {
+    public void wings() {
+        if (lama.hasWings) {
             timeCounter++;
             if (timeCounter == bonusTimer) {
-                lama.hasPampers = false;
+                lama.hasWings = false;
                 timeCounter = 0;
-                lama.width = 57;
-                lama.height=80;
-            } else {
-                lama.height = 40;
-                lama.width = 30;
+                lama.GRAVITY=-15;
+
             }
+
         }
     }
+
+
+
 
     public void gameOver() {
         game.setScreen(new AuthorizationScreen(game));
