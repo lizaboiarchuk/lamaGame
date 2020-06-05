@@ -195,7 +195,7 @@ public class GameScreen implements Screen {
         }
 
         if (lama.hasWings) {
-            sb.draw(wingsPic, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20, 20 ,20);
+            sb.draw(wingsPic, camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 20, 22 ,10);
             sb.draw(whiteS, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
         }
 
