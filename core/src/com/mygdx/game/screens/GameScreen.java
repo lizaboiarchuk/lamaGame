@@ -233,7 +233,7 @@ public class GameScreen implements Screen {
 
 
 
-        if (lama.hasWings || lama.fly || lama.magnitism)
+        if (lama.hasWings || lama.fly || lama.magnitism || bonusesOn[3])
             sb.draw(whiteS, camera.position.x -20, camera.position.y - camera.viewportHeight / 2 + 30, 40*(timeCounter*1.0f/bonusTimer),4 );
 
 
