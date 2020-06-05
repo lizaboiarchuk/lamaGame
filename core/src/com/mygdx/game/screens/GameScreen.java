@@ -34,6 +34,12 @@ public class GameScreen implements Screen {
     Texture whiteS;
     SpriteBatch sb;
 
+    boolean begins=true;
+    int timer=0;
+
+    public Texture siitingLama = new Texture("sittingLama.png");
+    public Texture grass = new Texture("grass.JPEG");
+
 
     Image moneyBag;
     Label moneyCount, scoreCount;
@@ -135,6 +141,9 @@ public class GameScreen implements Screen {
         lama=new Lame(clouds.get(0).position.x+10, clouds.get(0).position.y+35, game);
         lamePrev = lama.position.y;
 
+
+
+
         camera.position.y=lama.position.y+80;
     }
 
@@ -142,13 +151,12 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        handleInput();
         update(delta);
 
         sb.begin();
         sb.setProjectionMatrix(camera.combined);
         sb.draw(background, camera.position.x-camera.viewportWidth/2, camera.position.y-camera.viewportHeight/2, camera.viewportWidth,camera.viewportHeight);
-
+        sb.draw(grass, 0,0,grass.getWidth()/2,grass.getHeight()/2);
         //drawing clouds with coins/bonuses on them
         for (Cloud c:clouds) {
             if (c.visited) c.toDraw = false;
@@ -186,7 +194,15 @@ public class GameScreen implements Screen {
             sb.draw(whiteS, camera.position.x - camera.viewportWidth / 2 + 15, camera.position.y - camera.viewportHeight / 2 + 10, 27*(timeCounter*1.0f/bonusTimer),5 );
         }
 
-        sb.draw(lama.lame, lama.position.x, lama.position.y, lama.width/2, lama.height/2);
+
+        if (!begins) sb.draw(lama.lame, lama.position.x, lama.position.y, lama.width/2, lama.height/2);
+        else {
+            sb.draw(siitingLama, lama.position.x, lama.position.y-3,lama.width/2, lama.height/2);
+            if (timer==80) {
+                begins=false;
+            }
+        }
+        timer++;
         sb.end();
 
 
@@ -215,7 +231,7 @@ public class GameScreen implements Screen {
     }
 
     public void update(float dt) {
-        handleInput();
+        if (!begins) handleInput();
         lama.update(dt);
         float plus=0.86f;
         if (gameMode==4) plus=0.95f;
@@ -241,10 +257,11 @@ public class GameScreen implements Screen {
 
 
 
-
-        if (!lama.fly) camera.position.y+=plus;//change this value to make camera move faster/slower
-        else {
-            camera.position.y = lama.position.y+80;
+        if (timer>=120) {
+            if (!lama.fly) camera.position.y += plus;//change this value to make camera move faster/slower
+            else {
+                camera.position.y = lama.position.y + 80;
+            }
         }
 
         for (int d=0; d<clouds.size(); d++)//repos the clouds when they are out of camera viewport
@@ -275,7 +292,7 @@ public class GameScreen implements Screen {
                     if (c.bad && !lama.fly) gameOver();
                     lama.velocity.set(new Vector3(0, 0, 0));
                     if (!lama.fly) lama.position.y = c.position.y + c.height - 2;
-                    if (gameMode == 4 && !lama.fly) lama.jump();
+                    if (gameMode == 4 && !lama.fly && !begins) lama.jump();
 
                     score = lama.onCloud(score, c.visited); //if this cloud wasn't visited earlier - score++
                     c.visited = true;

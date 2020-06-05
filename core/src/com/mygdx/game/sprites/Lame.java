@@ -26,6 +26,12 @@ public class Lame {
     public Cloud currentCloud=null;
     private StartClass startClass;
 
+
+
+
+
+
+
     public Lame (float x, float y, StartClass startClass) {
         this.startClass = startClass;
         jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
