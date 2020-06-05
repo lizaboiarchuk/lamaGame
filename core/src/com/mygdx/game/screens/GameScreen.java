@@ -362,12 +362,15 @@ public class GameScreen implements Screen {
     public void doubleOn() {
         tubesGrey.get(3).tube = new Image(new Texture("tube.png"));
         bonusesOn[3] = true;
-        bonusesNumber[2]--;
+        bonusesNumber[3]--;
+        lama.isDouble=true;
     }
 
     public void doubleOf() {
         tubesGrey.get(3).tube = new Image(new Texture("tubeGrey.png"));
         bonusesOn[3]=false;
+        timeCounter = bonusTimer-1;
+
     }
 
 
@@ -539,8 +542,8 @@ public class GameScreen implements Screen {
                 lama.isOnCloud=true;
                 lama.position.y=camera.position.y-camera.viewportHeight/2;
                 lama.GRAVITY=0;
-                if (lama.lookingLeft) lama.lame=new Sprite(new Texture("lameLeftStay.PNG"));
-                else lama.lame=new Sprite(new Texture("lameRightStay.PNG"));
+                if (lama.lookingLeft) lama.lame=new Sprite(new Texture("lamaWingsLeftStay.PNG"));
+                else lama.lame=new Sprite(new Texture("lamaWingsRightStay.PNG"));
             }
         }
         camera.update();
@@ -614,9 +617,10 @@ public class GameScreen implements Screen {
     }
 
     public void doubleSc() {
-        if (bonusesOn[3]) {
+        if (lama.isDouble) {
             timeCounter++;
             if (timeCounter == bonusTimer) {
+                lama.isDouble=false;
                 doubleOf();
                 timeCounter = 0;
                 lama.GRAVITY=-15;

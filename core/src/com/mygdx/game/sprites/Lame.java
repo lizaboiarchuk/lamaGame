@@ -21,6 +21,7 @@ public class Lame {
     public boolean magnitism;
     public boolean fly;
     public boolean hasPampers=false;
+    public boolean isDouble =false;
 
     public boolean hasWings=false;
     public float width, height;
@@ -58,6 +59,7 @@ public class Lame {
             position.x=0;
         if (position.x>= StartClass.WIDTH/2-lame.getWidth()/2)
             position.x=StartClass.WIDTH/2-lame.getWidth()/2;
+
     }
 
     public void jump() {
@@ -67,10 +69,32 @@ public class Lame {
             jumpSound.setVolume(0,0.2f);
            if(startClass.musicOn) jumpSound.play();
             velocity.y = 400;
-            if (lookingLeft)
+            if (lookingLeft && !hasWings && !fly && !magnitism && !isDouble)
                 lame = new Sprite(new Texture("lameLeftMove.PNG"));
             else
                 lame = new Sprite(new Texture("LameRightMove.PNG"));
+            if (hasWings) {
+                if (lookingLeft)
+                    lame = new Sprite(new Texture("lamaWingsLeftMove.PNG"));
+                else
+                    lame = new Sprite(new Texture("lamaWingsRightMove.PNG"));
+
+            }
+            if (magnitism) {
+                if (lookingLeft)
+                    lame = new Sprite(new Texture("lamaMagnitLeftMove.PNG"));
+                else
+                    lame = new Sprite(new Texture("lamaMagnitRightMove.PNG"));
+
+            }
+
+            if (isDouble) {
+                if (lookingLeft)
+                    lame = new Sprite(new Texture("lamaDoubleLeftMove.PNG"));
+                else
+                    lame = new Sprite(new Texture("lamaDoubleRightMove.PNG"));
+
+            }
         }
 
     }
@@ -79,18 +103,70 @@ public class Lame {
         lookingLeft=true;
         if (position.x>0)
             position.x+=-2;
-        if (isOnCloud) lame=new Sprite(new Texture("lameLeftStay.PNG"));
+        if (isOnCloud && !hasWings && !fly && !magnitism && !isDouble) lame=new Sprite(new Texture("lameLeftStay.PNG"));
         else lame=new Sprite(new Texture("lameLeftMove.PNG"));
+        if (hasWings) {
+            if (isOnCloud) lame=new Sprite(new Texture("lamaWingsLeftStay.PNG"));
+            else lame=new Sprite(new Texture("lamaWingsLeftMove.PNG"));
+        }
+
+        if (magnitism) {
+            if (isOnCloud) lame=new Sprite(new Texture("lamaMagnitLeftStay.PNG"));
+            else lame=new Sprite(new Texture("lamaMagnitLeftMove.PNG"));
+        }
+
+        if (isDouble) {
+            if (isOnCloud) lame=new Sprite(new Texture("lamaDoubleLeftStay.PNG"));
+            else lame=new Sprite(new Texture("lamaDoubleLeftMove.PNG"));
+        }
+
+        if (fly) {
+            if (isOnCloud) lame=new Sprite(new Texture("lameJetLeft.PNG"));
+         //   else lame=new Sprite(new Texture("lamaDoubleLeftMove.PNG"));
+        }
+
+
+
+
+
+
     }
 
     public void right() {
         lookingLeft=false;
         if (position.x<StartClass.WIDTH/2-lame.getWidth()/2)
             position.x+= 2;
-        if (isOnCloud)
+        if (isOnCloud && !hasWings && !fly && !magnitism && !isDouble)
             lame=new Sprite(new Texture("lameRightStay.PNG"));
         else
             lame=new Sprite(new Texture("LameRightMove.PNG"));
+        if (hasWings) {
+            if (isOnCloud)
+                lame=new Sprite(new Texture("lamaWingsRightStay.PNG"));
+            else
+                lame=new Sprite(new Texture("LamaWingsRightMove.PNG"));
+        }
+        if (magnitism) {
+            if (isOnCloud)
+                lame=new Sprite(new Texture("lamaMagnitRightStay.PNG"));
+            else
+                lame=new Sprite(new Texture("LamaMagnitRightMove.PNG"));
+        }
+
+        if (isDouble) {
+            if (isOnCloud)
+                lame=new Sprite(new Texture("lamaDoubleRightStay.PNG"));
+            else
+                lame=new Sprite(new Texture("LamaDoubleRightMove.PNG"));
+        }
+
+        if (fly) {
+            if (isOnCloud)
+                lame=new Sprite(new Texture("lameJetRight.PNG"));
+          //  else
+             //   lame=new Sprite(new Texture("LamaDoubleRightMove.PNG"));
+        }
+
 
     }
 
@@ -99,10 +175,38 @@ public class Lame {
             isOnCloud=true;
             if (!v) score+=10;
         }
-        if (lookingLeft)
+        if (lookingLeft && !hasWings && !magnitism && !fly && !isDouble)
             lame=new Sprite(new Texture("lameLeftStay.PNG"));
         else
             lame=new Sprite(new Texture("lameRightStay.PNG"));
+        if (hasWings) {
+            if (lookingLeft)
+                lame = new Sprite(new Texture("lamaWingsLeftStay.PNG"));
+            else
+                lame = new Sprite(new Texture("lamaWingsRightStay.PNG"));
+        }
+
+        if (magnitism) {
+            if (lookingLeft)
+                lame = new Sprite(new Texture("lamaMagnitLeftStay.PNG"));
+            else
+                lame = new Sprite(new Texture("lamaMagnitRightStay.PNG"));
+        }
+
+        if (isDouble) {
+            if (lookingLeft)
+                lame = new Sprite(new Texture("lamaDoubleLeftStay.PNG"));
+            else
+                lame = new Sprite(new Texture("lamaDoubleRightStay.PNG"));
+        }
+
+        if (fly) {
+            if (lookingLeft)
+                lame = new Sprite(new Texture("lameJetLeft.PNG"));
+            else
+                lame = new Sprite(new Texture("lameJetRight.PNG"));
+        }
+
         return score;
     }
 }
