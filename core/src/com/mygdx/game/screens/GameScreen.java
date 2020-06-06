@@ -36,6 +36,9 @@ public class GameScreen implements Screen {
     Texture whiteS;
     boolean multi = false;
 
+
+
+
     SpriteBatch sb;
 
     boolean begins=true;
@@ -73,6 +76,7 @@ public class GameScreen implements Screen {
     public static final int bonusTimer = 1000; //(*delta time (0.22sec))
     public int timeCounter;
     public boolean drawMagnet=true;
+    public boolean paused=false;
 
     public static final int SPACE_BETWEEN_CLOUDS = 60;
     public static final int CLOUDS_COUNT = 18;
@@ -144,7 +148,7 @@ public class GameScreen implements Screen {
         backgrounds = new ArrayList<Texture>();
         backgrounds.add(new Texture("d.jpg"));
         backgrounds.add(new Texture("pinkBackGround.jpg"));
-        backgrounds.add(new Texture("yellowBackGround.jpg"));
+        backgrounds.add(new Texture("yellowBackGround.png"));
         backgrounds.add(new Texture("blueBackGround.jpg"));
         backgrounds.add(new Texture("greenBackGround.jpg"));
 
@@ -199,126 +203,126 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        update(delta);
 
-        sb.begin();
-        sb.setProjectionMatrix(camera.combined);
-        sb.draw(background, camera.position.x-camera.viewportWidth/2, camera.position.y-camera.viewportHeight/2, camera.viewportWidth,camera.viewportHeight);
-        sb.draw(grass, 0,0,grass.getWidth()/2,grass.getHeight()/2);
-        //drawing clouds with coins/bonuses on them
-        for (Cloud c:clouds) {
-            if (c.visited) c.toDraw = false;
-            if (lama.isOnCloud && lama.currentCloud==c) c.toDraw=true;
-            c.move();
-            c.resize();
-            if (c.toDraw || gameMode != 3) {
-                sb.draw(c.cloud, c.position.x, c.position.y, c.width, c.height);
-                if (c.hasCoin) {
-                    sb.draw(c.coin, c.coinPosition.x, c.coinPosition.y);
+            Gdx.gl.glClearColor(1, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            update(delta);
+
+            sb.begin();
+            sb.setProjectionMatrix(camera.combined);
+            sb.draw(background, camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2, camera.viewportWidth, camera.viewportHeight);
+            sb.draw(grass, 0, 0, grass.getWidth() / 2, grass.getHeight() / 2);
+            //drawing clouds with coins/bonuses on them
+            for (Cloud c : clouds) {
+                if (c.visited) c.toDraw = false;
+                if (lama.isOnCloud && lama.currentCloud == c) c.toDraw = true;
+                c.move();
+                c.resize();
+                if (c.toDraw || gameMode != 3) {
+                    sb.draw(c.cloud, c.position.x, c.position.y, c.width, c.height);
+                    if (c.hasCoin) {
+                        sb.draw(c.coin, c.coinPosition.x, c.coinPosition.y);
+                    }
+                    if (c.magnit)
+                        sb.draw(c.mag, c.magnitPosition.x, c.magnitPosition.y);
+                    if (c.hasJetpack)
+                        sb.draw(c.jetpack, c.jetpackPosition.x, c.jetpackPosition.y);
+                    if (c.hasWings)
+                        sb.draw(c.wings, c.wingsPosition.x, c.wingsPosition.y, 22, 10);
                 }
-                if (c.magnit)
-                    sb.draw(c.mag, c.magnitPosition.x, c.magnitPosition.y);
-                if (c.hasJetpack)
-                    sb.draw(c.jetpack, c.jetpackPosition.x, c.jetpackPosition.y);
-                if (c.hasWings)
-                    sb.draw(c.wings, c.wingsPosition.x, c.wingsPosition.y, 22,10);
             }
-        }
 
 
+            if (lama.hasWings || lama.fly || lama.magnitism || bonusesOn[3])
+                sb.draw(whiteS, camera.position.x - 20, camera.position.y - camera.viewportHeight / 2 + 30, 40 * (timeCounter * 1.0f / bonusTimer), 4);
 
 
-
-
-        if (lama.hasWings || lama.fly || lama.magnitism || bonusesOn[3])
-            sb.draw(whiteS, camera.position.x -20, camera.position.y - camera.viewportHeight / 2 + 30, 40*(timeCounter*1.0f/bonusTimer),4 );
-
-
-
-
-        if (!begins) sb.draw(lama.lame, lama.position.x, lama.position.y, lama.width/2, lama.height/2);
-        else {
-            sb.draw(siitingLama, lama.position.x, lama.position.y-10,lama.width/2, lama.height/2);
-            if (timer==80) {
-                begins=false;
+            if (!begins) sb.draw(lama.lame, lama.position.x, lama.position.y, lama.width / 2, lama.height / 2);
+            else {
+                sb.draw(siitingLama, lama.position.x, lama.position.y - 10, lama.width / 2, lama.height / 2);
+                if (timer == 80) {
+                    begins = false;
+                }
             }
-        }
-        timer++;
-        sb.end();
+            timer++;
+            sb.end();
 
 
-        stage.act();
-        stage.draw();
+            stage.act();
+            stage.draw();
+
     }
 
 
 
     public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if (gameMode!=4 && !lama.fly) {
-                lama.jump();
-                lama.isOnCloud = false;
+        if (!paused) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+                if (gameMode != 4 && !lama.fly) {
+                    lama.jump();
+                    lama.isOnCloud = false;
+                }
+                score += 3;
+                if (bonusesOn[3]) score += 3;
             }
-            score+=3;
-            if (bonusesOn[3]) score+=3;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            lama.left();
-
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            lama.right();
-        }
-
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            if(!bonusesOn[0]) {
-                magnitOn();
-            }
-            else {
-                magnitOf();
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            if(!bonusesOn[1]) {
-                wingsOn();
-            }
-            else {
-                wingsOf();
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-            if(!bonusesOn[2]) {
-                jetpackOn();
-            }
-            else {
-                jetpackOf();
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
-            if(!bonusesOn[3]) {
-                doubleOn();
-            }
-            else {
-               doubleOf();
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                lama.left();
 
             }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                lama.right();
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+                if (!bonusesOn[0]) {
+                    magnitOn();
+                } else {
+                    magnitOf();
+                }
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+                if (!bonusesOn[1]) {
+                    wingsOn();
+                } else {
+                    wingsOf();
+                }
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+                if (!bonusesOn[2]) {
+                    jetpackOn();
+                } else {
+                    jetpackOf();
+                }
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+                if (!bonusesOn[3]) {
+                    doubleOn();
+                } else {
+                    doubleOf();
+
+                }
+            }
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
+            pause();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
+            resume();
 
     }
 
 
 
     public void magnitOn() {
-        tubesGrey.get(0).tube = new Image(new Texture("tube.png"));
-        bonusesOn[0]=true;
-        lama.magnitism=true;
-        bonusesNumber[0]--;
+        if (!(bonusesOn[1] || bonusesOn[2] || bonusesOn[3])) {
+            tubesGrey.get(0).tube = new Image(new Texture("tube.png"));
+            bonusesOn[0] = true;
+            lama.magnitism = true;
+            bonusesNumber[0]--;
+        }
     }
 
 
@@ -329,10 +333,12 @@ public class GameScreen implements Screen {
         timeCounter=bonusTimer-1;
     }
     public void wingsOn() {
-        tubesGrey.get(1).tube = new Image(new Texture("tube.png"));
-        bonusesOn[1]=true;
-        lama.hasWings=true;
-        bonusesNumber[1]--;
+        if (!(bonusesOn[0] || bonusesOn[2] || bonusesOn[3])) {
+            tubesGrey.get(1).tube = new Image(new Texture("tube.png"));
+            bonusesOn[1] = true;
+            lama.hasWings = true;
+            bonusesNumber[1]--;
+        }
 
     }
     public void wingsOf() {
@@ -344,11 +350,12 @@ public class GameScreen implements Screen {
 
 
     public void jetpackOn() {
-        tubesGrey.get(2).tube = new Image(new Texture("tube.png"));
-        bonusesOn[2]=true;
-        lama.fly=true;
-        bonusesNumber[2]--;
-
+        if (!(bonusesOn[1] || bonusesOn[0] || bonusesOn[3])) {
+            tubesGrey.get(2).tube = new Image(new Texture("tube.png"));
+            bonusesOn[2] = true;
+            lama.fly = true;
+            bonusesNumber[2]--;
+        }
     }
 
 
@@ -360,10 +367,12 @@ public class GameScreen implements Screen {
     }
 
     public void doubleOn() {
-        tubesGrey.get(3).tube = new Image(new Texture("tube.png"));
-        bonusesOn[3] = true;
-        bonusesNumber[3]--;
-        lama.isDouble=true;
+        if (!(bonusesOn[1] || bonusesOn[2] || bonusesOn[0])) {
+            tubesGrey.get(3).tube = new Image(new Texture("tube.png"));
+            bonusesOn[3] = true;
+            bonusesNumber[3]--;
+            lama.isDouble = true;
+        }
     }
 
     public void doubleOf() {
@@ -384,169 +393,170 @@ public class GameScreen implements Screen {
 
     public void update(float dt) {
         if (!begins) handleInput();
-        lama.update(dt);
-        float plus=0.86f;
-        if (gameMode==4) plus=0.95f;
+        if (!paused) {
+        //    if (!begins) handleInput();
+            lama.update(dt);
+            float plus = 0.86f;
+            if (gameMode == 4) plus = 0.95f;
 
 
-        scoreCount = new Label(String.format("%04d", this.score), new Label.LabelStyle(game.countFont, Color.BLACK));
+            scoreCount = new Label(String.format("%04d", this.score), new Label.LabelStyle(game.countFont, Color.BLACK));
 
-        scoreCount.setPosition(game.WIDTH/2-scoreCount.getWidth()/2, game.HEIGHT-8-scoreCount.getHeight());
+            scoreCount.setPosition(game.WIDTH / 2 - scoreCount.getWidth() / 2, game.HEIGHT - 8 - scoreCount.getHeight());
 
-        moneyCount = new Label(String.format("%03d", this.money), new Label.LabelStyle(game.moneyFont, game.moneyFont.getColor()));
+            moneyCount = new Label(String.format("%03d", this.money), new Label.LabelStyle(game.moneyFont, game.moneyFont.getColor()));
 
-        moneyCount.setPosition(game.WIDTH-moneyCount.getWidth()-45, game.HEIGHT-14.5f-moneyCount.getHeight());
-        moneyBag.setBounds(game.WIDTH-47, game.HEIGHT-17-moneyCount.getHeight(), 40, 40);
+            moneyCount.setPosition(game.WIDTH - moneyCount.getWidth() - 45, game.HEIGHT - 14.5f - moneyCount.getHeight());
+            moneyBag.setBounds(game.WIDTH - 47, game.HEIGHT - 17 - moneyCount.getHeight(), 40, 40);
 
-        tubesGrey.get(0).tube.setBounds(game.WIDTH/2 - 100,0,50,50 );
-        tubesGrey.get(1).tube.setBounds(game.WIDTH/2 - 50,0, 50,50);
-        tubesGrey.get(2).tube.setBounds(game.WIDTH/2,0,50,50);
-        tubesGrey.get(3).tube.setBounds(game.WIDTH/2 +50,0,50,50);
+            tubesGrey.get(0).tube.setBounds(game.WIDTH / 2 - 100, 0, 50, 50);
+            tubesGrey.get(1).tube.setBounds(game.WIDTH / 2 - 50, 0, 50, 50);
+            tubesGrey.get(2).tube.setBounds(game.WIDTH / 2, 0, 50, 50);
+            tubesGrey.get(3).tube.setBounds(game.WIDTH / 2 + 50, 0, 50, 50);
 
-        magnitBonus.setBounds(game.WIDTH/2 - 90,14,30,28);
-        wingsBonus.setBounds(game.WIDTH/2 - 50,20,50,20);
-        jetPackBonus.setBounds(game.WIDTH/2+5  ,18,40,28);
-        doubleBonus.setBounds(game.WIDTH/2+60, 16,30,30);
-
-
-
-        bonusesNumberLabel[0] = new Label(String.format("%02d", bonusesNumber[0]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
-        bonusesNumberLabel[1] = new Label(String.format("%02d", bonusesNumber[1]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
-        bonusesNumberLabel[2] = new Label(String.format("%02d", bonusesNumber[2]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
-        bonusesNumberLabel[3] = new Label(String.format("%02d", bonusesNumber[3]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+            magnitBonus.setBounds(game.WIDTH / 2 - 90, 14, 30, 28);
+            wingsBonus.setBounds(game.WIDTH / 2 - 50, 20, 50, 20);
+            jetPackBonus.setBounds(game.WIDTH / 2 + 5, 18, 40, 28);
+            doubleBonus.setBounds(game.WIDTH / 2 + 60, 16, 30, 30);
 
 
-        bonusesNumberLabel[0].setPosition(game.WIDTH/2 - 78,2);
-        bonusesNumberLabel[1].setPosition(game.WIDTH/2 - 28,2);
-        bonusesNumberLabel[2].setPosition(game.WIDTH/2 + 21,2);
-        bonusesNumberLabel[3].setPosition(game.WIDTH/2 + 71,2);
+            bonusesNumberLabel[0] = new Label(String.format("%02d", bonusesNumber[0]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+            bonusesNumberLabel[1] = new Label(String.format("%02d", bonusesNumber[1]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+            bonusesNumberLabel[2] = new Label(String.format("%02d", bonusesNumber[2]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+            bonusesNumberLabel[3] = new Label(String.format("%02d", bonusesNumber[3]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
 
 
+            bonusesNumberLabel[0].setPosition(game.WIDTH / 2 - 78, 2);
+            bonusesNumberLabel[1].setPosition(game.WIDTH / 2 - 28, 2);
+            bonusesNumberLabel[2].setPosition(game.WIDTH / 2 + 21, 2);
+            bonusesNumberLabel[3].setPosition(game.WIDTH / 2 + 71, 2);
 
 
-        stage.clear();
+            stage.clear();
 
 
-        for (int i=0;i<4;i++) stage.addActor(tubesGrey.get(i).tube);
-        stage.addActor(magnitBonus);
-        stage.addActor(jetPackBonus);
-        stage.addActor(wingsBonus);
-        stage.addActor(doubleBonus);
-        stage.addActor(moneyBag);
-        stage.addActor(scoreCount);
-        stage.addActor(moneyCount);
-        for (int i=0;i<4;i++) stage.addActor(bonusesNumberLabel[i]);
+            for (int i = 0; i < 4; i++) stage.addActor(tubesGrey.get(i).tube);
+            stage.addActor(magnitBonus);
+            stage.addActor(jetPackBonus);
+            stage.addActor(wingsBonus);
+            stage.addActor(doubleBonus);
+            stage.addActor(moneyBag);
+            stage.addActor(scoreCount);
+            stage.addActor(moneyCount);
+            for (int i = 0; i < 4; i++) stage.addActor(bonusesNumberLabel[i]);
 
 
-
-
-
-        if (timer>=120) {
-            if (!lama.fly) camera.position.y += plus;//change this value to make camera move faster/slower
-            else {
-                camera.position.y = lama.position.y + 80;
-            }
-        }
-
-        for (int d=0; d<clouds.size(); d++)//repos the clouds when they are out of camera viewport
-        {
-            Cloud cl = clouds.get(d);
-            if (gameMode==2) cl.moveable=true;
-            if (gameMode==5) {
-                cl.resizable=true;
-                if (d%2==0) cl.sizeVel=0.15f;
-                if (d%3==0) cl.sizeVel=0.07f;
-                if (d%5==0) cl.sizeVel=0.2f;
+            if (timer >= 120) {
+                if (!lama.fly) camera.position.y += plus;//change this value to make camera move faster/slower
+                else {
+                    camera.position.y = lama.position.y + 80;
+                }
             }
 
+            for (int d = 0; d < clouds.size(); d++)//repos the clouds when they are out of camera viewport
+            {
+                Cloud cl = clouds.get(d);
+                if (gameMode == 2) cl.moveable = true;
+                if (gameMode == 5) {
+                    cl.resizable = true;
+                    if (d % 2 == 0) cl.sizeVel = 0.15f;
+                    if (d % 3 == 0) cl.sizeVel = 0.07f;
+                    if (d % 5 == 0) cl.sizeVel = 0.2f;
+                }
 
-            if (lama.magnitism || lama.fly || lama.hasPampers || lama.hasWings) { cl.magnit=false; cl.hasJetpack=false; cl.hasPampers=false; cl.hasWings=false;}
-            if ((camera.position.y - (camera.viewportHeight/2)) > (cl.position.y+Cloud.CLOUD_HEIGHT+200)) {
-                cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT+SPACE_BETWEEN_CLOUDS)*CLOUDS_COUNT),lastCloud, lama.magnitism);
-                lastCloud=cl;
-                lowestCloud=clouds.get((d+1)%10);
-                score+=5;
-                if (bonusesOn[3]) score+=5;
-                if ((!cl.canBeMagnit) && (cl.magnit)) cl.magnit=false;
+
+                if (lama.magnitism || lama.fly || lama.hasPampers || lama.hasWings) {
+                    cl.magnit = false;
+                    cl.hasJetpack = false;
+                    cl.hasPampers = false;
+                    cl.hasWings = false;
+                }
+                if ((camera.position.y - (camera.viewportHeight / 2)) > (cl.position.y + Cloud.CLOUD_HEIGHT + 200)) {
+                    cl.reposition(cl.position.y + ((Cloud.CLOUD_HEIGHT + SPACE_BETWEEN_CLOUDS) * CLOUDS_COUNT), lastCloud, lama.magnitism);
+                    lastCloud = cl;
+                    lowestCloud = clouds.get((d + 1) % 10);
+                    score += 5;
+                    if (bonusesOn[3]) score += 5;
+                    if ((!cl.canBeMagnit) && (cl.magnit)) cl.magnit = false;
+                }
             }
-        }
-        //checking all the clouds to understand on which lama is staying now
-        for (Cloud c:clouds) {
-            if (c.toDraw || gameMode!=3) {
-                if ((lama.position.y<=c.position.y+c.height+3) && (lama.position.y>=c.position.y+c.height-4) && (lama.position.x+lama.width/4>=c.position.x) && (lama.position.x<=c.position.x+c.width-lama.width/6)) {
-                    if (c.bad && !lama.fly && !lama.hasWings) gameOver();
-                    lama.velocity.set(new Vector3(0, 0, 0));
-                    if (!lama.fly) lama.position.y = c.position.y + c.height - 2;
-                    if (gameMode == 4 && !lama.fly && !begins) lama.jump();
+            //checking all the clouds to understand on which lama is staying now
+            for (Cloud c : clouds) {
+                if (c.toDraw || gameMode != 3) {
+                    if ((lama.position.y <= c.position.y + c.height + 3) && (lama.position.y >= c.position.y + c.height - 4) && (lama.position.x + lama.width / 4 >= c.position.x) && (lama.position.x <= c.position.x + c.width - lama.width / 6)) {
+                        if (c.bad && !lama.fly && !lama.hasWings) gameOver();
+                        lama.velocity.set(new Vector3(0, 0, 0));
+                        if (!lama.fly) lama.position.y = c.position.y + c.height - 2;
+                        if (gameMode == 4 && !lama.fly && !begins) lama.jump();
 
-                    score = lama.onCloud(score, c.visited); //if this cloud wasn't visited earlier - score++
-                    c.visited = true;
-                    lama.currentCloud = c;
+                        score = lama.onCloud(score, c.visited); //if this cloud wasn't visited earlier - score++
+                        c.visited = true;
+                        lama.currentCloud = c;
 
 
-                    if ((lama.isOnCloud) && (c.moveable))
-                        lama.position.x += c.velocity;        // if cloud is moveable - lama moves with it
+                        if ((lama.isOnCloud) && (c.moveable))
+                            lama.position.x += c.velocity;        // if cloud is moveable - lama moves with it
 
-                    //picking a coin
-                    if (c.hasCoin) {
-                        if ((lama.position.x + lama.lame.getWidth() >= c.coinPosition.x) && (lama.position.x <= c.coinPosition.x + c.coin.getWidth()))
-                            c.hasCoin = false;
-                       if(game.musicOn) coinSound.play();
-                        money++;
-                        if (bonusesOn[3]) money++;
-                        score += 7;
-                        if (bonusesOn[3]) score+=7;
-                    }
-
-                    //picking a magnit
-                    if (c.magnit) {
-                        if ((lama.position.x + lama.lame.getWidth() >= c.magnitPosition.x) && (lama.position.x <= c.magnitPosition.x + c.mag.getWidth())) {
-                            magnitOn();
-                            c.magnit = false;
-                            lama.magnitism = true;
-                           if(game.musicOn) coinSound.play(); //new sound here for a bonus
+                        //picking a coin
+                        if (c.hasCoin) {
+                            if ((lama.position.x + lama.lame.getWidth() >= c.coinPosition.x) && (lama.position.x <= c.coinPosition.x + c.coin.getWidth()))
+                                c.hasCoin = false;
+                            if (game.musicOn) coinSound.play();
+                            money++;
+                            if (bonusesOn[3]) money++;
+                            score += 7;
+                            if (bonusesOn[3]) score += 7;
                         }
 
-                    }
-                    if (c.hasJetpack) {
-                        jetpackOn();
-                        if ((lama.position.x + lama.lame.getWidth() >= c.jetpackPosition.x) && (lama.position.x <= c.jetpackPosition.x + c.mag.getWidth())) {
-                            c.hasJetpack = false;
-                            lama.fly = true;
-                           if(game.musicOn) coinSound.play(); //new sound here for a bonus
-                        }
-                    }
+                        //picking a magnit
+                        if (c.magnit) {
+                            if ((lama.position.x + lama.lame.getWidth() >= c.magnitPosition.x) && (lama.position.x <= c.magnitPosition.x + c.mag.getWidth())) {
+                                magnitOn();
+                                c.magnit = false;
+                                lama.magnitism = true;
+                                if (game.musicOn) coinSound.play(); //new sound here for a bonus
+                            }
 
-                    if (c.hasWings) {
-                        wingsOn();
-                        if ((lama.position.x + lama.lame.getWidth() >= c.wingsPosition.x) && (lama.position.x <= c.wingsPosition.x + 20)) {
-                            c.hasWings = false;
-                            lama.hasWings = true;
-                            if(game.musicOn) coinSound.play(); //new sound here for a bonus
+                        }
+                        if (c.hasJetpack) {
+                            jetpackOn();
+                            if ((lama.position.x + lama.lame.getWidth() >= c.jetpackPosition.x) && (lama.position.x <= c.jetpackPosition.x + c.mag.getWidth())) {
+                                c.hasJetpack = false;
+                                lama.fly = true;
+                                if (game.musicOn) coinSound.play(); //new sound here for a bonus
+                            }
+                        }
+
+                        if (c.hasWings) {
+                            wingsOn();
+                            if ((lama.position.x + lama.lame.getWidth() >= c.wingsPosition.x) && (lama.position.x <= c.wingsPosition.x + 20)) {
+                                c.hasWings = false;
+                                lama.hasWings = true;
+                                if (game.musicOn) coinSound.play(); //new sound here for a bonus
+                            }
                         }
                     }
                 }
             }
-        }
-        magniting();
-        jetpack();
-        wings();
-        doubleSc();
+            magniting();
+            jetpack();
+            wings();
+            doubleSc();
 
-        //end of game
-        if (lama.position.y+20<camera.position.y-camera.viewportHeight/2 && !lama.hasWings) {
-            gameOver();
-        }
-        else {
-            if (lama.hasWings && lama.position.y<camera.position.y-camera.viewportHeight/2) {
-                lama.isOnCloud=true;
-                lama.position.y=camera.position.y-camera.viewportHeight/2;
-                lama.GRAVITY=0;
-                if (lama.lookingLeft) lama.lame=new Sprite(new Texture("lamaWingsLeftStay.PNG"));
-                else lama.lame=new Sprite(new Texture("lamaWingsRightStay.PNG"));
+            //end of game
+            if (lama.position.y + 20 < camera.position.y - camera.viewportHeight / 2 && !lama.hasWings) {
+                gameOver();
+            } else {
+                if (lama.hasWings && lama.position.y < camera.position.y - camera.viewportHeight / 2) {
+                    lama.isOnCloud = true;
+                    lama.position.y = camera.position.y - camera.viewportHeight / 2;
+                    lama.GRAVITY = 0;
+                    if (lama.lookingLeft) lama.lame = new Sprite(new Texture("lamaWingsLeftStay.PNG"));
+                    else lama.lame = new Sprite(new Texture("lamaWingsRightStay.PNG"));
+                }
             }
+            camera.update();
         }
-        camera.update();
     }
 
 
@@ -657,12 +667,14 @@ public class GameScreen implements Screen {
     @Override
     public void pause() {
         System.out.println("pause");
+        paused =true;
 
     }
 
     @Override
     public void resume() {
         System.out.println("resume");
+        paused = false;
 
     }
 
