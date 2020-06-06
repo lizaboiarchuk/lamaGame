@@ -221,7 +221,7 @@ public class Cloud {
     public void resize() {
         if (resizable) {
             if (smaller) {
-                if (height >= 10) {
+                if (height >= 5) {
                     height -= sizeVel;
                     width -= 2.5*sizeVel;
                 }

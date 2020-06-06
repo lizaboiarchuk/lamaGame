@@ -11,6 +11,7 @@ public class UserBase {
         users = new ArrayList<>();
         users.add(new User("login","password"));
         users.add(new User("user1","pass"));
+        users.add(new User("l", "p"));
     }
 
     public boolean checkUser(User u) {

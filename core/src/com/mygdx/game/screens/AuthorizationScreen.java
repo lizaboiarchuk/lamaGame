@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
+import com.mygdx.game.User;
 
 public class AuthorizationScreen implements Screen {
 
@@ -98,8 +99,11 @@ public class AuthorizationScreen implements Screen {
                 System.out.println("login: " + loginInput + " ; password = " + passwordInput);
                 if(loginInput.matches("[A-Za-z0-9_@.]+") &&
                 passwordInput.matches("[A-Za-z0-9_@.]+")){
-                    dispose();
-                    startClass.setMenuScreen();
+                    User u = new User(loginInput,passwordInput);
+                    if (startClass.userBase.checkUser(u)) {
+                        dispose();
+                        startClass.setMenuScreen();
+                    }
                 } else {
                     System.out.println("weird input");
                 }
@@ -114,8 +118,11 @@ public class AuthorizationScreen implements Screen {
                 System.out.println("login: " + loginInput + " ; password = " + passwordInput);
                 if(loginInput.matches("[A-Za-z0-9_@.]+") &&
                         passwordInput.matches("[A-Za-z0-9_@.]+")){
-                    dispose();
-                    startClass.setMenuScreen();
+                    User u = new User(loginInput,passwordInput);
+                    if (startClass.userBase.checkUser(u)) {
+                        dispose();
+                        startClass.setMenuScreen();
+                    }
                 } else {
                     System.out.println("weird input");
                 }

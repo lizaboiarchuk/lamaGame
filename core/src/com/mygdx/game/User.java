@@ -7,7 +7,7 @@ public class User {
     public int money;
 
 
-    User (String login, String password) {
+    public User(String login, String password) {
         this.login = login;
         this.password = password;
     }

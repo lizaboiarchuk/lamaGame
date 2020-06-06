@@ -39,7 +39,8 @@ public class StartClass extends Game implements ApplicationListener {
 	public static Music music;
 	public int gameMode;
 	public long score;
-	UserBase userBase;
+	public UserBase userBase;
+	public User user;
 	Info inf = new Info();
 	Texture img;
 
