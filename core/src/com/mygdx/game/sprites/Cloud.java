@@ -4,198 +4,124 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import java.util.concurrent.ThreadLocalRandom;
 import com.mygdx.game.StartClass;
+import com.mygdx.game.bonuses.*;
 
 import java.util.Random;
 
 public class Cloud {
-    public static final int CLOUD_HEIGHT = 19;
-    public static final int CLOUD_WIDTH=50;
-    private static final int RANDOMfrom = 10;
-    private static final int RANDOMto = 180;
-
-    private int left_or_right ;
-    private int one_or_two_clouds_a_line;
 
     public boolean moveable;
-    public boolean bad=false;
+    public boolean bad;
     public boolean visited;
-    public boolean hasCoin;
-    public boolean magnit;
-    public boolean hasJetpack;
     public boolean canBeMagnit=true;
     public boolean toDraw=true;
     public boolean resizable=false;
-    public boolean hasPampers;
     public float width, height;
     public boolean smaller=false;
     public float sizeVel = 0.1f;
     public boolean isInter=false;
-
-    public boolean hasWings=false;
-
-
-
     public float velocity=1;
-    public float velocityY=1;
+
+
+
 
     public Texture cloud;
-    public Texture coin;
-    public Texture mag;
-    public Texture jetpack;
-    public Texture pampers;
-    public Texture wings;
 
+    public Bonus bonus;
+    public boolean hasBonus;
 
-
-
+    public Coin coin;
+    public boolean hasCoin;
     public Vector2 position;
-    public Random rand;
+    Random random = new Random();
 
-    public float yMoveTo;
-    public boolean yMoveable;
 
-    public Vector2 coinPosition;
-    public Vector2 magnitPosition;
-    public Vector2 jetpackPosition;
-    public Vector2 pampersPosition;
-    public Vector2 wingsPosition;
 
     //constructor
     public Cloud(float y, Cloud c) {
-        yMoveTo=y+70;
-        Random r = new Random();
-        if (r.nextBoolean()) hasCoin=true;
-        else hasCoin=false;
-        visited= false;
+        visited=false;
         cloud= new Texture("cloud1.png");
         width= cloud.getWidth();
         height = cloud.getHeight();
-        coin = new Texture("coin.png");
-        mag = new Texture("magnit.png");
-        jetpack = new Texture("jetpack.png");
-        pampers = new Texture("pampers.png");
-        wings = new Texture("wings.png");
 
-
-
-        rand = new Random();
-        if (c==null)
+        if (c==null)                                             // if it is a first cloud
             position = new Vector2(200, y);
-        else {
-            reposition(y,c,false);
-        }
-        if (hasCoin) coinPosition = new Vector2(position.x+18, y+20);
+        else
+            reposition(y,c);
     }
 
+
+
+
+
+
+
+
     //creates a new position for a cloud based on a location of a previous cloud
-    public void reposition(float y,Cloud c, boolean bonus) {
-        if (isInter) {
-            //  if (Cloud.ran()) {
+    public void reposition(float y,Cloud c) {
+        if (isInter)                                                    //some of the "inter" clouds are black
             setBad();
-            System.out.println("bad clous");
-            //}
-        }
-        yMoveTo = y + 70;
+        visited=false;
         toDraw = true;
-        magnit = false;
-        Random r = new Random();
-        if (r.nextBoolean())
+        hasCoin=false;
+        int left_or_right = random.nextInt(2);       //randomly generate a position for a cloud
+        if ((left_or_right==0) && (c.position.x<40))
+            left_or_right=1;
+        if ((left_or_right==1) && (c.position.x>165))
+            left_or_right=0;
+        int xCor;
+        if (left_or_right==0) {
+            if (c.position.x<95)
+                xCor=ThreadLocalRandom.current().nextInt(5,(int)c.position.x-30+1);
+            else
+                xCor=ThreadLocalRandom.current().nextInt((int)c.position.x-90,(int)c.position.x-30+1);
+            position = new Vector2(xCor, y);
+        }
+        else {
+            if (c.position.x>115)
+                xCor=ThreadLocalRandom.current().nextInt( (int)c.position.x+30, 197);
+            else
+                xCor=ThreadLocalRandom.current().nextInt( (int)c.position.x+30, (int) c.position.x+81);
+            position = new Vector2(xCor, y);
+        }
+        coin = new Coin(position, random.nextBoolean());       // create a coin with probability 1:2
+        if (coin.exists)
             hasCoin = true;
-        else
-            hasCoin = false;
-
-        int rr = (r.nextInt(40));
-
-        if (rr == 27) {
-            hasCoin = false;
-            hasJetpack = false;
-            hasPampers = false;
-            magnit = true;
-            hasWings = false;
-        } else {
-            if (rr == 26) {
-                hasCoin = false;
-                hasJetpack = true;
-                hasPampers = false;
-                magnit = false;
-                hasWings = false;
-            } else {
-                if (rr == 25) {
-                    hasCoin = false;
-                    hasPampers = true;
-                    hasJetpack = false;
-                    magnit = false;
-                    hasWings = false;
-                } else {
-                    if (rr == 24) {
-                        hasCoin = false;
-                        hasJetpack = true;
-                        hasPampers = false;
-                        magnit = false;
-                        hasWings = false;
-                    } else {
-                        if (rr == 22) {
-                            hasCoin = false;
-                            hasPampers = false;
-                            hasJetpack = false;
-                            magnit = false;
-                            hasWings = true;
-
-                        }
-                    }
+        if (!hasCoin) {
+            if (random.nextInt(5)==0) {                           //if cloud doesnt have a coin, there can be
+                int bonusType = random.nextInt(4);                //randomly generated one of 4 bonuses
+                if (bonusType==0) {
+                    this.bonus =new Magnet(position,true);
+                    this.bonus.bonusType=0;
+                }
+                if (bonusType==1) {
+                    this.bonus =new Wings(position,true);
+                    this.bonus.bonusType=1;
+                }
+                if (bonusType==2) {
+                    this.bonus =new Jetpack(position,true);
+                    this.bonus.bonusType=2;
+                }
+                if (bonusType==3) {
+                    this.bonus =new Multiplier(position,true);
+                    this.bonus.bonusType=3;
                 }
             }
         }
 
-
-
-            visited=false;
-            coin = new Texture("coin.png");
-            left_or_right = rand.nextInt(2);
-            if ((left_or_right==0) && (c.position.x<40))
-                left_or_right=1;
-            if ((left_or_right==1) && (c.position.x>165))
-                left_or_right=0;
-            int xCor;
-            if (left_or_right==0) {
-                if (c.position.x<95)
-                    xCor=ThreadLocalRandom.current().nextInt(5,(int)c.position.x-30+1);
-                else
-                    xCor=ThreadLocalRandom.current().nextInt((int)c.position.x-90,(int)c.position.x-30+1);
-                position = new Vector2(xCor, y);
-            }
-            else {
-                if (c.position.x>115)
-                    xCor=ThreadLocalRandom.current().nextInt( (int)c.position.x+30, 197);
-                else
-                    xCor=ThreadLocalRandom.current().nextInt( (int)c.position.x+30, (int) c.position.x+81);
-                position = new Vector2(xCor, y);
-            }
-
-        if (hasCoin)
-            coinPosition = new Vector2(position.x+18, y+20);
-        if (magnit)
-            magnitPosition = new Vector2(position.x+17, y+20);
-        if (hasJetpack)
-            jetpackPosition = new Vector2(position.x+17, y+20);
-        if (hasPampers)
-            pampersPosition = new Vector2(position.x+17, y+20);
-        if (hasWings)
-            wingsPosition = new Vector2(position.x+16, y+23);
     }
 
+
+
+
+
+
+    //change cloud's position if it is moveable (for gameMode2)
     public void move() {
         if (moveable==true) {
             position.x += velocity;
-            if (hasCoin)
-                coinPosition.x+=velocity;
-            if (magnit)
-                magnitPosition.x+=velocity;
-            if (hasJetpack)
-                jetpackPosition.x+=velocity;
-            if (hasPampers)
-                pampersPosition.x+=velocity;
-
+            if (hasBonus)
+                bonus.position.x+=velocity;
             if (position.x >= 200)
                 velocity = -1;
             if (position.x <= 0)
@@ -203,11 +129,15 @@ public class Cloud {
         }
     }
 
-    //make a cloud bad
+
+
+    //make a cloud bad (lama dies in case of jumping on it)
     public void setBad() {
         bad=true;
         cloud = new Texture("badCloud.png");
     }
+
+
 
     //true with probability 1:4
     public static boolean ran() {
@@ -217,6 +147,8 @@ public class Cloud {
         else res=false;
         return res;
     }
+
+
 
     public void resize() {
         if (resizable) {
