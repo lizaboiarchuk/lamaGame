@@ -226,7 +226,7 @@ public class GameScreen implements Screen {
                     if (c.magnit)
                         sb.draw(c.mag, c.magnitPosition.x, c.magnitPosition.y);
                     if (c.hasJetpack)
-                        sb.draw(c.jetpack, c.jetpackPosition.x, c.jetpackPosition.y);
+                        sb.draw(c.jetpack, c.jetpackPosition.x, c.jetpackPosition.y, c.jetpack.getWidth()/2, c.jetpack.getHeight()/2);
                     if (c.hasWings)
                         sb.draw(c.wings, c.wingsPosition.x, c.wingsPosition.y, 22, 10);
                 }
@@ -483,7 +483,7 @@ public class GameScreen implements Screen {
             //checking all the clouds to understand on which lama is staying now
             for (Cloud c : clouds) {
                 if (c.toDraw || gameMode != 3) {
-                    if ((lama.position.y <= c.position.y + c.height + 3) && (lama.position.y >= c.position.y + c.height - 4) && (lama.position.x + lama.width / 4 >= c.position.x) && (lama.position.x <= c.position.x + c.width - lama.width / 6)) {
+                    if ((lama.position.y <= c.position.y + c.height + 5) && (lama.position.y >= c.position.y + c.height - 4) && (lama.position.x + lama.width / 4 >= c.position.x) && (lama.position.x <= c.position.x + c.width - lama.width / 6)) {
                         if (c.bad && !lama.fly && !lama.hasWings) gameOver();
                         lama.velocity.set(new Vector3(0, 0, 0));
                         if (!lama.fly) lama.position.y = c.position.y + c.height - 2;
@@ -512,6 +512,7 @@ public class GameScreen implements Screen {
                         if (c.magnit) {
                             if ((lama.position.x + lama.lame.getWidth() >= c.magnitPosition.x) && (lama.position.x <= c.magnitPosition.x + c.mag.getWidth())) {
                                 magnitOn();
+                                bonusesNumber[0]++;
                                 c.magnit = false;
                                 lama.magnitism = true;
                                 if (game.musicOn) coinSound.play(); //new sound here for a bonus
@@ -519,18 +520,20 @@ public class GameScreen implements Screen {
 
                         }
                         if (c.hasJetpack) {
-                            jetpackOn();
                             if ((lama.position.x + lama.lame.getWidth() >= c.jetpackPosition.x) && (lama.position.x <= c.jetpackPosition.x + c.mag.getWidth())) {
                                 c.hasJetpack = false;
+                                bonusesNumber[2]++;
+                                jetpackOn();
                                 lama.fly = true;
                                 if (game.musicOn) coinSound.play(); //new sound here for a bonus
                             }
                         }
 
                         if (c.hasWings) {
-                            wingsOn();
                             if ((lama.position.x + lama.lame.getWidth() >= c.wingsPosition.x) && (lama.position.x <= c.wingsPosition.x + 20)) {
                                 c.hasWings = false;
+                                wingsOn();
+                                bonusesNumber[1]++;
                                 lama.hasWings = true;
                                 if (game.musicOn) coinSound.play(); //new sound here for a bonus
                             }

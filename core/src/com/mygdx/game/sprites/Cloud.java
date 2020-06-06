@@ -90,58 +90,65 @@ public class Cloud {
     //creates a new position for a cloud based on a location of a previous cloud
     public void reposition(float y,Cloud c, boolean bonus) {
         if (isInter) {
-          //  if (Cloud.ran()) {
-                setBad();
-                System.out.println("bad clous");
+            //  if (Cloud.ran()) {
+            setBad();
+            System.out.println("bad clous");
             //}
         }
-        yMoveTo=y+70;
-        toDraw=true;
-        magnit=false;
+        yMoveTo = y + 70;
+        toDraw = true;
+        magnit = false;
         Random r = new Random();
         if (r.nextBoolean())
-            hasCoin=true;
+            hasCoin = true;
         else
-            hasCoin=false;
-        if ((canBeMagnit) && (!bonus)) {
-            if (r.nextInt(10) == 5) {
+            hasCoin = false;
+
+        int rr = (r.nextInt(40));
+
+        if (rr == 27) {
+            hasCoin = false;
+            hasJetpack = false;
+            hasPampers = false;
+            magnit = true;
+            hasWings = false;
+        } else {
+            if (rr == 26) {
                 hasCoin = false;
-                hasJetpack=false;
-                hasPampers=false;
-                magnit = true;
-                hasWings=false;
+                hasJetpack = true;
+                hasPampers = false;
+                magnit = false;
+                hasWings = false;
             } else {
-                if (r.nextInt(10) == 4) {
-                    hasCoin = false;
-                    hasJetpack = true;
-                    hasPampers=false;
-                    magnit = false;
-                    hasWings=false;
-                }
-                if (r.nextInt(10) == 3) {
+                if (rr == 25) {
                     hasCoin = false;
                     hasPampers = true;
-                    hasJetpack=false;
+                    hasJetpack = false;
                     magnit = false;
-                    hasWings=false;
-                }
-                if (r.nextInt(10) == 4) {
-                    hasCoin = false;
-                    hasJetpack = true;
-                    hasPampers=false;
-                    magnit = false;
-                    hasWings=false;
-                }
-                if (r.nextInt(10) == 2) {
-                    hasCoin = false;
-                    hasPampers = false;
-                    hasJetpack=false;
-                    magnit = false;
-                    hasWings=true;
+                    hasWings = false;
+                } else {
+                    if (rr == 24) {
+                        hasCoin = false;
+                        hasJetpack = true;
+                        hasPampers = false;
+                        magnit = false;
+                        hasWings = false;
+                    } else {
+                        if (rr == 22) {
+                            hasCoin = false;
+                            hasPampers = false;
+                            hasJetpack = false;
+                            magnit = false;
+                            hasWings = true;
 
+                        }
+                    }
                 }
             }
         }
+
+
+
             visited=false;
             coin = new Texture("coin.png");
             left_or_right = rand.nextInt(2);
