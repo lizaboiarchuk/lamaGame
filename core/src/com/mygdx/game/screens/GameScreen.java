@@ -36,9 +36,6 @@ public class GameScreen implements Screen {
     Texture whiteS;
     boolean multi = false;
 
-
-
-
     SpriteBatch sb;
 
     boolean begins=true;
@@ -135,7 +132,6 @@ public class GameScreen implements Screen {
             tubesGrey.add(tu);
         }
         tubePink = new Image(new Texture("tube.png"));
-
         magnitBonus = new Image(new Texture("magnit.png"));
         jetPackBonus = new Image(new Texture("jetpack.png"));
         wingsBonus = new Image( new Texture("wings.png"));
@@ -151,16 +147,13 @@ public class GameScreen implements Screen {
         backgrounds.add(new Texture("yellowBackGround.png"));
         backgrounds.add(new Texture("blueBackGround.jpg"));
         backgrounds.add(new Texture("greenBackGround.jpg"));
-
         background = backgrounds.get(gameMode-1);
 
 
         scoreCount = new Label(String.format("%05d", this.score), new Label.LabelStyle(game.welcomeFont, Color.PINK));
         scoreCount.setPosition(game.WIDTH-moneyBag.getWidth(), game.HEIGHT-moneyBag.getHeight());
-
         moneyCount = new Label(String.format("%03d", this.money), new Label.LabelStyle(game.welcomeFont, Color.PINK));
         moneyCount.setPosition(game.WIDTH-moneyBag.getWidth()-10, game.HEIGHT-moneyBag.getHeight());
-
         moneyBag.setPosition(game.WIDTH-moneyBag.getWidth(), game.HEIGHT-moneyBag.getHeight());
 
 
@@ -170,10 +163,6 @@ public class GameScreen implements Screen {
         stage.addActor(moneyBag);
         stage.addActor(scoreCount);
         stage.addActor(moneyCount);
-
-
-
-
 
 
 
@@ -383,20 +372,12 @@ public class GameScreen implements Screen {
     }
 
 
-
-
-
-
-
-
-
-
     public void update(float dt) {
         if (!begins) handleInput();
         if (!paused) {
         //    if (!begins) handleInput();
             lama.update(dt);
-            float plus = 0.86f;
+            float plus = 1f;
             if (gameMode == 4) plus = 0.95f;
 
 
@@ -688,6 +669,18 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        background.dispose();
+        grass.dispose();
+        lama.lame.getTexture().dispose();
+        sb.dispose();
+        for (Cloud c: clouds) {
+            if (c.hasWings) c.wings.dispose();
+            if (c.hasJetpack) c.jetpack.dispose();
+            if (c.magnit) c.mag.dispose();
+            if (c.hasCoin) c.coin.dispose();
+            c.cloud.dispose();
+        }
+        stage.dispose();
 
     }
 
