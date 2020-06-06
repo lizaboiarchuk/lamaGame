@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 
@@ -107,10 +109,45 @@ public class RegistrationScreen implements Screen {
         registerButtonImage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
-                dispose();
-                startClass.setMenuScreen();
+                nameInput = nameTextField.getText();
+                loginInput = loginTextField.getText();
+                passwordInput = passwordTextField.getText();
+                checkPasswordInput = checkPasswordTextField.getText();
+                System.out.println("name = " + nameInput + " ; login = " + loginInput + " ; password = " + passwordInput + " ; checked password = " + checkPasswordInput);
+                if(loginInput.matches("[A-Za-z0-9_@.]+") &&
+                        passwordInput.matches("[A-Za-z0-9_@.]+") &&
+                        nameInput.matches("[A-Za-z]+") &&
+                        checkPasswordInput.matches("[A-Za-z0-9_@.]+") &&
+                        (passwordInput.equals(checkPasswordInput))) {
+                    dispose();
+                    startClass.setMenuScreen();
+                } else {
+                    if(loginInput.equals("") || passwordInput.equals("") || nameInput.equals("") || checkPasswordInput.equals("")){
+                        MessageCloud messageCloud4 = new MessageCloud(startClass, stage, " Field cannot\n  be empty.");
+                    } else if (!passwordInput.equals(checkPasswordInput)) {
+                        MessageCloud messageCloud2 = new MessageCloud(startClass, stage, "       Oops! Passwords\n doesn`t match.");
+                    } else {
+                        MessageCloud messageCloud = new MessageCloud(startClass, stage, "     Oops!\nInvalid input");
+                        if (!nameInput.matches("[A-Za-z]+")) {
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    MessageCloud messageCloud1 = new MessageCloud(startClass, stage, "Only letters are\n accepted in\n name field.");
+                                }
+                            }, 2f);
+                        } else {
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    MessageCloud messageCloud3 = new MessageCloud(startClass, stage, "Only letters\n and digits\nare accepted.");
+                                }
+                            }, 2f);
+                        }
+                    }
+                }
             }
         });
+
 
         registerButtonLabel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
@@ -128,7 +165,28 @@ public class RegistrationScreen implements Screen {
                     dispose();
                     startClass.setMenuScreen();
                 } else {
-                    System.out.println("weird input");
+                    if(loginInput.equals("") || passwordInput.equals("") || nameInput.equals("") || checkPasswordInput.equals("")){
+                        MessageCloud messageCloud4 = new MessageCloud(startClass, stage, " Field cannot\n  be empty.");
+                    } else if (!passwordInput.equals(checkPasswordInput)) {
+                        MessageCloud messageCloud2 = new MessageCloud(startClass, stage, "       Oops! Passwords\n doesn`t match.");
+                    } else {
+                        MessageCloud messageCloud = new MessageCloud(startClass, stage, "     Oops!\nInvalid input");
+                        if (!nameInput.matches("[A-Za-z]+")) {
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    MessageCloud messageCloud1 = new MessageCloud(startClass, stage, "Only letters are\n accepted in\n name field.");
+                                }
+                            }, 2f);
+                        } else {
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    MessageCloud messageCloud3 = new MessageCloud(startClass, stage, "Only letters\n and digits\nare accepted.");
+                                }
+                            }, 2f);
+                        }
+                    }
                 }
             }
         });

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -33,13 +34,14 @@ public class AuthorizationScreen implements Screen {
     Label loginButtonLabel;
     Label registerButtonLabel;
     Skin defaultSkin;
-    TextField.TextFieldStyle style;
+    TextField.TextFieldStyle textFieldStyle;
     TextField loginTextField;
     TextField passwordTextField;
     String loginInput;
     String passwordInput;
     ImageButton musicOnSmallButton;
     ImageButton musicOffSmallButton;
+
 
     public AuthorizationScreen(final StartClass startClass){
         this.startClass = startClass;
@@ -73,16 +75,16 @@ public class AuthorizationScreen implements Screen {
         defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
         textFieldBack = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/textFieldBorder.png")));
-        style = new TextField.TextFieldStyle();
-        style.font = startClass.whiteFont;
-        style.fontColor = Color.BLACK;
-        style.background = textFieldBack;
+        textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.font = startClass.whiteFont;
+        textFieldStyle.fontColor = Color.BLACK;
+        textFieldStyle.background = textFieldBack;
 
-        loginTextField = new TextField("", style);
+        loginTextField = new TextField("", textFieldStyle);
         loginTextField.setPosition(StartClass.WIDTH/2-loginTextField.getWidth(), StartClass.HEIGHT/2+80);
         loginTextField.setSize(300, 30);
 
-        passwordTextField = new TextField("", style);
+        passwordTextField = new TextField("", textFieldStyle);
         passwordTextField.setPosition(StartClass.WIDTH/2-passwordTextField.getWidth(), StartClass.HEIGHT/2);
         passwordTextField.setSize(300, 30);
         passwordTextField.setPasswordCharacter('*');
@@ -105,7 +107,7 @@ public class AuthorizationScreen implements Screen {
                         startClass.setMenuScreen();
                     }
                 } else {
-                    System.out.println("weird input");
+                    MessageCloud messageCloud = new MessageCloud(startClass, stage, "     Oops!\nInvalid input");
                 }
             }
         });
@@ -124,7 +126,8 @@ public class AuthorizationScreen implements Screen {
                         startClass.setMenuScreen();
                     }
                 } else {
-                    System.out.println("weird input");
+
+
                 }
             }
         });
@@ -168,6 +171,7 @@ public class AuthorizationScreen implements Screen {
             }
         });
 
+
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
         stage.addActor(sittingLamaImage);
@@ -204,6 +208,8 @@ public class AuthorizationScreen implements Screen {
             musicOffSmallButton.setVisible(false);
         }
     }
+
+
 
     @Override
     public void resize(int width, int height) {

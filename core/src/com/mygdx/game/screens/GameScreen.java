@@ -681,8 +681,5 @@ public class GameScreen implements Screen {
             c.cloud.dispose();
         }
         stage.dispose();
-
     }
-
-
 }
