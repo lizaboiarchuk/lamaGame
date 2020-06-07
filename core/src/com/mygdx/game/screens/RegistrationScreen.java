@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
+import com.mygdx.game.User;
 
 public class RegistrationScreen implements Screen {
 
@@ -119,8 +120,20 @@ public class RegistrationScreen implements Screen {
                         nameInput.matches("[A-Za-z]+") &&
                         checkPasswordInput.matches("[A-Za-z0-9_@.]+") &&
                         (passwordInput.equals(checkPasswordInput))) {
+
+                    User newUser = new User();
+                    newUser.setName(nameInput);
+                    newUser.setLogin(loginInput);
+                    newUser.setPassword(passwordInput);
+                    newUser.setMoney(0);
+                    newUser.setHighScore(0);
+                    newUser.setMagnetPurchased(0);
+                    newUser.setWingsPurchased(0);
+                    newUser.setRocketPurchased(0);
+                    newUser.setDoubleBonusPurchased(0);
+                    startClass.setUser(newUser);
                     dispose();
-                    startClass.setMenuScreen();
+                    startClass.setMenuScreen(true, true);
                 } else {
                     if(loginInput.equals("") || passwordInput.equals("") || nameInput.equals("") || checkPasswordInput.equals("")){
                         MessageCloud messageCloud4 = new MessageCloud(startClass, stage, " Field cannot\n  be empty.");
@@ -162,8 +175,20 @@ public class RegistrationScreen implements Screen {
                         nameInput.matches("[A-Za-z]+") &&
                         checkPasswordInput.matches("[A-Za-z0-9_@.]+") &&
                         (passwordInput.equals(checkPasswordInput))) {
+
+                    User newUser = new User();
+                    newUser.setName(nameInput);
+                    newUser.setLogin(loginInput);
+                    newUser.setPassword(passwordInput);
+                    newUser.setMoney(0);
+                    newUser.setHighScore(0);
+                    newUser.setMagnetPurchased(0);
+                    newUser.setWingsPurchased(0);
+                    newUser.setRocketPurchased(0);
+                    newUser.setDoubleBonusPurchased(0);
+                    startClass.setUser(newUser);
                     dispose();
-                    startClass.setMenuScreen();
+                    startClass.setMenuScreen(true, true);
                 } else {
                     if(loginInput.equals("") || passwordInput.equals("") || nameInput.equals("") || checkPasswordInput.equals("")){
                         MessageCloud messageCloud4 = new MessageCloud(startClass, stage, " Field cannot\n  be empty.");

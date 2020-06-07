@@ -10,11 +10,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.StartClass;
 import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.sprites.Lame;
@@ -31,7 +37,7 @@ public class GameScreen implements Screen {
     Stage stage;
 
     //pictures and labels
-    Texture siitingLama;
+    Texture sititingLama;
     Texture grass;
     Texture whiteS;
     Texture background;
@@ -51,12 +57,12 @@ public class GameScreen implements Screen {
     boolean begins=true;
     int timer=0;
     public long score; // current score
-    public long money; //current coins
+    public int money; //current coins
     public int gameMode;
     float lamePrev;
     public int timeCounter;
     public boolean drawMagnet=true;
-    public boolean paused=false;
+    public boolean paused;
     public static final int SPACE_BETWEEN_CLOUDS = 60;
     public static final int CLOUDS_COUNT = 18;
     public static final int bonusTimer = 1000; //(*delta time (0.22sec))
@@ -64,14 +70,11 @@ public class GameScreen implements Screen {
     //sounds
     public Sound coinSound;
     public Sound endSound;
-
-
-
-
+    PauseScreen pauseScreen;
 
 
     //constructor
-    public GameScreen(StartClass game, int gameMode) {
+    public GameScreen(final StartClass game, int gameMode) {
         this.game = game;
         this.gameMode=gameMode;
         spriteBatch = new SpriteBatch();
@@ -79,59 +82,67 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
+        paused = game.pausedScreenOn;
 
         initPictures();
         initSound();
-        initStage();
         initClouds();
 
         score=0;
-        money=0;
+        money=game.user.getMoney();
         lama=new Lame(clouds.get(0).position.x+10, clouds.get(0).position.y+35, game);
         lamePrev = lama.position.y;
         camera.position.y=lama.position.y+80;
+
     }
 
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        update(delta);
-        spriteBatch.begin();
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.draw(background, camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2, camera.viewportWidth, camera.viewportHeight);
-        spriteBatch.draw(grass, 0, 0, grass.getWidth() / 2, grass.getHeight() / 2);
-
-        //clouds with bonuses/coins
-        for (Cloud c : clouds) {
-            if (c.visited) c.toDraw = false;
-            if (lama.isOnCloud && lama.currentCloud == c) c.toDraw = true;
-            c.move(); //for gameMode 2
-            c.resize(); //for gameMode 5
-            if (c.toDraw || gameMode != 3) {
-                spriteBatch.draw(c.cloud, c.position.x, c.position.y, c.width, c.height);
-                if (c.hasCoin) spriteBatch.draw(c.coin.texture, c.coin.position.x, c.coin.position.y);
-                if (c.hasBonus) spriteBatch.draw(c.bonus.texture, c.bonus.position.x, c.bonus.position.y);
+        paused = game.pausedScreenOn;
+        if(!game.disposeGameScreen) {
+            Gdx.gl.glClearColor(1, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            update(delta);
+            spriteBatch.begin();
+            spriteBatch.setProjectionMatrix(camera.combined);
+            spriteBatch.draw(background, camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2, camera.viewportWidth, camera.viewportHeight);
+            spriteBatch.draw(grass, 0, 0, grass.getWidth() / 2, grass.getHeight() / 2);
+            //clouds with bonuses/coins
+            for (Cloud c : clouds) {
+                if (c.visited) c.toDraw = false;
+                if (lama.isOnCloud && lama.currentCloud == c) c.toDraw = true;
+                if (!paused) c.move(); //for gameMode 2
+                if (!paused) c.resize(); //for gameMode 5
+                if (c.toDraw || gameMode != 3) {
+                    spriteBatch.draw(c.cloud, c.position.x, c.position.y, c.width, c.height);
+                    if (c.hasCoin) spriteBatch.draw(c.coin.texture, c.coin.position.x, c.coin.position.y);
+                    if (c.hasBonus) spriteBatch.draw(c.bonus.texture, c.bonus.position.x, c.bonus.position.y);
+                }
             }
-        }
 
-        //timer for bonuses
-        if (bonusesOn[0] || bonusesOn[1]|| bonusesOn[2]|| bonusesOn[3])
-            spriteBatch.draw(whiteS, camera.position.x - 20, camera.position.y - camera.viewportHeight / 2 + 30, 40 * (timeCounter * 1.0f / bonusTimer), 4);
+            //timer for bonuses
+            if (bonusesOn[0] || bonusesOn[1] || bonusesOn[2] || bonusesOn[3])
+                spriteBatch.draw(whiteS, camera.position.x - 20, camera.position.y - camera.viewportHeight / 2 + 30, 40 * (timeCounter * 1.0f / bonusTimer), 4);
 
-        if (!begins) spriteBatch.draw(lama.currentSprite, lama.position.x, lama.position.y, lama.width / 2, lama.height / 2);
-        else {
-            spriteBatch.draw(siitingLama, lama.position.x, lama.position.y - 10, lama.width / 2, lama.height / 2);
-            if (timer == 80) {
-                begins = false;
+            if (!begins)
+                spriteBatch.draw(lama.currentSprite, lama.position.x, lama.position.y, lama.width / 2, lama.height / 2);
+            else {
+                spriteBatch.draw(sititingLama, lama.position.x, lama.position.y - 10, lama.width / 2, lama.height / 2);
+                if (timer == 80) {
+                    begins = false;
+                }
             }
-        }
-        timer++;
-        spriteBatch.end();
+            timer++;
+            spriteBatch.end();
 
-        stage.act();
-        stage.draw();
+            stage.act();
+            stage.draw();
+
+        } else {
+            dispose();
+            game.setMenuScreen(false, false);
+        }
     }
 
 
@@ -153,40 +164,46 @@ public class GameScreen implements Screen {
                 lama.right();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-                if (!bonusesOn[0]) {
+                if ((!bonusesOn[0]) && bonusesNumber[0]!=0) {
                     magnitOn();
                 } else {
                     magnitOf();
                 }
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-                if (!bonusesOn[1]) {
+                if ((!bonusesOn[1]) && bonusesNumber[1]!=0) {
                     wingsOn();
                 } else {
                     wingsOf();
                 }
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-                if (!bonusesOn[2]) {
+                if ((!bonusesOn[2])&& bonusesNumber[2]!=0) {
                     jetpackOn();
                 } else {
                     jetpackOf();
                 }
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
-                if (!bonusesOn[3]) {
+                if ((!bonusesOn[3]) && bonusesNumber[3]!=0) {
                     doubleOn();
                 } else {
                     doubleOf();
-
                 }
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
-            pause();
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+            game.pausedScreenOn = true;
+            pause();
+            pauseScreen = new PauseScreen(game, stage);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) {
+            paused = false;
+            game.pausedScreenOn = false;
             resume();
+        }
     }
 
 
@@ -222,8 +239,6 @@ public class GameScreen implements Screen {
 
     }
 
-
-
     public void jetpackOn() {
         if (!(bonusesOn[1] || bonusesOn[0] || bonusesOn[3])) {
             tubesGrey.get(2).tube = new Image(new Texture("tube.png"));
@@ -237,8 +252,6 @@ public class GameScreen implements Screen {
         bonusesOn[2]=false;
         timeCounter=bonusTimer-1;
     }
-
-
 
     public void doubleOn() {
         if (!(bonusesOn[1] || bonusesOn[2] || bonusesOn[0])) {
@@ -254,10 +267,6 @@ public class GameScreen implements Screen {
         timeCounter = bonusTimer-1;
     }
 
-
-
-
-
     public void update(float dt) {
         if (!begins) handleInput();
         if (!paused) {
@@ -265,7 +274,6 @@ public class GameScreen implements Screen {
             float plus = 1f;
             if (gameMode == 4) plus = 0.95f;
             drawStage();
-
             if (timer >= 120) {
                 if (!lama.bonusesOn[2]) camera.position.y += plus;
                 else {
@@ -282,7 +290,6 @@ public class GameScreen implements Screen {
                     if (d % 3 == 0) cl.sizeVel = 0.07f;
                     if (d % 5 == 0) cl.sizeVel = 0.2f;
                 }
-
                 if ((camera.position.y - (camera.viewportHeight / 2)) > (cl.position.y + 19 + 200)) {
                     cl.reposition(cl.position.y + ((19 + SPACE_BETWEEN_CLOUDS) * CLOUDS_COUNT), lastCloud);
                     lastCloud = cl;
@@ -367,6 +374,8 @@ public class GameScreen implements Screen {
                 }
             }
             camera.update();
+            scoreCount.setPosition(game.WIDTH / 2 - scoreCount.getWidth() / 2, game.HEIGHT - 8 - scoreCount.getHeight());
+            moneyCount.setPosition(game.WIDTH - moneyCount.getWidth() - 45, game.HEIGHT - 14.5f - moneyCount.getHeight());
         }
     }
 
@@ -403,7 +412,6 @@ public class GameScreen implements Screen {
                     }
                 }
             }
-
         }
     }
 
@@ -431,9 +439,7 @@ public class GameScreen implements Screen {
                 wingsOf();
                 timeCounter = 0;
                 lama.GRAVITY=-15;
-
             }
-
         }
     }
 
@@ -445,19 +451,22 @@ public class GameScreen implements Screen {
                 doubleOf();
                 timeCounter = 0;
                 lama.GRAVITY=-15;
-
             }
-
         }
     }
 
     public void gameOver() {
-        game.setScreen(new AuthorizationScreen(game));
         StartClass.music.stop();
         if(game.musicOn) endSound.play();
+        game.user.setMagnetPurchased(this.bonusesNumber[0]);
+        game.user.setWingsPurchased(this.bonusesNumber[1]);
+        game.user.setRocketPurchased(this.bonusesNumber[2]);
+        game.user.setDoubleBonusPurchased(this.bonusesNumber[3]);
         this.dispose();
         game.setScore(this.score);
-        game.setGameOverScreen();
+        game.user.updateHighScore(this.score);
+        game.user.setMoney(this.money);
+        game.setGameOverScreen(game.user.newHighScoreBool);
     }
 
     @Override
@@ -517,14 +526,18 @@ public class GameScreen implements Screen {
         bonusesOn = new boolean[4];
         bonusesNumber = new int[4];
         bonusesNumberLabel = new Label[4];
+        bonusesNumber[0] = game.user.getMagnetPurchased();
+        bonusesNumber[1] = game.user.getWingsPurchased();
+        bonusesNumber[2] = game.user.getRocketPurchased();
+        bonusesNumber[3] = game.user.getDoubleBonusPurchased();
         for (int i=0;i<4;i++) {
-            bonusesNumber[i]=99;
             bonusesOn[i]=false;
             Image t = new Image(new Texture("tubeGrey.png"));
             Tube tu = new Tube();
             tu.tube=t;
             tubesGrey.add(tu);
         }
+
         tubePink = new Image(new Texture("tube.png"));
         backgrounds = new ArrayList<Texture>();
         backgrounds.add(new Texture("d.jpg"));
@@ -533,7 +546,7 @@ public class GameScreen implements Screen {
         backgrounds.add(new Texture("blueBackGround.jpg"));
         backgrounds.add(new Texture("greenBackGround.jpg"));
         background = backgrounds.get(gameMode-1);
-        siitingLama = new Texture("sittingLama.png");
+        sititingLama = new Texture("sittingLama.png");
         grass = new Texture("grass.JPEG");
     }
 
@@ -542,18 +555,6 @@ public class GameScreen implements Screen {
     private void initSound() {
         coinSound = Gdx.audio.newSound(Gdx.files.internal("coin_sound.wav"));
         endSound = Gdx.audio.newSound(Gdx.files.internal("end.wav"));
-    }
-
-    private void initStage() {
-        scoreCount = new Label(String.format("%05d", this.score), new Label.LabelStyle(game.welcomeFont, Color.PINK));
-        scoreCount.setPosition(game.WIDTH-moneyBag.getWidth(), game.HEIGHT-moneyBag.getHeight());
-        moneyCount = new Label(String.format("%03d", this.money), new Label.LabelStyle(game.welcomeFont, Color.PINK));
-        moneyCount.setPosition(game.WIDTH-moneyBag.getWidth()-10, game.HEIGHT-moneyBag.getHeight());
-        moneyBag.setPosition(game.WIDTH-moneyBag.getWidth(), game.HEIGHT-moneyBag.getHeight());
-        stage.addActor(moneyBag);
-        stage.addActor(scoreCount);
-        stage.addActor(moneyCount);
-
     }
 
     private void initClouds() {
@@ -575,10 +576,8 @@ public class GameScreen implements Screen {
 
 
     private void drawStage() {
-        scoreCount = new Label(String.format("%04d", this.score), new Label.LabelStyle(game.countFont, Color.BLACK));
-        scoreCount.setPosition(game.WIDTH / 2 - scoreCount.getWidth() / 2, game.HEIGHT - 8 - scoreCount.getHeight());
-        moneyCount = new Label(String.format("%03d", this.money), new Label.LabelStyle(game.moneyFont, game.moneyFont.getColor()));
-        moneyCount.setPosition(game.WIDTH - moneyCount.getWidth() - 45, game.HEIGHT - 14.5f - moneyCount.getHeight());
+        scoreCount = new Label(String.format("%d", this.score), new Label.LabelStyle(game.countFont, Color.BLACK));
+        moneyCount = new Label(String.format("%d", this.money), new Label.LabelStyle(game.moneyFont, game.moneyFont.getColor()));
         moneyBag.setBounds(game.WIDTH - 47, game.HEIGHT - 17 - moneyCount.getHeight(), 40, 40);
 
         tubesGrey.get(0).tube.setBounds(game.WIDTH / 2 - 100, 0, 50, 50);
@@ -591,16 +590,17 @@ public class GameScreen implements Screen {
         bonusesImage[2].setBounds(game.WIDTH / 2 + 5, 18, 40, 28);
         bonusesImage[3].setBounds(game.WIDTH / 2 + 60, 16, 30, 30);
 
-        bonusesNumberLabel[0] = new Label(String.format("%02d", bonusesNumber[0]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
-        bonusesNumberLabel[1] = new Label(String.format("%02d", bonusesNumber[1]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
-        bonusesNumberLabel[2] = new Label(String.format("%02d", bonusesNumber[2]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
-        bonusesNumberLabel[3] = new Label(String.format("%02d", bonusesNumber[3]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+        bonusesNumberLabel[0] = new Label(String.format("%d", bonusesNumber[0]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+        bonusesNumberLabel[1] = new Label(String.format("%d", bonusesNumber[1]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+        bonusesNumberLabel[2] = new Label(String.format("%d", bonusesNumber[2]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
+        bonusesNumberLabel[3] = new Label(String.format("%d", bonusesNumber[3]), new Label.LabelStyle(game.bonusFont, Color.BLACK));
 
         bonusesNumberLabel[0].setPosition(game.WIDTH / 2 - 78, 2);
         bonusesNumberLabel[1].setPosition(game.WIDTH / 2 - 28, 2);
         bonusesNumberLabel[2].setPosition(game.WIDTH / 2 + 21, 2);
         bonusesNumberLabel[3].setPosition(game.WIDTH / 2 + 71, 2);
         stage.clear();
+
 
         for (int i = 0; i < 4; i++) stage.addActor(tubesGrey.get(i).tube);
         stage.addActor(bonusesImage[0]);
@@ -612,6 +612,4 @@ public class GameScreen implements Screen {
         stage.addActor(moneyCount);
         for (int i = 0; i < 4; i++) stage.addActor(bonusesNumberLabel[i]);
     }
-
-
 }

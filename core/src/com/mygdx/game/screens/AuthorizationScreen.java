@@ -103,8 +103,9 @@ public class AuthorizationScreen implements Screen {
                 passwordInput.matches("[A-Za-z0-9_@.]+")){
                     User u = new User(loginInput,passwordInput);
                     if (startClass.userBase.checkUser(u)) {
+                        startClass.setUser(u);
                         dispose();
-                        startClass.setMenuScreen();
+                        startClass.setMenuScreen(false, true);
                     }
                 } else {
                     MessageCloud messageCloud = new MessageCloud(startClass, stage, "     Oops!\nInvalid input");
@@ -122,12 +123,12 @@ public class AuthorizationScreen implements Screen {
                         passwordInput.matches("[A-Za-z0-9_@.]+")){
                     User u = new User(loginInput,passwordInput);
                     if (startClass.userBase.checkUser(u)) {
+                        startClass.setUser(u);
                         dispose();
-                        startClass.setMenuScreen();
+                        startClass.setMenuScreen(false, true);
                     }
                 } else {
-
-
+                    MessageCloud messageCloud1 = new MessageCloud(startClass, stage, "     Oops!\nInvalid input");
                 }
             }
         });

@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -29,6 +31,7 @@ public class MenuScreen implements Screen {
     ImageButton shopButton;
     ImageButton musicOnSmallButton;
     ImageButton musicOffSmallButton;
+    MessageCloud messageCloud;
 
     public MenuScreen(final StartClass startClass){
         this.startClass = startClass;
@@ -72,6 +75,8 @@ public class MenuScreen implements Screen {
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
+                startClass.user=null;
+                startClass.userWelcomeString=null;
                 dispose();
                 startClass.setAuthorizationScreen();
             }
@@ -108,6 +113,8 @@ public class MenuScreen implements Screen {
             }
         });
 
+        startClass.disposeGameScreen = false;
+
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
         stage.addActor(sittingLamaImage);
@@ -118,6 +125,7 @@ public class MenuScreen implements Screen {
         stage.addActor(musicOnSmallButton);
         stage.addActor(musicOffSmallButton);
         musicOnSmallButton.setVisible(false);
+        if(startClass.firstEntrance) messageCloud = new MessageCloud(startClass, stage, startClass.userWelcomeString);
     }
 
     @Override

@@ -14,9 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
+import com.mygdx.game.sprites.Tube;
+
+import java.util.ArrayList;
 
 public class ShopScreen implements Screen {
     private StartClass startClass;
@@ -46,6 +49,12 @@ public class ShopScreen implements Screen {
     private String descriptionString;
     Label priceLabel;
     private String priceString;
+    Label moneyCount;
+    Image moneyBag;
+    Image bonusesImage[];
+    ArrayList<Tube> tubesGrey;
+    Label bonusesNumberLabel[];
+    int bonusesNumber[];
 
     
     public ShopScreen(final StartClass startClass){
@@ -66,17 +75,23 @@ public class ShopScreen implements Screen {
         sittingLamaImage = new Image(new Texture("sittingLama.png"));
         sittingLamaImage.setPosition(StartClass.WIDTH/2-sittingLamaImage.getWidth()/2, 70);
 
+        moneyBag = new Image(new Texture("uiskins/moneybagBigger.png"));
+        moneyBag.setPosition(startClass.WIDTH/2, startClass.HEIGHT-80);
+
+        moneyCount = new Label(String.format("%d", startClass.user.getMoney()), new Label.LabelStyle(startClass.priceFont, startClass.priceFont.getColor()));
+        moneyCount.setPosition(moneyBag.getX() - moneyCount.getPrefWidth(), startClass.HEIGHT - moneyCount.getHeight()-14.5f);
+
         magnetImage = new Image(new Texture("uiskins/buyMagnetImage.png"));
-        magnetImage.setPosition(StartClass.WIDTH/2- magnetImage.getWidth()/2, StartClass.HEIGHT/2- magnetImage.getHeight()/2+grassImage.getHeight()/2-30);
+        magnetImage.setPosition(StartClass.WIDTH/2- magnetImage.getWidth()/2, StartClass.HEIGHT/2- magnetImage.getHeight()/2+grassImage.getHeight()/2-10);
 
         wingsImage = new Image(new Texture("uiskins/buyWingsImage.png"));
-        wingsImage.setPosition(StartClass.WIDTH/2- wingsImage.getWidth()/2, StartClass.HEIGHT/2- wingsImage.getHeight()/2+grassImage.getHeight()/2-30);
+        wingsImage.setPosition(StartClass.WIDTH/2- wingsImage.getWidth()/2, StartClass.HEIGHT/2- wingsImage.getHeight()/2+grassImage.getHeight()/2-10);
 
         rocketImage = new Image(new Texture("uiskins/buyRocketImage.png"));
-        rocketImage.setPosition(StartClass.WIDTH/2- rocketImage.getWidth()/2, StartClass.HEIGHT/2- rocketImage.getHeight()/2+grassImage.getHeight()/2-30);
+        rocketImage.setPosition(StartClass.WIDTH/2- rocketImage.getWidth()/2, StartClass.HEIGHT/2- rocketImage.getHeight()/2+grassImage.getHeight()/2-10);
 
         doubleBonusImage = new Image(new Texture("uiskins/buyDoubleBonusImage.png"));
-        doubleBonusImage.setPosition(StartClass.WIDTH/2- doubleBonusImage.getWidth()/2, StartClass.HEIGHT/2- doubleBonusImage.getHeight()/2+grassImage.getHeight()/2-30);
+        doubleBonusImage.setPosition(StartClass.WIDTH/2- doubleBonusImage.getWidth()/2, StartClass.HEIGHT/2- doubleBonusImage.getHeight()/2+grassImage.getHeight()/2-10);
 
         coinImage = new Image(new Texture("uiskins/coinImage.png"));
         coinImage.setPosition(StartClass.WIDTH/2- 2*coinImage.getWidth()+coinImage.getWidth()/2, magnetImage.getY()-80);
@@ -92,13 +107,13 @@ public class ShopScreen implements Screen {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
                 dispose();
-                startClass.setMenuScreen();
+                startClass.setMenuScreen(false, false);
             }
         });
 
         Drawable slideLeftDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/slideLeft.png")));
         slideLeftButton = new ImageButton(slideLeftDrawable);
-        slideLeftButton.setPosition(37.5f-slideLeftButton.getWidth()/2, StartClass.HEIGHT/2-slideLeftButton.getHeight()/2+grassImage.getHeight()/2-30);
+        slideLeftButton.setPosition(37.5f-slideLeftButton.getWidth()/2, StartClass.HEIGHT/2-slideLeftButton.getHeight()/2+grassImage.getHeight()/2-10);
         slideLeftButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 countPage--;
@@ -107,7 +122,7 @@ public class ShopScreen implements Screen {
 
         Drawable slideRightDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/slideRight.png")));
         slideRightButton = new ImageButton(slideRightDrawable);
-        slideRightButton.setPosition(462.5f-slideRightButton.getWidth()/2, StartClass.HEIGHT/2-slideRightButton.getHeight()/2+grassImage.getHeight()/2-30);
+        slideRightButton.setPosition(462.5f-slideRightButton.getWidth()/2, StartClass.HEIGHT/2-slideRightButton.getHeight()/2+grassImage.getHeight()/2-10);
         slideRightButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 countPage++;
@@ -136,43 +151,102 @@ public class ShopScreen implements Screen {
 
         Drawable buyMagnetDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/buyButton.png")));
         buyMagnetButton = new ImageButton(buyMagnetDrawable);
-        buyMagnetButton.setPosition(StartClass.WIDTH/2-buyMagnetButton.getWidth()/2, StartClass.HEIGHT/2-3*buyMagnetButton.getHeight());
+        buyMagnetButton.setPosition(StartClass.WIDTH/2-buyMagnetButton.getWidth()/2, StartClass.HEIGHT/2-3*buyMagnetButton.getHeight()+20);
         buyMagnetButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
-                System.out.println("buy magnet");
+                int moneyLeft = startClass.user.getMoney() - Integer.parseInt(priceString);
+                if(moneyLeft < 0){
+                    MessageCloud messageCloud = new MessageCloud(startClass, stage, "Not enough money");
+                } else {
+                    startClass.user.purchaseMagnet();
+                    startClass.user.setMoney(moneyLeft);
+                }
             }
         });
 
         Drawable buyWingsDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/buyButton.png")));
         buyWingsButton = new ImageButton(buyWingsDrawable);
-        buyWingsButton.setPosition(StartClass.WIDTH/2-buyWingsButton.getWidth()/2, StartClass.HEIGHT/2-3*buyWingsButton.getHeight());
+        buyWingsButton.setPosition(StartClass.WIDTH/2-buyWingsButton.getWidth()/2, StartClass.HEIGHT/2-3*buyWingsButton.getHeight()+20);
         buyWingsButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
-                System.out.println("buy wings");
+                int moneyLeft = startClass.user.getMoney() - Integer.parseInt(priceString);
+                if(moneyLeft < 0){
+                    MessageCloud messageCloud = new MessageCloud(startClass, stage, "Not enough money");
+                } else {
+                    startClass.user.purchaseWings();
+                    startClass.user.setMoney(moneyLeft);
+                }
             }
         });
 
         Drawable buyRocketDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/buyButton.png")));
         buyRocketButton = new ImageButton(buyRocketDrawable);
-        buyRocketButton.setPosition(StartClass.WIDTH/2-buyRocketButton.getWidth()/2, StartClass.HEIGHT/2-3*buyRocketButton.getHeight());
+        buyRocketButton.setPosition(StartClass.WIDTH/2-buyRocketButton.getWidth()/2, StartClass.HEIGHT/2-3*buyRocketButton.getHeight()+20);
         buyRocketButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
-                System.out.println("buy rocket");
+                int moneyLeft = startClass.user.getMoney() - Integer.parseInt(priceString);
+                if(moneyLeft < 0){
+                    MessageCloud messageCloud = new MessageCloud(startClass, stage, "Not enough money");
+                } else {
+                    startClass.user.purchaseRocket();
+                    startClass.user.setMoney(moneyLeft);
+                }
             }
         });
 
         Drawable buyDoubleBonusDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/buyButton.png")));
         buyDoubleBonusButton = new ImageButton(buyDoubleBonusDrawable);
-        buyDoubleBonusButton.setPosition(StartClass.WIDTH/2-buyDoubleBonusButton.getWidth()/2, StartClass.HEIGHT/2-3*buyDoubleBonusButton.getHeight());
+        buyDoubleBonusButton.setPosition(StartClass.WIDTH/2-buyDoubleBonusButton.getWidth()/2, StartClass.HEIGHT/2-3*buyDoubleBonusButton.getHeight()+20);
         buyDoubleBonusButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
-                System.out.println("buy double bonus");
+                int moneyLeft = startClass.user.getMoney() - Integer.parseInt(priceString);
+                if(moneyLeft < 0){
+                    MessageCloud messageCloud = new MessageCloud(startClass, stage, "Not enough money");
+                } else {
+                    startClass.user.purchaseDoubleBonus();
+                    startClass.user.setMoney(moneyLeft);
+                }
             }
         });
+
+        bonusesImage = new Image[4];
+        bonusesImage[0] = new Image(new Texture("magnit.png"));
+        bonusesImage[1] = new Image( new Texture("wings.png"));
+        bonusesImage[2] = new Image(new Texture("jetpack.png"));
+        bonusesImage[3] = new Image(new Texture("doubleBonus.png"));
+        tubesGrey = new ArrayList<Tube>();
+        bonusesNumber = new int[4];
+        bonusesNumberLabel = new Label[4];
+        for (int i=0;i<4;i++) {
+            Image t = new Image(new Texture("tubeGrey.png"));
+            Tube tu = new Tube();
+            tu.tube=t;
+            tubesGrey.add(tu);
+        }
+
+        tubesGrey.get(0).tube.setBounds(startClass.WIDTH / 2 - 100, 0, 50, 50);
+        tubesGrey.get(1).tube.setBounds(startClass.WIDTH / 2 - 50, 0, 50, 50);
+        tubesGrey.get(2).tube.setBounds(startClass.WIDTH / 2, 0, 50, 50);
+        tubesGrey.get(3).tube.setBounds(startClass.WIDTH / 2 + 50, 0, 50, 50);
+
+        bonusesImage[0].setBounds(startClass.WIDTH / 2 - 90, 14, 30, 28);
+        bonusesImage[1].setBounds(startClass.WIDTH / 2 - 50, 20, 50, 20);
+        bonusesImage[2].setBounds(startClass.WIDTH / 2 + 5, 18, 40, 28);
+        bonusesImage[3].setBounds(startClass.WIDTH / 2 + 60, 16, 30, 30);
+
+        bonusesNumber[0] = startClass.user.getMagnetPurchased();
+        bonusesNumber[1] = startClass.user.getWingsPurchased();
+        bonusesNumber[2] = startClass.user.getRocketPurchased();
+        bonusesNumber[3] = startClass.user.getDoubleBonusPurchased();
+
+        bonusesNumberLabel[0] = new Label(String.format("%d", bonusesNumber[0]), new Label.LabelStyle(startClass.bonusFont, Color.BLACK));
+        bonusesNumberLabel[1] = new Label(String.format("%d", bonusesNumber[1]), new Label.LabelStyle(startClass.bonusFont, Color.BLACK));
+        bonusesNumberLabel[2] = new Label(String.format("%d", bonusesNumber[2]), new Label.LabelStyle(startClass.bonusFont, Color.BLACK));
+        bonusesNumberLabel[3] = new Label(String.format("%d", bonusesNumber[3]), new Label.LabelStyle(startClass.bonusFont, Color.BLACK));
 
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
@@ -204,6 +278,14 @@ public class ShopScreen implements Screen {
         stage.addActor(descriptionLabel);
         stage.addActor(coinImage);
         stage.addActor(priceLabel);
+        stage.addActor(moneyBag);
+        stage.addActor(moneyCount);
+        for (int i = 0; i < 4; i++) stage.addActor(tubesGrey.get(i).tube);
+        stage.addActor(bonusesImage[0]);
+        stage.addActor(bonusesImage[1]);
+        stage.addActor(bonusesImage[2]);
+        stage.addActor(bonusesImage[3]);
+        for (int i = 0; i < 4; i++) stage.addActor(bonusesNumberLabel[i]);
     }
 
     @Override
@@ -237,7 +319,8 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Magnet";
             descriptionString = "       collect all the coins you \ncome across without any efforts";
-            priceString = "100";
+            priceString = "50";
+            bonusesNumber[0] = startClass.user.getMagnetPurchased();
         } else if(countPage==1){
             slideLeftButton.setVisible(true);
             slideRightButton.setVisible(true);
@@ -251,7 +334,8 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Wings";
             descriptionString = "           save yourself from falling\nand don`t bother about the black clouds";
-            priceString = "200";
+            priceString = "90";
+            bonusesNumber[1] = startClass.user.getWingsPurchased();
         } else if(countPage==2){
             slideLeftButton.setVisible(true);
             slideRightButton.setVisible(true);
@@ -265,7 +349,8 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Rocket";
             descriptionString = "have a rest and fly only upwards";
-            priceString = "300";
+            priceString = "65";
+            bonusesNumber[2] = startClass.user.getRocketPurchased();
         } else if(countPage==3){
             slideLeftButton.setVisible(true);
             slideRightButton.setVisible(false);
@@ -279,7 +364,8 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(true);
             objectNameString = "Double Bonus";
             descriptionString = "double all your achievments";
-            priceString = "400";
+            priceString = "85";
+            bonusesNumber[3] = startClass.user.getDoubleBonusPurchased();
         }
         objectNameLabel.setText(objectNameString);
         objectNameLabel.setPosition(StartClass.WIDTH/2-objectNameLabel.getPrefWidth()/2, StartClass.HEIGHT-100);
@@ -287,6 +373,18 @@ public class ShopScreen implements Screen {
         descriptionLabel.setPosition(StartClass.WIDTH/2-descriptionLabel.getPrefWidth()/2, StartClass.HEIGHT-160);
         priceLabel.setText(priceString);
         priceLabel.setPosition(StartClass.WIDTH/2-priceLabel.getPrefWidth()/2+coinImage.getWidth()/4, coinImage.getY()+coinImage.getHeight()/2);
+        moneyCount.setText(String.format("%d", startClass.user.getMoney()));
+        moneyCount.setPosition(moneyBag.getX() - moneyCount.getPrefWidth(), startClass.HEIGHT - moneyCount.getHeight()-14.5f);
+
+        bonusesNumberLabel[0].setText(String.format("%d", bonusesNumber[0]));
+        bonusesNumberLabel[1].setText(String.format("%d", bonusesNumber[1]));
+        bonusesNumberLabel[2].setText(String.format("%d", bonusesNumber[2]));
+        bonusesNumberLabel[3].setText(String.format("%d", bonusesNumber[3]));
+
+        bonusesNumberLabel[0].setPosition(startClass.WIDTH / 2 - 78, 2);
+        bonusesNumberLabel[1].setPosition(startClass.WIDTH / 2 - 28, 2);
+        bonusesNumberLabel[2].setPosition(startClass.WIDTH / 2 + 21, 2);
+        bonusesNumberLabel[3].setPosition(startClass.WIDTH / 2 + 71, 2);
     }
 
     @Override
