@@ -34,6 +34,8 @@ public class ChoiceScreen implements Screen {
     ImageButton backButton;
     ImageButton musicOnSmallButton;
     ImageButton musicOffSmallButton;
+    Label currentScore;
+    Label currentScoreDigits;
 
     public ChoiceScreen(final StartClass startClass){
         this.startClass = startClass;
@@ -49,8 +51,14 @@ public class ChoiceScreen implements Screen {
         sittingLamaImage = new Image(new Texture("sittingLama.png"));
         sittingLamaImage.setPosition(StartClass.WIDTH/2-sittingLamaImage.getWidth()/2, 70);
 
-        choiceLabel = new Label("Choose difficulty", new Label.LabelStyle(startClass.whiteFont, Color.WHITE));
-        choiceLabel.setPosition(StartClass.WIDTH/2-choiceLabel.getWidth()/2, StartClass.HEIGHT/2+120);
+        currentScore = new Label("Your current high score", new Label.LabelStyle(startClass.welcomeFont, Color.PINK));
+        currentScore.setPosition(StartClass.WIDTH/2-currentScore.getWidth()/2, StartClass.HEIGHT/2+200);
+
+        currentScoreDigits = new Label(String.format("%d", startClass.user.getHighScore()), new Label.LabelStyle(startClass.welcomeFont, Color.PINK));
+        currentScoreDigits.setPosition(StartClass.WIDTH/2-currentScoreDigits.getWidth()/2, StartClass.HEIGHT/2+150);
+
+        choiceLabel = new Label("Choose difficulty", new Label.LabelStyle(startClass.pauseFont, Color.WHITE));
+        choiceLabel.setPosition(StartClass.WIDTH/2-choiceLabel.getWidth()/2, StartClass.HEIGHT/2+40);
 
         Drawable oneLevelDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/oneLevel.png")));
         oneLevel = new ImageButton(oneLevelDrawable);
@@ -119,7 +127,7 @@ public class ChoiceScreen implements Screen {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
                 dispose();
-                startClass.setMenuScreen();
+                startClass.setMenuScreen(false, false);
             }
         });
 
@@ -156,6 +164,8 @@ public class ChoiceScreen implements Screen {
         stage.addActor(musicOnSmallButton);
         stage.addActor(musicOffSmallButton);
         musicOnSmallButton.setVisible(false);
+        stage.addActor(currentScore);
+        stage.addActor(currentScoreDigits);
     }
 
     @Override

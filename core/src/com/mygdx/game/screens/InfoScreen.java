@@ -85,7 +85,7 @@ public class InfoScreen implements Screen {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
                 dispose();
-                startClass.setMenuScreen();
+                startClass.setMenuScreen(false, false);
             }
         });
 

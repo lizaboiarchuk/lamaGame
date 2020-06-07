@@ -46,6 +46,8 @@ public class ShopScreen implements Screen {
     private String descriptionString;
     Label priceLabel;
     private String priceString;
+    Label moneyCount;
+    Image moneyBag;
 
     
     public ShopScreen(final StartClass startClass){
@@ -66,17 +68,23 @@ public class ShopScreen implements Screen {
         sittingLamaImage = new Image(new Texture("sittingLama.png"));
         sittingLamaImage.setPosition(StartClass.WIDTH/2-sittingLamaImage.getWidth()/2, 70);
 
+        moneyCount = new Label(String.format("%d", startClass.user.getMoney()), new Label.LabelStyle(startClass.priceFont, startClass.priceFont.getColor()));
+        moneyCount.setPosition(startClass.WIDTH/2 - moneyCount.getWidth(), startClass.HEIGHT - 14.5f - moneyCount.getHeight());
+
+        moneyBag = new Image(new Texture("uiskins/moneybagBigger.png"));
+        moneyBag.setPosition(startClass.WIDTH/2, startClass.HEIGHT - moneyBag.getHeight() + moneyCount.getHeight()/2);
+
         magnetImage = new Image(new Texture("uiskins/buyMagnetImage.png"));
-        magnetImage.setPosition(StartClass.WIDTH/2- magnetImage.getWidth()/2, StartClass.HEIGHT/2- magnetImage.getHeight()/2+grassImage.getHeight()/2-30);
+        magnetImage.setPosition(StartClass.WIDTH/2- magnetImage.getWidth()/2, StartClass.HEIGHT/2- magnetImage.getHeight()/2+grassImage.getHeight()/2-10);
 
         wingsImage = new Image(new Texture("uiskins/buyWingsImage.png"));
-        wingsImage.setPosition(StartClass.WIDTH/2- wingsImage.getWidth()/2, StartClass.HEIGHT/2- wingsImage.getHeight()/2+grassImage.getHeight()/2-30);
+        wingsImage.setPosition(StartClass.WIDTH/2- wingsImage.getWidth()/2, StartClass.HEIGHT/2- wingsImage.getHeight()/2+grassImage.getHeight()/2-10);
 
         rocketImage = new Image(new Texture("uiskins/buyRocketImage.png"));
-        rocketImage.setPosition(StartClass.WIDTH/2- rocketImage.getWidth()/2, StartClass.HEIGHT/2- rocketImage.getHeight()/2+grassImage.getHeight()/2-30);
+        rocketImage.setPosition(StartClass.WIDTH/2- rocketImage.getWidth()/2, StartClass.HEIGHT/2- rocketImage.getHeight()/2+grassImage.getHeight()/2-10);
 
         doubleBonusImage = new Image(new Texture("uiskins/buyDoubleBonusImage.png"));
-        doubleBonusImage.setPosition(StartClass.WIDTH/2- doubleBonusImage.getWidth()/2, StartClass.HEIGHT/2- doubleBonusImage.getHeight()/2+grassImage.getHeight()/2-30);
+        doubleBonusImage.setPosition(StartClass.WIDTH/2- doubleBonusImage.getWidth()/2, StartClass.HEIGHT/2- doubleBonusImage.getHeight()/2+grassImage.getHeight()/2-10);
 
         coinImage = new Image(new Texture("uiskins/coinImage.png"));
         coinImage.setPosition(StartClass.WIDTH/2- 2*coinImage.getWidth()+coinImage.getWidth()/2, magnetImage.getY()-80);
@@ -92,13 +100,13 @@ public class ShopScreen implements Screen {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
                 dispose();
-                startClass.setMenuScreen();
+                startClass.setMenuScreen(false, false);
             }
         });
 
         Drawable slideLeftDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/slideLeft.png")));
         slideLeftButton = new ImageButton(slideLeftDrawable);
-        slideLeftButton.setPosition(37.5f-slideLeftButton.getWidth()/2, StartClass.HEIGHT/2-slideLeftButton.getHeight()/2+grassImage.getHeight()/2-30);
+        slideLeftButton.setPosition(37.5f-slideLeftButton.getWidth()/2, StartClass.HEIGHT/2-slideLeftButton.getHeight()/2+grassImage.getHeight()/2-10);
         slideLeftButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 countPage--;
@@ -107,7 +115,7 @@ public class ShopScreen implements Screen {
 
         Drawable slideRightDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/slideRight.png")));
         slideRightButton = new ImageButton(slideRightDrawable);
-        slideRightButton.setPosition(462.5f-slideRightButton.getWidth()/2, StartClass.HEIGHT/2-slideRightButton.getHeight()/2+grassImage.getHeight()/2-30);
+        slideRightButton.setPosition(462.5f-slideRightButton.getWidth()/2, StartClass.HEIGHT/2-slideRightButton.getHeight()/2+grassImage.getHeight()/2-10);
         slideRightButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 countPage++;
@@ -136,17 +144,22 @@ public class ShopScreen implements Screen {
 
         Drawable buyMagnetDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/buyButton.png")));
         buyMagnetButton = new ImageButton(buyMagnetDrawable);
-        buyMagnetButton.setPosition(StartClass.WIDTH/2-buyMagnetButton.getWidth()/2, StartClass.HEIGHT/2-3*buyMagnetButton.getHeight());
+        buyMagnetButton.setPosition(StartClass.WIDTH/2-buyMagnetButton.getWidth()/2, StartClass.HEIGHT/2-3*buyMagnetButton.getHeight()+20);
         buyMagnetButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
-                System.out.println("buy magnet");
+                int moneyLeft = startClass.user.getMoney() - Integer.parseInt(priceString);
+                if(moneyLeft < 0){
+                    MessageCloud messageCloud = new MessageCloud(startClass, stage, "Not enough money");
+                } else {
+                    startClass.user.setMoney(moneyLeft);
+                }
             }
         });
 
         Drawable buyWingsDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/buyButton.png")));
         buyWingsButton = new ImageButton(buyWingsDrawable);
-        buyWingsButton.setPosition(StartClass.WIDTH/2-buyWingsButton.getWidth()/2, StartClass.HEIGHT/2-3*buyWingsButton.getHeight());
+        buyWingsButton.setPosition(StartClass.WIDTH/2-buyWingsButton.getWidth()/2, StartClass.HEIGHT/2-3*buyWingsButton.getHeight()+20);
         buyWingsButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
@@ -156,7 +169,7 @@ public class ShopScreen implements Screen {
 
         Drawable buyRocketDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/buyButton.png")));
         buyRocketButton = new ImageButton(buyRocketDrawable);
-        buyRocketButton.setPosition(StartClass.WIDTH/2-buyRocketButton.getWidth()/2, StartClass.HEIGHT/2-3*buyRocketButton.getHeight());
+        buyRocketButton.setPosition(StartClass.WIDTH/2-buyRocketButton.getWidth()/2, StartClass.HEIGHT/2-3*buyRocketButton.getHeight()+20);
         buyRocketButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
@@ -166,7 +179,7 @@ public class ShopScreen implements Screen {
 
         Drawable buyDoubleBonusDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/buyButton.png")));
         buyDoubleBonusButton = new ImageButton(buyDoubleBonusDrawable);
-        buyDoubleBonusButton.setPosition(StartClass.WIDTH/2-buyDoubleBonusButton.getWidth()/2, StartClass.HEIGHT/2-3*buyDoubleBonusButton.getHeight());
+        buyDoubleBonusButton.setPosition(StartClass.WIDTH/2-buyDoubleBonusButton.getWidth()/2, StartClass.HEIGHT/2-3*buyDoubleBonusButton.getHeight()+20);
         buyDoubleBonusButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
@@ -204,6 +217,8 @@ public class ShopScreen implements Screen {
         stage.addActor(descriptionLabel);
         stage.addActor(coinImage);
         stage.addActor(priceLabel);
+        stage.addActor(moneyBag);
+        stage.addActor(moneyCount);
     }
 
     @Override
@@ -282,11 +297,13 @@ public class ShopScreen implements Screen {
             priceString = "400";
         }
         objectNameLabel.setText(objectNameString);
-        objectNameLabel.setPosition(StartClass.WIDTH/2-objectNameLabel.getPrefWidth()/2, StartClass.HEIGHT-100);
+        objectNameLabel.setPosition(StartClass.WIDTH/2-objectNameLabel.getPrefWidth()/2, StartClass.HEIGHT-80);
         descriptionLabel.setText(descriptionString);
-        descriptionLabel.setPosition(StartClass.WIDTH/2-descriptionLabel.getPrefWidth()/2, StartClass.HEIGHT-160);
+        descriptionLabel.setPosition(StartClass.WIDTH/2-descriptionLabel.getPrefWidth()/2, StartClass.HEIGHT-140);
         priceLabel.setText(priceString);
         priceLabel.setPosition(StartClass.WIDTH/2-priceLabel.getPrefWidth()/2+coinImage.getWidth()/4, coinImage.getY()+coinImage.getHeight()/2);
+        moneyCount.setText(String.format("%d", startClass.user.getMoney()));
+        moneyCount.setPosition(startClass.WIDTH/2 - moneyCount.getWidth(), startClass.HEIGHT - 14.5f - moneyCount.getHeight());
     }
 
     @Override

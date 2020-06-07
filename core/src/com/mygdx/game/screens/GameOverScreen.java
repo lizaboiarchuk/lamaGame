@@ -23,8 +23,6 @@ public class GameOverScreen implements Screen {
     private Stage stage;
 
     Image backgroundImage;
-    Image grassImage;
-    Image sittingLamaImage;
     Image boardImage;
     Image topBoardImage;
     Image bottomBoardImage;
@@ -32,9 +30,11 @@ public class GameOverScreen implements Screen {
     Label scoreLabel;
     ImageButton mainMenuButton;
     ImageButton restartButton;
+    String scoreString;
+    Label scoreDigitsLabel;
     private long score;
 
-    public GameOverScreen(final StartClass startClass, long score){
+    public GameOverScreen(final StartClass startClass, long score, boolean newHighScore){
         this.startClass = startClass;
         stage = new Stage(new ScreenViewport());
         this.score = score;
@@ -42,12 +42,6 @@ public class GameOverScreen implements Screen {
         backgroundImage = new Image(new Texture("blueBackGround.jpg"));
         backgroundImage.setPosition(0, 0);
         backgroundImage.setSize(StartClass.WIDTH, StartClass.HEIGHT);
-
-        grassImage = new Image( new Texture("grass.JPEG"));
-        grassImage.setPosition(0, -50);
-
-        sittingLamaImage = new Image(new Texture("sittingLama.png"));
-        sittingLamaImage.setPosition(StartClass.WIDTH/2-sittingLamaImage.getWidth()/2, 70);
 
         boardImage = new Image(new Texture("uiskins/board.png"));
         boardImage.setPosition(StartClass.WIDTH/2-boardImage.getWidth()/2, StartClass.HEIGHT/2-boardImage.getHeight()/2);
@@ -61,8 +55,12 @@ public class GameOverScreen implements Screen {
         gameOver = new Label("Game Over!", new Label.LabelStyle(startClass.welcomeFont, Color.PINK));
         gameOver.setPosition(StartClass.WIDTH/2-gameOver.getWidth()/2, topBoardImage.getY()-2*gameOver.getHeight());
 
-        scoreLabel = new Label("Score: " + String.format("%d", this.score) , new Label.LabelStyle(startClass.welcomeFont, Color.PINK));
-        scoreLabel.setPosition(StartClass.WIDTH/2-scoreLabel.getWidth()/2, StartClass.HEIGHT/2+scoreLabel.getHeight());
+        scoreDigitsLabel = new Label(String.format("%d", this.score) , new Label.LabelStyle(startClass.welcomeFont, Color.PINK));
+        scoreDigitsLabel.setPosition(StartClass.WIDTH/2-scoreDigitsLabel.getWidth()/2, StartClass.HEIGHT/2+scoreDigitsLabel.getHeight()/4);
+
+        scoreString = startClass.highScoreString;
+        scoreLabel = new Label(scoreString , new Label.LabelStyle(startClass.welcomeFont, Color.PINK));
+        scoreLabel.setPosition(StartClass.WIDTH/2-scoreLabel.getWidth()/2, StartClass.HEIGHT/2+scoreLabel.getHeight()+10);
 
         Drawable restartDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/restartButton.png")));
         restartButton = new ImageButton(restartDrawable);
@@ -71,6 +69,7 @@ public class GameOverScreen implements Screen {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
                 dispose();
+                startClass.user.newHighScoreBool = false;
                 startClass.setGameScreen();
             }
         });
@@ -82,13 +81,12 @@ public class GameOverScreen implements Screen {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
                 dispose();
-                startClass.setMenuScreen();
+                startClass.user.newHighScoreBool = false;
+                startClass.setMenuScreen(false, false);
             }
         });
 
         stage.addActor(backgroundImage);
-//        stage.addActor(grassImage);
-//        stage.addActor(sittingLamaImage);
         stage.addActor(boardImage);
         stage.addActor(topBoardImage);
         stage.addActor(bottomBoardImage);
@@ -96,6 +94,7 @@ public class GameOverScreen implements Screen {
         stage.addActor(scoreLabel);
         stage.addActor(restartButton);
         stage.addActor(mainMenuButton);
+        stage.addActor(scoreDigitsLabel);
     }
 
     @Override

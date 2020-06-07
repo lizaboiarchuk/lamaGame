@@ -34,6 +34,8 @@ public class StartClass extends Game implements ApplicationListener {
 	public BitmapFont moneyFont;
 	public FreeTypeFontGenerator.FreeTypeFontParameter messageFontParameter;
 	public BitmapFont messageFont;
+	public FreeTypeFontGenerator.FreeTypeFontParameter pauseFontParameter;
+	public BitmapFont pauseFont;
 	public Sound clickSound;
 	final static String title = "Jumping Lama";
 	public boolean clicksoundbool = false;
@@ -45,6 +47,11 @@ public class StartClass extends Game implements ApplicationListener {
 	public User user;
 	Info inf = new Info();
 	Texture img;
+	public boolean newUserBool;
+	public boolean firstEntrance;
+	public boolean newHighScore;
+	public String userWelcomeString;
+	public String highScoreString;
 
 	private AuthorizationScreen authorizationScreen;
 	private RegistrationScreen registrationScreen;
@@ -61,6 +68,7 @@ public class StartClass extends Game implements ApplicationListener {
 		userBase = new UserBase();
 		batch = new SpriteBatch();
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Modulus-Bold.otf"));
+		user = new User();
 
 		welcomeFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		welcomeFontParameter.size = 35;
@@ -86,6 +94,11 @@ public class StartClass extends Game implements ApplicationListener {
 		priceFontParameter.size = 40;
 		priceFontParameter.color = Color.YELLOW;
 		priceFont = fontGenerator.generateFont(priceFontParameter);
+
+		pauseFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		pauseFontParameter.size = 35;
+		pauseFontParameter.color = Color.WHITE;
+		pauseFont = fontGenerator.generateFont(pauseFontParameter);
 
 		bonusFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		bonusFontParameter.size = 10;
@@ -118,7 +131,13 @@ public class StartClass extends Game implements ApplicationListener {
 		registrationScreen= new RegistrationScreen(this);
 		setScreen(registrationScreen);
 	}
-	public void setMenuScreen() {
+	public void setMenuScreen(boolean newUserBool, boolean firstEntrance) {
+		this.newUserBool = newUserBool;
+		this.firstEntrance = firstEntrance;
+		if(firstEntrance) {
+			if (newUserBool) this.userWelcomeString = "Glad you joined,\n" + user.getName();
+			else this.userWelcomeString = "Happy to see you\nagain, " + user.getName();
+		}
 		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 	}
@@ -130,8 +149,11 @@ public class StartClass extends Game implements ApplicationListener {
 		gameScreen = new GameScreen(this, getGameMode());
 		setScreen(gameScreen);
 	}
-	public void setGameOverScreen() {
-		gameOverScreen = new GameOverScreen(this, score);
+	public void setGameOverScreen(boolean newHighScore) {
+		this.newHighScore = newHighScore;
+		if(newHighScore) highScoreString = "New high score :)";
+		else highScoreString = "Your score";
+		gameOverScreen = new GameOverScreen(this, score, newHighScore);
 		setScreen(gameOverScreen);
 	}
 	public void setShopScreen(){
@@ -141,6 +163,10 @@ public class StartClass extends Game implements ApplicationListener {
 	public void setInfoScreen(){
 		infoScreen = new InfoScreen(this);
 		setScreen(infoScreen);
+	}
+
+	public void setUser (User user){
+		this.user = user;
 	}
 
 	@Override
