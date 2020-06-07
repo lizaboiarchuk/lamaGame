@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
     boolean begins=true;
     int timer=0;
     public long score; // current score
-    public long money; //current coins
+    public int money; //current coins
     public int gameMode;
     float lamePrev;
     public int timeCounter;
@@ -444,6 +444,7 @@ public class GameScreen implements Screen {
         this.dispose();
         game.setScore(this.score);
         game.user.updateHighScore(this.score);
+        game.user.setMoney(this.money);
         game.setGameOverScreen(game.user.newHighScoreBool);
     }
 

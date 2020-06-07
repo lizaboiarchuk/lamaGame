@@ -20,7 +20,7 @@ public class User {
         this.password = password;
         name = "admin";
         highScore = 0;
-        money = 500;
+        money = 300;
         magnetPurchased = 10;
         wingsPurchased = 10;
         rocketPurchased = 10;
