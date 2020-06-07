@@ -122,6 +122,8 @@ public class Cloud {
             position.x += velocity;
             if (hasBonus)
                 bonus.position.x+=velocity;
+            if (hasCoin)
+                coin.position.x+=velocity;
             if (position.x >= 200)
                 velocity = -1;
             if (position.x <= 0)
