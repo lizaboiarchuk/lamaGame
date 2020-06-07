@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 
@@ -166,6 +167,13 @@ public class ChoiceScreen implements Screen {
         musicOnSmallButton.setVisible(false);
         stage.addActor(currentScore);
         stage.addActor(currentScoreDigits);
+        MessageCloud messageCloud = new MessageCloud(startClass, stage, "Use 1,2,3,4 keys\nto use bonuses");
+        Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    MessageCloud messageCloud1 = new MessageCloud(startClass, stage, "Press 5 to pause,\n 6 - to resume");
+                }
+            }, 2f);
     }
 
     @Override

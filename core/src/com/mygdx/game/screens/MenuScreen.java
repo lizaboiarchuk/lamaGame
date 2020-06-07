@@ -113,6 +113,7 @@ public class MenuScreen implements Screen {
             }
         });
 
+        startClass.disposeGameScreen = false;
 
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);

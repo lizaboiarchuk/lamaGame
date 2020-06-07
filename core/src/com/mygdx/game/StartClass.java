@@ -62,6 +62,8 @@ public class StartClass extends Game implements ApplicationListener {
 	private ShopScreen shopScreen;
 	private InfoScreen infoScreen;
 	public boolean musicOn;
+	public boolean pausedScreenOn;
+	public boolean disposeGameScreen;
 
 	@Override
 	public void create () {
@@ -69,6 +71,8 @@ public class StartClass extends Game implements ApplicationListener {
 		batch = new SpriteBatch();
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Modulus-Bold.otf"));
 		user = new User();
+		pausedScreenOn = false;
+		disposeGameScreen = false;
 
 		welcomeFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		welcomeFontParameter.size = 35;

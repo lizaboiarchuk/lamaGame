@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 
 public class PauseScreen implements Screen {
@@ -25,39 +24,51 @@ public class PauseScreen implements Screen {
     Image pauseTopBoard;
     ImageButton resumeButton;
     ImageButton mainMenuButton;
+    ImageButton musicOnButton;
+    ImageButton musicOffButton;
 
     public PauseScreen(final StartClass startClass, final Stage stage){
         this.startClass = startClass;
         this.stage = stage;
+        startClass.pausedScreenOn = true;
 
         pauseBoard = new Image(new Texture("uiskins/pauseBoard.png"));
         pauseBoard.setPosition(StartClass.WIDTH/2-pauseBoard.getWidth()/2, StartClass.HEIGHT/2-pauseBoard.getHeight()/2);
 
         pauseTopBoard = new Image(new Texture("uiskins/pauseTopBoard.png"));
-        pauseTopBoard.setPosition(StartClass.WIDTH/2-pauseTopBoard.getWidth()/2, pauseBoard.getY()+pauseBoard.getHeight());
+        pauseTopBoard.setPosition(StartClass.WIDTH/2-pauseTopBoard.getWidth()/2, pauseBoard.getY()+pauseBoard.getHeight()-pauseTopBoard.getHeight());
 
         pauseLabel = new Label("Pause", new Label.LabelStyle(startClass.pauseFont, Color.WHITE));
         pauseLabel.setPosition(StartClass.WIDTH/2-pauseLabel.getWidth()/2, pauseTopBoard.getY()+10);
 
         Drawable resumeDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/resumeButton.png")));
         resumeButton = new ImageButton(resumeDrawable);
-        resumeButton.setPosition(pauseBoard.getX()+50, pauseTopBoard.getY()-resumeButton.getHeight()-18);
+        resumeButton.setPosition(pauseBoard.getX()+50, pauseTopBoard.getY()-resumeButton.getHeight());
         resumeButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
                 dispose();
-
+                startClass.pausedScreenOn = false;
             }
         });
 
+        Drawable musicOnDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOn.png")));
+        musicOnButton = new ImageButton(musicOnDrawable);
+        musicOnButton.setPosition(resumeButton.getX(), resumeButton.getY()-musicOnButton.getHeight());
+
+        Drawable musicOffDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/musicOff.png")));
+        musicOffButton = new ImageButton(musicOffDrawable);
+        musicOffButton.setPosition(resumeButton.getX(), resumeButton.getY()-musicOffButton.getHeight());
+
         Drawable mainMenuDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/mainMenuButton.png")));
         mainMenuButton = new ImageButton(mainMenuDrawable);
-        mainMenuButton.setPosition(pauseBoard.getX()+50, pauseBoard.getY()+28);
+        mainMenuButton.setPosition(musicOnButton.getX(), musicOnButton.getY()-mainMenuButton.getHeight());
         mainMenuButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
-
-
+                startClass.pausedScreenOn = false;
+                startClass.disposeGameScreen = true;
+                dispose();
                 startClass.setMenuScreen(false, false);
             }
         });
@@ -67,6 +78,26 @@ public class PauseScreen implements Screen {
         stage.addActor(pauseLabel);
         stage.addActor(resumeButton);
         stage.addActor(mainMenuButton);
+        stage.addActor(musicOnButton);
+        stage.addActor(musicOffButton);
+
+        musicOnButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
+                startClass.musicOn = true;
+                musicOnButton.setVisible(false);
+                musicOffButton.setVisible(true);
+            }
+        });
+
+        musicOffButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                startClass.clicksoundbool = true;
+                startClass.musicOn = false;
+                musicOnButton.setVisible(true);
+                musicOffButton.setVisible(false);
+            }
+        });
 
     }
 

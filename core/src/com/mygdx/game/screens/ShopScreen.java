@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 import com.mygdx.game.sprites.Tube;
@@ -319,7 +319,7 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Magnet";
             descriptionString = "       collect all the coins you \ncome across without any efforts";
-            priceString = "100";
+            priceString = "50";
             bonusesNumber[0] = startClass.user.getMagnetPurchased();
         } else if(countPage==1){
             slideLeftButton.setVisible(true);
@@ -334,7 +334,7 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Wings";
             descriptionString = "           save yourself from falling\nand don`t bother about the black clouds";
-            priceString = "200";
+            priceString = "90";
             bonusesNumber[1] = startClass.user.getWingsPurchased();
         } else if(countPage==2){
             slideLeftButton.setVisible(true);
@@ -349,7 +349,7 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Rocket";
             descriptionString = "have a rest and fly only upwards";
-            priceString = "300";
+            priceString = "65";
             bonusesNumber[2] = startClass.user.getRocketPurchased();
         } else if(countPage==3){
             slideLeftButton.setVisible(true);
@@ -364,7 +364,7 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(true);
             objectNameString = "Double Bonus";
             descriptionString = "double all your achievments";
-            priceString = "400";
+            priceString = "85";
             bonusesNumber[3] = startClass.user.getDoubleBonusPurchased();
         }
         objectNameLabel.setText(objectNameString);

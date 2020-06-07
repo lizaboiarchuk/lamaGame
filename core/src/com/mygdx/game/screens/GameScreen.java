@@ -10,11 +10,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.StartClass;
 import com.mygdx.game.sprites.Cloud;
 import com.mygdx.game.sprites.Lame;
@@ -56,7 +62,7 @@ public class GameScreen implements Screen {
     float lamePrev;
     public int timeCounter;
     public boolean drawMagnet=true;
-    public boolean paused=false;
+    public boolean paused;
     public static final int SPACE_BETWEEN_CLOUDS = 60;
     public static final int CLOUDS_COUNT = 18;
     public static final int bonusTimer = 1000; //(*delta time (0.22sec))
@@ -64,10 +70,11 @@ public class GameScreen implements Screen {
     //sounds
     public Sound coinSound;
     public Sound endSound;
+    PauseScreen pauseScreen;
 
 
     //constructor
-    public GameScreen(StartClass game, int gameMode) {
+    public GameScreen(final StartClass game, int gameMode) {
         this.game = game;
         this.gameMode=gameMode;
         spriteBatch = new SpriteBatch();
@@ -75,6 +82,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, StartClass.WIDTH/2, StartClass.HEIGHT/2);
+        paused = game.pausedScreenOn;
 
         initPictures();
         initSound();
@@ -85,48 +93,56 @@ public class GameScreen implements Screen {
         lama=new Lame(clouds.get(0).position.x+10, clouds.get(0).position.y+35, game);
         lamePrev = lama.position.y;
         camera.position.y=lama.position.y+80;
+
     }
 
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        update(delta);
-        spriteBatch.begin();
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.draw(background, camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2, camera.viewportWidth, camera.viewportHeight);
-        spriteBatch.draw(grass, 0, 0, grass.getWidth() / 2, grass.getHeight() / 2);
-
-        //clouds with bonuses/coins
-        for (Cloud c : clouds) {
-            if (c.visited) c.toDraw = false;
-            if (lama.isOnCloud && lama.currentCloud == c) c.toDraw = true;
-            c.move(); //for gameMode 2
-            c.resize(); //for gameMode 5
-            if (c.toDraw || gameMode != 3) {
-                spriteBatch.draw(c.cloud, c.position.x, c.position.y, c.width, c.height);
-                if (c.hasCoin) spriteBatch.draw(c.coin.texture, c.coin.position.x, c.coin.position.y);
-                if (c.hasBonus) spriteBatch.draw(c.bonus.texture, c.bonus.position.x, c.bonus.position.y);
+        paused = game.pausedScreenOn;
+        if(!game.disposeGameScreen) {
+            Gdx.gl.glClearColor(1, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            update(delta);
+            spriteBatch.begin();
+            spriteBatch.setProjectionMatrix(camera.combined);
+            spriteBatch.draw(background, camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2, camera.viewportWidth, camera.viewportHeight);
+            spriteBatch.draw(grass, 0, 0, grass.getWidth() / 2, grass.getHeight() / 2);
+            //clouds with bonuses/coins
+            for (Cloud c : clouds) {
+                if (c.visited) c.toDraw = false;
+                if (lama.isOnCloud && lama.currentCloud == c) c.toDraw = true;
+                if (!paused) c.move(); //for gameMode 2
+                if (!paused) c.resize(); //for gameMode 5
+                if (c.toDraw || gameMode != 3) {
+                    spriteBatch.draw(c.cloud, c.position.x, c.position.y, c.width, c.height);
+                    if (c.hasCoin) spriteBatch.draw(c.coin.texture, c.coin.position.x, c.coin.position.y);
+                    if (c.hasBonus) spriteBatch.draw(c.bonus.texture, c.bonus.position.x, c.bonus.position.y);
+                }
             }
-        }
 
-        //timer for bonuses
-        if (bonusesOn[0] || bonusesOn[1]|| bonusesOn[2]|| bonusesOn[3])
-            spriteBatch.draw(whiteS, camera.position.x - 20, camera.position.y - camera.viewportHeight / 2 + 30, 40 * (timeCounter * 1.0f / bonusTimer), 4);
+            //timer for bonuses
+            if (bonusesOn[0] || bonusesOn[1] || bonusesOn[2] || bonusesOn[3])
+                spriteBatch.draw(whiteS, camera.position.x - 20, camera.position.y - camera.viewportHeight / 2 + 30, 40 * (timeCounter * 1.0f / bonusTimer), 4);
 
-        if (!begins) spriteBatch.draw(lama.currentSprite, lama.position.x, lama.position.y, lama.width / 2, lama.height / 2);
-        else {
-            spriteBatch.draw(sititingLama, lama.position.x, lama.position.y - 10, lama.width / 2, lama.height / 2);
-            if (timer == 80) {
-                begins = false;
+            if (!begins)
+                spriteBatch.draw(lama.currentSprite, lama.position.x, lama.position.y, lama.width / 2, lama.height / 2);
+            else {
+                spriteBatch.draw(sititingLama, lama.position.x, lama.position.y - 10, lama.width / 2, lama.height / 2);
+                if (timer == 80) {
+                    begins = false;
+                }
             }
-        }
-        timer++;
-        spriteBatch.end();
+            timer++;
+            spriteBatch.end();
 
-        stage.act();
-        stage.draw();
+            stage.act();
+            stage.draw();
+
+        } else {
+            dispose();
+            game.setMenuScreen(false, false);
+        }
     }
 
 
@@ -176,11 +192,18 @@ public class GameScreen implements Screen {
                 }
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
-            pause();
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+            game.pausedScreenOn = true;
+            pause();
+            pauseScreen = new PauseScreen(game, stage);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) {
+            paused = false;
+            game.pausedScreenOn = false;
             resume();
+        }
     }
 
 
@@ -251,7 +274,6 @@ public class GameScreen implements Screen {
             float plus = 1f;
             if (gameMode == 4) plus = 0.95f;
             drawStage();
-
             if (timer >= 120) {
                 if (!lama.bonusesOn[2]) camera.position.y += plus;
                 else {
@@ -268,7 +290,6 @@ public class GameScreen implements Screen {
                     if (d % 3 == 0) cl.sizeVel = 0.07f;
                     if (d % 5 == 0) cl.sizeVel = 0.2f;
                 }
-
                 if ((camera.position.y - (camera.viewportHeight / 2)) > (cl.position.y + 19 + 200)) {
                     cl.reposition(cl.position.y + ((19 + SPACE_BETWEEN_CLOUDS) * CLOUDS_COUNT), lastCloud);
                     lastCloud = cl;
@@ -579,6 +600,7 @@ public class GameScreen implements Screen {
         bonusesNumberLabel[2].setPosition(game.WIDTH / 2 + 21, 2);
         bonusesNumberLabel[3].setPosition(game.WIDTH / 2 + 71, 2);
         stage.clear();
+
 
         for (int i = 0; i < 4; i++) stage.addActor(tubesGrey.get(i).tube);
         stage.addActor(bonusesImage[0]);
