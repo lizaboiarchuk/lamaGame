@@ -319,7 +319,7 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Magnet";
             descriptionString = "       collect all the coins you \ncome across without any efforts";
-            priceString = "50";
+            priceString = "90";
             bonusesNumber[0] = startClass.user.getMagnetPurchased();
         } else if(countPage==1){
             slideLeftButton.setVisible(true);
@@ -334,7 +334,7 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Wings";
             descriptionString = "           save yourself from falling\nand don`t bother about the black clouds";
-            priceString = "90";
+            priceString = "180";
             bonusesNumber[1] = startClass.user.getWingsPurchased();
         } else if(countPage==2){
             slideLeftButton.setVisible(true);
@@ -349,7 +349,7 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(false);
             objectNameString = "Rocket";
             descriptionString = "have a rest and fly only upwards";
-            priceString = "65";
+            priceString = "165";
             bonusesNumber[2] = startClass.user.getRocketPurchased();
         } else if(countPage==3){
             slideLeftButton.setVisible(true);
@@ -364,7 +364,7 @@ public class ShopScreen implements Screen {
             buyDoubleBonusButton.setVisible(true);
             objectNameString = "Double Bonus";
             descriptionString = "double all your achievments";
-            priceString = "85";
+            priceString = "120";
             bonusesNumber[3] = startClass.user.getDoubleBonusPurchased();
         }
         objectNameLabel.setText(objectNameString);

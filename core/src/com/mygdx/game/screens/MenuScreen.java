@@ -75,10 +75,7 @@ public class MenuScreen implements Screen {
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 startClass.clicksoundbool = true;
-                startClass.user=null;
-                startClass.userWelcomeString=null;
-                dispose();
-                startClass.setAuthorizationScreen();
+               LogOutScreen logOutScreen = new LogOutScreen(startClass, stage);
             }
         });
 

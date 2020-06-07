@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -137,10 +138,12 @@ public class PauseScreen implements Screen {
 
     @Override
     public void dispose() {
-        pauseBoard.clear();
-        pauseTopBoard.clear();
-        pauseLabel.clear();
-        resumeButton.clear();
-        mainMenuButton.clear();
+        pauseBoard.addAction(Actions.removeActor());
+        pauseTopBoard.addAction(Actions.removeActor());
+        pauseLabel.addAction(Actions.removeActor());
+        resumeButton.addAction(Actions.removeActor());
+        musicOnButton.addAction(Actions.removeActor());
+        musicOffButton.addAction(Actions.removeActor());
+        mainMenuButton.addAction(Actions.removeActor());
     }
 }

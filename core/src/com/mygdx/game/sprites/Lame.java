@@ -68,7 +68,7 @@ public class Lame {
         GRAVITY=-15;
         if (isOnCloud==true) {
             position.y+=5;
-            jumpSound.setVolume(0,0.2f);
+            jumpSound.setVolume(0,0.4f);
            if (game.musicOn)
                jumpSound.play();
             velocity.y = 400;

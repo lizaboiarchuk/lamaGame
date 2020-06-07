@@ -36,6 +36,8 @@ public class StartClass extends Game implements ApplicationListener {
 	public BitmapFont messageFont;
 	public FreeTypeFontGenerator.FreeTypeFontParameter pauseFontParameter;
 	public BitmapFont pauseFont;
+	public FreeTypeFontGenerator.FreeTypeFontParameter sureFontParameter;
+	public BitmapFont sureFont;
 	public Sound clickSound;
 	final static String title = "Jumping Lama";
 	public boolean clicksoundbool = false;
@@ -118,6 +120,11 @@ public class StartClass extends Game implements ApplicationListener {
 		messageFontParameter.size = 20;
 		messageFontParameter.color = Color.BLACK;
 		messageFont = fontGenerator.generateFont(messageFontParameter);
+
+		sureFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		sureFontParameter.size = 25;
+		sureFontParameter.color = Color.BLACK;
+		sureFont = fontGenerator.generateFont(sureFontParameter);
 
 		musicOn = true;
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
