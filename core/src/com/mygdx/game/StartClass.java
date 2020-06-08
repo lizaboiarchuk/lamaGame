@@ -123,10 +123,10 @@ public class StartClass extends Game implements ApplicationListener {
 		messageFontParameter.color = Color.BLACK;
 		messageFont = fontGenerator.generateFont(messageFontParameter);
 
-		messageFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		messageFontParameter.size = 20;
-		messageFontParameter.color = Color.BLACK;
-		messageFont = fontGenerator.generateFont(messageFontParameter);
+		sureFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		sureFontParameter.size = 25;
+		sureFontParameter.color = Color.BLACK;
+		sureFont = fontGenerator.generateFont(sureFontParameter);
 
 		linkFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		linkFontParameter.size = 20;
@@ -138,7 +138,7 @@ public class StartClass extends Game implements ApplicationListener {
 		music.setLooping(true);
 		music.setVolume(0.1f);
 		clickSound = Gdx.audio.newSound(Gdx.files.internal("clickSound.wav"));
-		setInfoScreen();
+		setAuthorizationScreen();
 	}
 
 	public void setAuthorizationScreen() {
