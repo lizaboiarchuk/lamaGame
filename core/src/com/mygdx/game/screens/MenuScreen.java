@@ -35,6 +35,7 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(final StartClass startClass){
         this.startClass = startClass;
+        startClass.userBase.write();
         stage = new Stage(new ScreenViewport());
 
         backgroundImage = new Image(new Texture("blueBackGround.jpg"));

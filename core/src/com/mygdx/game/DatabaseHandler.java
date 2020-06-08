@@ -1,16 +1,16 @@
 package com.mygdx.game;
 
-import com.mongodb.*;
-import com.mongodb.util.JSON;
+/*import com.mongodb.*;
+import com.mongodb.util.*;
 
-/*
-import com.mongodb.*;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.util.JSON;
-import org.bson.Document;
 
-import java.util.Arrays;
- */
+//import com.mongodb.*;
+//import com.mongodb.client.MongoCollection;
+//import com.mongodb.util.JSON;
+//import org.bson.Document;
+
+import java.util.Arrays;*/
+
 public class DatabaseHandler {
 /*
     private static JSON json;
@@ -27,7 +27,7 @@ public class DatabaseHandler {
             DBObject object = cursor.next();
             System.out.println(object.toString());
 
-            json = new JSON();
+            //json = new JSON();
 
             User user = new User("l", "p");
             System.out.println(user.toString());
@@ -46,8 +46,7 @@ public class DatabaseHandler {
 
 
     }
-
- */
+    */
 
 
 }

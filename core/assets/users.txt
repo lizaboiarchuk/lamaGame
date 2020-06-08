@@ -1,0 +1,1 @@
+name login password 100 500 10 10 10 10 liza liza liza 1000 1000 80 80 80 80 marichka marichka marichka 1000 1000 80 80 80 80

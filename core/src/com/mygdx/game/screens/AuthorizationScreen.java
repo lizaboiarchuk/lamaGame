@@ -103,7 +103,7 @@ public class AuthorizationScreen implements Screen {
                 passwordInput.matches("[A-Za-z0-9_@.]+")){
                     User u = new User(loginInput,passwordInput);
                     if (startClass.userBase.checkUser(u)) {
-                        startClass.setUser(u);
+                        startClass.setUser(startClass.userBase.returnUser(u));
                         dispose();
                         startClass.setMenuScreen(false, true);
                     }
@@ -123,7 +123,7 @@ public class AuthorizationScreen implements Screen {
                         passwordInput.matches("[A-Za-z0-9_@.]+")){
                     User u = new User(loginInput,passwordInput);
                     if (startClass.userBase.checkUser(u)) {
-                        startClass.setUser(u);
+                        startClass.setUser(startClass.userBase.returnUser(u));
                         dispose();
                         startClass.setMenuScreen(false, true);
                     }

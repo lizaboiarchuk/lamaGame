@@ -13,7 +13,14 @@ public class User {
     public int doubleBonusPurchased;
     public boolean newHighScoreBool =false;
 
-    public User(){}
+    public User(){
+        highScore=0;
+        money=0;
+        magnetPurchased=0;
+        wingsPurchased=0;
+        rocketPurchased=0;
+        doubleBonusPurchased=0;
+    }
 
     public User(String login, String password) {
         this.login = login;

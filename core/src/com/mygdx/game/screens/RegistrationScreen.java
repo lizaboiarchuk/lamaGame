@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,6 +20,11 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 import com.mygdx.game.User;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class RegistrationScreen implements Screen {
 
@@ -130,6 +136,24 @@ public class RegistrationScreen implements Screen {
                     newUser.setWingsPurchased(0);
                     newUser.setRocketPurchased(0);
                     newUser.setDoubleBonusPurchased(0);
+                    try {
+                        FileWriter fileWriter  = new FileWriter("/users/lizaboiarchuk/desktop/users.txt");
+                        FileReader fr = new FileReader("/users/lizaboiarchuk/desktop/users.txt");
+                        Scanner sc = new Scanner(fr);
+                        while (sc.hasNextLine()) {
+                            String p = sc.nextLine();
+                            System.out.println(p);
+                            fileWriter.append(p);
+                        }
+                        fr.close();
+                        String k = newUser.name + " " + newUser.login + " " + newUser.password + " " + newUser.highScore + " " + newUser.money + " "+ newUser.magnetPurchased+ " " + newUser.wingsPurchased+ " " + newUser.rocketPurchased +" " + newUser.doubleBonusPurchased + " k";
+                        fileWriter.append(k);
+                        fileWriter.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    startClass.userBase.users.add(newUser);
+                    startClass.userBase.write();
                     startClass.setUser(newUser);
                     dispose();
                     startClass.setMenuScreen(true, true);
@@ -185,6 +209,24 @@ public class RegistrationScreen implements Screen {
                     newUser.setWingsPurchased(0);
                     newUser.setRocketPurchased(0);
                     newUser.setDoubleBonusPurchased(0);
+                    try {
+                        FileWriter fileWriter  = new FileWriter("/users/lizaboiarchuk/desktop/users.txt");
+                        FileReader fr = new FileReader("/users/lizaboiarchuk/desktop/users.txt");
+                        Scanner sc = new Scanner(fr);
+                        while (sc.hasNextLine()) {
+                            String p = sc.nextLine();
+                            System.out.println(p);
+                            fileWriter.append(p);
+                        }
+                        fr.close();
+                        String k = newUser.name + " " + newUser.login + " " + newUser.password + " " + newUser.highScore + " " + newUser.money + " "+ newUser.magnetPurchased+ " " + newUser.wingsPurchased+ " " + newUser.rocketPurchased +" " + newUser.doubleBonusPurchased + " k";
+                        fileWriter.append(k);
+                        fileWriter.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    startClass.userBase.users.add(newUser);
+                    startClass.userBase.write();
                     startClass.setUser(newUser);
                     dispose();
                     startClass.setMenuScreen(true, true);

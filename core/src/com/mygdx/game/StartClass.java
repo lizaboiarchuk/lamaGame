@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.game.screens.*;
+
+import java.io.IOException;
 
 public class StartClass extends Game implements ApplicationListener {
 
@@ -69,7 +72,18 @@ public class StartClass extends Game implements ApplicationListener {
 
 	@Override
 	public void create () {
+
 		userBase = new UserBase();
+		try {
+			userBase.renew();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	/*	userBase.renew();
+		for (User u:userBase.users) {
+			System.out.println(u.name + " " + u.login + " " + u.password + " " + u.highScore + " " + u.money);
+		}*/
+
 		batch = new SpriteBatch();
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Modulus-Bold.otf"));
 		user = new User();
@@ -132,6 +146,15 @@ public class StartClass extends Game implements ApplicationListener {
 		music.setVolume(0.1f);
 		clickSound = Gdx.audio.newSound(Gdx.files.internal("clickSound.wav"));
 		setAuthorizationScreen();
+
+
+
+
+
+
+
+
+
 	}
 
 	public void setAuthorizationScreen() {
@@ -188,7 +211,7 @@ public class StartClass extends Game implements ApplicationListener {
 		if(musicOn){
 			music.play();
 			if(clicksoundbool) {
-				clickSound.play(1f);
+				clickSound.play(0f);
 				clicksoundbool = false;
 			}
 		} else{
