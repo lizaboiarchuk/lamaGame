@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
     public boolean paused;
     public static final int SPACE_BETWEEN_CLOUDS = 60;
     public static final int CLOUDS_COUNT = 18;
-    public static final int bonusTimer = 1000; //(*delta time (0.22sec))
+    public static final int bonusTimer = 600; //(*delta time (0.22sec))
 
     //sounds
     public Sound coinSound;
