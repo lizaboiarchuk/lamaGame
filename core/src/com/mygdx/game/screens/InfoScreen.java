@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -27,7 +29,6 @@ public class InfoScreen implements Screen {
     Image secondImage;
     Image thirdImage;
     Image fourthImage;
-    Image fifthImage;
     Image topBoardImage;
     Image bottomBoardImage;
     ImageButton backButton;
@@ -36,6 +37,7 @@ public class InfoScreen implements Screen {
     ImageButton slideLeftButton;
     ImageButton slideRightButton;
     private int countPage;
+    Label linkLabel;
 
 
 
@@ -63,20 +65,17 @@ public class InfoScreen implements Screen {
         bottomBoardImage = new Image(new Texture("uiskins/bottomBoard.png"));
         bottomBoardImage.setPosition(StartClass.WIDTH/2-bottomBoardImage.getWidth()/2, boardImage.getY());
 
-        firstImage = new Image(new Texture("uiskins/oneLevel.png"));
+        firstImage = new Image(new Texture("uiskins/firstImage.png"));
         firstImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
 
-        secondImage = new Image(new Texture("uiskins/twoLevel.png"));
+        secondImage = new Image(new Texture("uiskins/secondImage.png"));
         secondImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
 
-        thirdImage = new Image(new Texture("uiskins/threeLevel.png"));
+        thirdImage = new Image(new Texture("uiskins/thirdImage.jpeg"));
         thirdImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
 
-        fourthImage = new Image(new Texture("uiskins/fourLevel.png"));
+        fourthImage = new Image(new Texture("uiskins/fourthImage.png"));
         fourthImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
-
-        fifthImage = new Image(new Texture("uiskins/fiveLevel.png"));
-        fifthImage.setPosition(boardImage.getX()+boardImage.getWidth()/2-firstImage.getWidth()/2, boardImage.getY()+boardImage.getHeight()/2-firstImage.getHeight()/2);
 
         Drawable backDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("uiskins/homeButton.png")));
         backButton = new ImageButton(backDrawable);
@@ -127,6 +126,15 @@ public class InfoScreen implements Screen {
             }
         });
 
+        linkLabel = new Label("clicking here", new Label.LabelStyle(startClass.linkFont, Color.BLUE));
+        linkLabel.setPosition(StartClass.WIDTH/2-linkLabel.getWidth()/2-6, bottomBoardImage.getY()+linkLabel.getPrefHeight()+40);
+        linkLabel.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.net.openURI("https://github.com/lizaboiarchuk/lamaGame");
+            }
+        });
+
         stage.addActor(backgroundImage);
         stage.addActor(grassImage);
         stage.addActor(sittingLamaImage);
@@ -142,14 +150,14 @@ public class InfoScreen implements Screen {
         stage.addActor(secondImage);
         stage.addActor(thirdImage);
         stage.addActor(fourthImage);
-        stage.addActor(fifthImage);
         musicOnSmallButton.setVisible(false);
         slideLeftButton.setVisible(false);
         firstImage.setVisible(true);
         secondImage.setVisible(false);
         thirdImage.setVisible(false);
         fourthImage.setVisible(false);
-        fifthImage.setVisible(false);
+        stage.addActor(linkLabel);
+        linkLabel.setVisible(false);
     }
 
 
@@ -178,7 +186,7 @@ public class InfoScreen implements Screen {
             secondImage.setVisible(false);
             thirdImage.setVisible(false);
             fourthImage.setVisible(false);
-            fifthImage.setVisible(false);
+            linkLabel.setVisible(false);
         } else if(countPage==1){
             slideLeftButton.setVisible(true);
             slideRightButton.setVisible(true);
@@ -186,7 +194,7 @@ public class InfoScreen implements Screen {
             secondImage.setVisible(true);
             thirdImage.setVisible(false);
             fourthImage.setVisible(false);
-            fifthImage.setVisible(false);
+            linkLabel.setVisible(false);
         } else if(countPage==2){
             slideLeftButton.setVisible(true);
             slideRightButton.setVisible(true);
@@ -194,7 +202,7 @@ public class InfoScreen implements Screen {
             secondImage.setVisible(false);
             thirdImage.setVisible(true);
             fourthImage.setVisible(false);
-            fifthImage.setVisible(false);
+            linkLabel.setVisible(false);
         } else if(countPage==3){
             slideLeftButton.setVisible(true);
             slideRightButton.setVisible(true);
@@ -202,15 +210,8 @@ public class InfoScreen implements Screen {
             secondImage.setVisible(false);
             thirdImage.setVisible(false);
             fourthImage.setVisible(true);
-            fifthImage.setVisible(false);
-        } else if(countPage==4){
+            linkLabel.setVisible(true);
             slideRightButton.setVisible(false);
-            slideLeftButton.setVisible(true);
-            firstImage.setVisible(false);
-            secondImage.setVisible(false);
-            thirdImage.setVisible(false);
-            fourthImage.setVisible(false);
-            fifthImage.setVisible(true);
         }
     }
 

@@ -234,7 +234,7 @@ public class RegistrationScreen implements Screen {
                     if(loginInput.equals("") || passwordInput.equals("") || nameInput.equals("") || checkPasswordInput.equals("")){
                         MessageCloud messageCloud4 = new MessageCloud(startClass, stage, " Field cannot\n  be empty.");
                     } else if (!passwordInput.equals(checkPasswordInput)) {
-                        MessageCloud messageCloud2 = new MessageCloud(startClass, stage, "       Oops! Passwords\n doesn`t match.");
+                        MessageCloud messageCloud2 = new MessageCloud(startClass, stage, " Oops! Passwords\n   doesn`t match.");
                     } else {
                         MessageCloud messageCloud = new MessageCloud(startClass, stage, "     Oops!\nInvalid input");
                         if (!nameInput.matches("[A-Za-z]+")) {
