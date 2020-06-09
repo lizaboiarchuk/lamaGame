@@ -5,7 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Coin extends Bonus{
 
-    //create a coin on a specific cloud if true
+    /**
+     * create coin on cloud if true
+     * @param cloud
+     * @param exists
+     */
     public Coin(Vector2 cloud, boolean exists) {
         super(cloud,exists);
         this.exists=exists;

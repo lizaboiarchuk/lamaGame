@@ -18,7 +18,9 @@ import com.mygdx.game.StartClass;
 import com.mygdx.game.User;
 
 public class AuthorizationScreen implements Screen {
-
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
 
@@ -42,7 +44,10 @@ public class AuthorizationScreen implements Screen {
     ImageButton musicOnSmallButton;
     ImageButton musicOffSmallButton;
 
-
+    /**
+     * authorization screen constructor
+     * @param startClass
+     */
     public AuthorizationScreen(final StartClass startClass){
         this.startClass = startClass;
         stage = new Stage(new ScreenViewport());
@@ -190,11 +195,18 @@ public class AuthorizationScreen implements Screen {
         musicOnSmallButton.setVisible(false);
     }
 
+    /**
+     * show screen
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * render screen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -232,6 +244,9 @@ public class AuthorizationScreen implements Screen {
 
     }
 
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         stage.dispose();

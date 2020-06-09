@@ -18,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.StartClass;
 
 public class PauseScreen implements Screen {
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
     Label pauseLabel;
@@ -28,6 +31,11 @@ public class PauseScreen implements Screen {
     ImageButton musicOnButton;
     ImageButton musicOffButton;
 
+    /**
+     * pause screen constructor
+     * @param startClass
+     * @param stage
+     */
     public PauseScreen(final StartClass startClass, final Stage stage){
         this.startClass = startClass;
         this.stage = stage;
@@ -103,11 +111,18 @@ public class PauseScreen implements Screen {
     }
 
 
+    /**
+     * show stage
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * render screen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -136,6 +151,9 @@ public class PauseScreen implements Screen {
 
     }
 
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         pauseBoard.addAction(Actions.removeActor());

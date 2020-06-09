@@ -5,8 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.sprites.Cloud;
 
 public class Wings extends Bonus{
-
-    //create a coin on a specific cloud if true
+    /**
+     * create wings on a specific cloud if true
+     * @param cloud
+     * @param exists
+     */
     public Wings(Vector2 cloud, boolean exists) {
         super(cloud,exists);
         this.exists=exists;

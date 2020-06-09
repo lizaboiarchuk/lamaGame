@@ -29,7 +29,9 @@ import com.mygdx.game.sprites.Tube;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
-
+    /**
+     * parameters
+     */
     StartClass game;
     Lame lama; //main character
     SpriteBatch spriteBatch;
@@ -73,7 +75,11 @@ public class GameScreen implements Screen {
     PauseScreen pauseScreen;
 
 
-    //constructor
+    /**
+     * constructor
+     * @param game
+     * @param gameMode
+     */
     public GameScreen(final StartClass game, int gameMode) {
         this.game = game;
         this.gameMode=gameMode;
@@ -96,7 +102,10 @@ public class GameScreen implements Screen {
 
     }
 
-
+    /**
+     * render
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         paused = game.pausedScreenOn;
@@ -146,7 +155,9 @@ public class GameScreen implements Screen {
     }
 
 
-
+    /**
+     * handle user input
+     */
     public void handleInput() {
         if (!paused) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
@@ -207,7 +218,9 @@ public class GameScreen implements Screen {
     }
 
 
-
+    /**
+     * magnit on
+     */
     public void magnitOn() {
         if (!(bonusesOn[1] || bonusesOn[2] || bonusesOn[3])) {
             tubesGrey.get(0).tube = new Image(new Texture("tube.png"));
@@ -216,14 +229,19 @@ public class GameScreen implements Screen {
             bonusesNumber[0]--;
         }
     }
+
+    /**
+     * magnit off
+     */
     public void magnitOf() {
         tubesGrey.get(0).tube = new Image(new Texture("tubeGrey.png"));
         bonusesOn[0]=false;
         timeCounter=bonusTimer-1;
     }
 
-
-
+    /**
+     * wings on
+     */
     public void wingsOn() {
         if (!(bonusesOn[0] || bonusesOn[2] || bonusesOn[3])) {
             tubesGrey.get(1).tube = new Image(new Texture("tube.png"));
@@ -232,6 +250,10 @@ public class GameScreen implements Screen {
             bonusesNumber[1]--;
         }
     }
+
+    /**
+     * wings off
+     */
     public void wingsOf() {
         tubesGrey.get(1).tube = new Image(new Texture("tubeGrey.png"));
         bonusesOn[1]=false;
@@ -239,6 +261,9 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * rocket on
+     */
     public void jetpackOn() {
         if (!(bonusesOn[1] || bonusesOn[0] || bonusesOn[3])) {
             tubesGrey.get(2).tube = new Image(new Texture("tube.png"));
@@ -247,12 +272,19 @@ public class GameScreen implements Screen {
             bonusesNumber[2]--;
         }
     }
+
+    /**
+     * rocket off
+     */
     public void jetpackOf () {
         tubesGrey.get(2).tube = new Image(new Texture("tubeGrey.png"));
         bonusesOn[2]=false;
         timeCounter=bonusTimer-1;
     }
 
+    /**
+     * double bonus on
+     */
     public void doubleOn() {
         if (!(bonusesOn[1] || bonusesOn[2] || bonusesOn[0])) {
             tubesGrey.get(3).tube = new Image(new Texture("tube.png"));
@@ -261,12 +293,20 @@ public class GameScreen implements Screen {
             lama.bonusesOn[3] = true;
         }
     }
+
+    /**
+     * double bonus off
+     */
     public void doubleOf() {
         tubesGrey.get(3).tube = new Image(new Texture("tubeGrey.png"));
         bonusesOn[3]=false;
         timeCounter = bonusTimer-1;
     }
 
+    /**
+     * update screen
+     * @param dt
+     */
     public void update(float dt) {
         if (!begins) handleInput();
         if (!paused) {
@@ -380,8 +420,9 @@ public class GameScreen implements Screen {
     }
 
 
-
-    //magniting all the coins
+    /**
+     * magniting all coins
+     */
     public void magniting() {
         if (lama.bonusesOn[0]) {
             timeCounter++;
@@ -416,8 +457,9 @@ public class GameScreen implements Screen {
     }
 
 
-
-
+    /**
+     * rocket bonus
+     */
     public void jetpack() {
         if (lama.bonusesOn[2]) {
             timeCounter++;
@@ -431,6 +473,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * wings bonus
+     */
     public void wings() {
         if (lama.bonusesOn[1]) {
             timeCounter++;
@@ -443,6 +488,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * double bonus
+     */
     public void doubleSc() {
         if (lama.bonusesOn[3]) {
             timeCounter++;
@@ -455,6 +503,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * game over
+     */
     public void gameOver() {
         StartClass.music.stop();
         if(game.musicOn) endSound.play();
@@ -479,6 +530,9 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * pause screen
+     */
     @Override
     public void pause() {
         System.out.println("pause");
@@ -486,6 +540,9 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * resume screen
+     */
     @Override
     public void resume() {
         System.out.println("resume");
@@ -498,6 +555,9 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * dispose screen
+     */
     @Override
     public void dispose() {
         background.dispose();
@@ -513,7 +573,9 @@ public class GameScreen implements Screen {
     }
 
 
-
+    /**
+     * init pictures set up
+     */
     private void initPictures() {
         bonusesImage = new Image[4];
         bonusesImage[0] = new Image(new Texture("magnit.png"));
@@ -551,12 +613,17 @@ public class GameScreen implements Screen {
     }
 
 
-
+    /**
+     * init sound
+     */
     private void initSound() {
         coinSound = Gdx.audio.newSound(Gdx.files.internal("coin_sound.wav"));
         endSound = Gdx.audio.newSound(Gdx.files.internal("end.wav"));
     }
 
+    /**
+     * init clouds
+     */
     private void initClouds() {
         clouds = new ArrayList<Cloud>();
         for (int i=1; i<=CLOUDS_COUNT; i++) {

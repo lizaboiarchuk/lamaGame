@@ -1,5 +1,13 @@
 package com.mygdx.game;
 
+/*
+"Jumping Lama" Game
+
+Developers: Vareshchuk Mariia, Boiarchuk Yelyzaveta
+
+file: lamaGame.java
+ */
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,6 +26,9 @@ import java.io.IOException;
 
 public class StartClass extends Game implements ApplicationListener {
 
+	/**
+	 * parameters
+	 */
 	public final static int WIDTH = 500;
 	public final static int HEIGHT = 700;
 	public FreeTypeFontGenerator fontGenerator;
@@ -72,6 +83,9 @@ public class StartClass extends Game implements ApplicationListener {
 	public boolean pausedScreenOn;
 	public boolean disposeGameScreen;
 
+	/**
+	 * create main stage
+	 */
 	@Override
 	public void create () {
 
@@ -81,10 +95,6 @@ public class StartClass extends Game implements ApplicationListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	/*	userBase.renew();
-		for (User u:userBase.users) {
-			System.out.println(u.name + " " + u.login + " " + u.password + " " + u.highScore + " " + u.money);
-		}*/
 
 		batch = new SpriteBatch();
 		fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Modulus-Bold.otf"));
@@ -154,24 +164,29 @@ public class StartClass extends Game implements ApplicationListener {
 		clickSound = Gdx.audio.newSound(Gdx.files.internal("clickSound.wav"));
 		setAuthorizationScreen();
 
-
-
-
-
-
-
-
-
 	}
 
+	/**
+	 * set authorization screen
+	 */
 	public void setAuthorizationScreen() {
 		authorizationScreen = new AuthorizationScreen(this);
 		setScreen(authorizationScreen);
 	}
+
+	/**
+	 * set registration sceen
+	 */
 	public void setRegistrationScreen() {
 		registrationScreen= new RegistrationScreen(this);
 		setScreen(registrationScreen);
 	}
+
+	/**
+	 * set Menu screen
+	 * @param newUserBool
+	 * @param firstEntrance
+	 */
 	public void setMenuScreen(boolean newUserBool, boolean firstEntrance) {
 		this.newUserBool = newUserBool;
 		this.firstEntrance = firstEntrance;
@@ -182,14 +197,27 @@ public class StartClass extends Game implements ApplicationListener {
 		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 	}
+
+	/**
+	 * set choice screen
+	 */
 	public void setChoiceScreen() {
 		choiceScreen = new ChoiceScreen(this);
 		setScreen(choiceScreen);
 	}
+
+	/**
+	 * set game screen
+	 */
 	public void setGameScreen() {
 		gameScreen = new GameScreen(this, getGameMode());
 		setScreen(gameScreen);
 	}
+
+	/**
+	 * set Game screen
+	 * @param newHighScore
+	 */
 	public void setGameOverScreen(boolean newHighScore) {
 		this.newHighScore = newHighScore;
 		if(newHighScore) highScoreString = "New high score :)";
@@ -197,19 +225,34 @@ public class StartClass extends Game implements ApplicationListener {
 		gameOverScreen = new GameOverScreen(this, score, newHighScore);
 		setScreen(gameOverScreen);
 	}
+
+	/**
+	 * set shop screen
+	 */
 	public void setShopScreen(){
 		shopScreen = new ShopScreen(this);
 		setScreen(shopScreen);
 	}
+
+	/**
+	 * set info screen
+	 */
 	public void setInfoScreen(){
 		infoScreen = new InfoScreen(this);
 		setScreen(infoScreen);
 	}
 
+	/**
+	 * set user
+	 * @param user
+	 */
 	public void setUser (User user){
 		this.user = user;
 	}
 
+	/**
+	 * render screen
+	 */
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -226,34 +269,60 @@ public class StartClass extends Game implements ApplicationListener {
 		}
 	}
 
+	/**
+	 * set Game mode
+	 * @param gameMode
+	 */
 	public void setGameMode(int gameMode){
 		this.gameMode = gameMode;
 	}
 
+	/**
+	 * set score
+	 * @param score
+	 */
 	public void setScore(long score){
 		this.score = score;
 	}
 
+	/**
+	 * get game mode
+	 * @return
+	 */
 	public int getGameMode(){
 		return gameMode;
 	}
 
+	/**
+	 * dispose
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();
 	}
 
+	/**
+	 * resize screen
+	 * @param width
+	 * @param height
+	 */
 	@Override
 	public void resize(int width, int height) {
 
 		super.resize(width, height);
 	}
 
+	/**
+	 * pause
+	 */
 	@Override
 	public void pause() {
 		super.pause();
 	}
 
+	/**
+	 * resume
+	 */
 	@Override
 	public void resume() {
 		super.resume();

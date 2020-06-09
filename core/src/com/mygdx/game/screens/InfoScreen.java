@@ -18,6 +18,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 
 public class InfoScreen implements Screen {
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
 
@@ -40,7 +43,10 @@ public class InfoScreen implements Screen {
     Label linkLabel;
 
 
-
+    /**
+     * indo screen constructor
+     * @param startClass
+     */
     public InfoScreen(final StartClass startClass){
         this.startClass = startClass;
         stage = new Stage(new ScreenViewport());
@@ -160,12 +166,18 @@ public class InfoScreen implements Screen {
         linkLabel.setVisible(false);
     }
 
-
+    /**
+     * show screen
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * reneder screen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -235,6 +247,9 @@ public class InfoScreen implements Screen {
 
     }
 
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         stage.dispose();

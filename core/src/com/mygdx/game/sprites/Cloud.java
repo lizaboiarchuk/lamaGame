@@ -9,7 +9,9 @@ import com.mygdx.game.bonuses.*;
 import java.util.Random;
 
 public class Cloud {
-
+    /**
+     * parameters
+     */
     public boolean moveable;
     public boolean bad;
     public boolean visited;
@@ -36,8 +38,11 @@ public class Cloud {
     Random random = new Random();
 
 
-
-    //constructor
+    /**
+     * constructor
+     * @param y
+     * @param c
+     */
     public Cloud(float y, Cloud c) {
         visited=false;
         cloud= new Texture("cloud1.png");

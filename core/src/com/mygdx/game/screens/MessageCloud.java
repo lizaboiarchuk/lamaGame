@@ -13,6 +13,9 @@ import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.StartClass;
 
 public class MessageCloud implements Screen {
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
     Image cloudImage;
@@ -22,6 +25,12 @@ public class MessageCloud implements Screen {
     private long delayLong = 2000L;
     private float delay = 2;
 
+    /**
+     * message cloud constructor
+     * @param startClass
+     * @param stage
+     * @param message
+     */
     public MessageCloud(StartClass startClass, Stage stage, String message){
         this.startClass = startClass;
         this.stage = stage;
@@ -51,6 +60,10 @@ public class MessageCloud implements Screen {
 
     }
 
+    /**
+     * render screen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -80,6 +93,9 @@ public class MessageCloud implements Screen {
 
     }
 
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         cloudImage.clear();

@@ -6,7 +6,11 @@ import com.mygdx.game.sprites.Cloud;
 
 public class Multiplier extends Bonus{
 
-    //create a coin on a specific cloud if true
+    /**
+     * create double bonus on cloud if true
+     * @param cloud
+     * @param exists
+     */
     public Multiplier(Vector2 cloud, boolean exists) {
         super(cloud,exists);
         this.exists=exists;

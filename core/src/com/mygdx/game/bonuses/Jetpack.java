@@ -5,9 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.sprites.Cloud;
 
 public class Jetpack extends Bonus{
-
-
-    //create a coin on a specific cloud if true
+    /**
+     * create rocket bonus on cloud if true
+     * @param cloud
+     * @param exists
+     */
     public Jetpack(Vector2 cloud, boolean exists) {
         super(cloud,exists);
         this.exists=exists;

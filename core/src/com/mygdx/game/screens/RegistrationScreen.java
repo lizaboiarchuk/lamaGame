@@ -28,6 +28,9 @@ import java.util.Scanner;
 
 public class RegistrationScreen implements Screen {
 
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
 
@@ -54,6 +57,10 @@ public class RegistrationScreen implements Screen {
     ImageButton musicOnSmallButton;
     ImageButton musicOffSmallButton;
 
+    /**
+     * registration screen constructor
+     * @param startClass
+     */
     public RegistrationScreen(final StartClass startClass){
         this.startClass = startClass;
         stage = new Stage(new ScreenViewport());
@@ -137,8 +144,8 @@ public class RegistrationScreen implements Screen {
                     newUser.setRocketPurchased(0);
                     newUser.setDoubleBonusPurchased(0);
                     try {
-                        FileWriter fileWriter  = new FileWriter("/users/lizaboiarchuk/desktop/users.txt");
-                        FileReader fr = new FileReader("/users/lizaboiarchuk/desktop/users.txt");
+                        FileWriter fileWriter  = new FileWriter("C:\\jl/users.txt");
+                        FileReader fr = new FileReader("C:\\jl/users.txt");
                         Scanner sc = new Scanner(fr);
                         while (sc.hasNextLine()) {
                             String p = sc.nextLine();
@@ -210,8 +217,8 @@ public class RegistrationScreen implements Screen {
                     newUser.setRocketPurchased(0);
                     newUser.setDoubleBonusPurchased(0);
                     try {
-                        FileWriter fileWriter  = new FileWriter("/users/lizaboiarchuk/desktop/users.txt");
-                        FileReader fr = new FileReader("/users/lizaboiarchuk/desktop/users.txt");
+                        FileWriter fileWriter  = new FileWriter("C:\\jl/users.txt");
+                        FileReader fr = new FileReader("C:\\jl/users.txt");
                         Scanner sc = new Scanner(fr);
                         while (sc.hasNextLine()) {
                             String p = sc.nextLine();
@@ -307,11 +314,18 @@ public class RegistrationScreen implements Screen {
         musicOnSmallButton.setVisible(false);
     }
 
+    /**
+     * show stage
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * render screen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -347,6 +361,9 @@ public class RegistrationScreen implements Screen {
 
     }
 
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         stage.dispose();

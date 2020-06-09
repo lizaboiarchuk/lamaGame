@@ -22,6 +22,9 @@ import com.mygdx.game.sprites.Tube;
 import java.util.ArrayList;
 
 public class ShopScreen implements Screen {
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
 
@@ -56,7 +59,10 @@ public class ShopScreen implements Screen {
     Label bonusesNumberLabel[];
     int bonusesNumber[];
 
-    
+    /**
+     * shopscreen constructor
+     * @param startClass
+     */
     public ShopScreen(final StartClass startClass){
         this.startClass = startClass;
         stage = new Stage(new ScreenViewport());
@@ -288,11 +294,18 @@ public class ShopScreen implements Screen {
         for (int i = 0; i < 4; i++) stage.addActor(bonusesNumberLabel[i]);
     }
 
+    /**
+     * show stage
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * render screen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -407,6 +420,9 @@ public class ShopScreen implements Screen {
 
     }
 
+    /**
+     * dispose screen
+     */
     @Override
     public void dispose() {
         stage.dispose();

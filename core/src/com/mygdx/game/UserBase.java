@@ -12,10 +12,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserBase {
+    /**
+     * parameters
+     */
     public ArrayList<User> users;
     int userNumber;
     public String ss="";
 
+    /**
+     * create userbase
+     */
     UserBase() {
         users = new ArrayList<User>();
         userNumber=0;
@@ -24,6 +30,11 @@ public class UserBase {
         users.add(new User("l", "p"));
     }
 
+    /**
+     * check user login and password
+     * @param u
+     * @return
+     */
     public boolean checkUser(User u) {
         boolean res = false;
         for (User k:users) {
@@ -35,6 +46,11 @@ public class UserBase {
         return res;
     }
 
+    /**
+     * find user
+     * @param u
+     * @return
+     */
     public User returnUser(User u) {
         User res = null;
         for (User k:users) {
@@ -47,9 +63,13 @@ public class UserBase {
     }
 
 
+    /**
+     * update user info
+     * @throws IOException
+     */
     public void renew() throws IOException {
         users = new ArrayList<User>();
-        FileReader fileReader = new FileReader("/users/lizaboiarchuk/desktop/users.txt");
+        FileReader fileReader = new FileReader("C:\\jl/users.txt");
         Scanner sc = new Scanner(fileReader);
         String s="";
 
@@ -76,19 +96,20 @@ public class UserBase {
     }
 
 
+    /**
+     * write user info to file
+     */
     public void write() {
         try {
             ss="";
-            FileWriter fileWriter  = new FileWriter("/users/lizaboiarchuk/desktop/users.txt");
+            FileWriter fileWriter  = new FileWriter("C:\\jl/users.txt");
             for (User newUser:users) {
                 String k = newUser.name + " " + newUser.login + " " + newUser.password + " " + newUser.highScore + " " + newUser.money + " " + newUser.magnetPurchased+ " " + newUser.wingsPurchased+ " " + newUser.rocketPurchased +" " + newUser.doubleBonusPurchased + " k";
                 fileWriter.append(k+ System. lineSeparator());
-              //  fileWriter.write(k);
+
             }
 
             fileWriter.close();
-       //     ss+=" k";
-        //    System.out.println(ss+ " k" + "write");
 
         } catch (IOException e) {
             e.printStackTrace();

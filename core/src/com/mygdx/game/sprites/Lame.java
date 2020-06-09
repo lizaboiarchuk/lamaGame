@@ -9,6 +9,9 @@ import com.mygdx.game.StartClass;
 
 public class Lame {
 
+    /**
+     * parameters
+     */
     public Vector3 position;
     public Vector3 velocity;
 
@@ -27,9 +30,12 @@ public class Lame {
     private StartClass game;
 
 
-
-
-    //constructor
+    /**
+     * Lama constructor
+     * @param x
+     * @param y
+     * @param startClass
+     */
     public Lame (float x, float y, StartClass startClass) {
         currentSprite = new Sprite(new Texture("lameLeftStay.PNG"));
         width =  currentSprite.getWidth();
@@ -46,7 +52,10 @@ public class Lame {
         jumpSound = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
     }
 
-    //updating position
+    /**
+     * update Lama position
+     * @param dt
+     */
     public void update(float dt) {
         if (position.y>0)
             velocity.add(0, GRAVITY,0);
@@ -62,8 +71,9 @@ public class Lame {
     }
 
 
-
-    //"UP" key is pressed
+    /**
+     * "UP" key is pressed
+     */
     public void jump() {
         GRAVITY=-15;
         if (isOnCloud==true) {
@@ -94,8 +104,9 @@ public class Lame {
     }
 
 
-
-    // "LEFT" key is pressed
+    /**
+     *  "LEFT" key is pressed
+     */
     public void left() {
         lookingLeft=true;
         if (position.x>0)
@@ -124,8 +135,9 @@ public class Lame {
     }
 
 
-
-    // "RIGHT" key is pressed
+    /**
+     * "RIGHT" key is pressed
+     */
     public void right() {
         lookingLeft = false;
         if (position.x < StartClass.WIDTH / 2 - currentSprite.getWidth() / 2)
@@ -154,7 +166,12 @@ public class Lame {
         }
     }
 
-
+    /**
+     * lama on cloud
+     * @param score
+     * @param v
+     * @return
+     */
     public long onCloud(long score, boolean v) {
         if (!isOnCloud) {
             isOnCloud=true;
@@ -183,10 +200,9 @@ public class Lame {
     }
 
 
-
-
-
-
+    /**
+     * init sprites
+     */
     private void initSprites() {
         sprites = new Sprite[5][4];
 
@@ -215,38 +231,5 @@ public class Lame {
         sprites[4][2] = new Sprite(new Texture("lamaDoubleLeftMove.PNG"));
         sprites[4][3] = new Sprite(new Texture("LamaDoubleRightMove.PNG"));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

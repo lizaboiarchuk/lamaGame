@@ -18,7 +18,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 
 public class MenuScreen implements Screen {
-
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
 
@@ -33,6 +35,10 @@ public class MenuScreen implements Screen {
     ImageButton musicOffSmallButton;
     MessageCloud messageCloud;
 
+    /**
+     * menu screen constructor
+     * @param startClass
+     */
     public MenuScreen(final StartClass startClass){
         this.startClass = startClass;
         startClass.userBase.write();
@@ -126,11 +132,18 @@ public class MenuScreen implements Screen {
         if(startClass.firstEntrance) messageCloud = new MessageCloud(startClass, stage, startClass.userWelcomeString);
     }
 
+    /**
+     * show screen
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * render
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -166,6 +179,9 @@ public class MenuScreen implements Screen {
 
     }
 
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         stage.dispose();

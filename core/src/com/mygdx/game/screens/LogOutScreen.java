@@ -18,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.StartClass;
 
 public class LogOutScreen implements Screen {
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
     Label warningLabel;
@@ -27,7 +30,11 @@ public class LogOutScreen implements Screen {
     ImageButton cancelButton;
     Label areYouSureLabel;
 
-
+    /**
+     * log out screen constructor
+     * @param startClass
+     * @param stage
+     */
     public LogOutScreen(final StartClass startClass, final Stage stage){
         this.startClass = startClass;
         this.stage = stage;
@@ -77,12 +84,18 @@ public class LogOutScreen implements Screen {
 
     }
 
-
+    /**
+     * show screen
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * render
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -111,6 +124,9 @@ public class LogOutScreen implements Screen {
 
     }
 
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         logoutBoard.addAction(Actions.removeActor());

@@ -19,7 +19,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.StartClass;
 
 public class ChoiceScreen implements Screen {
-
+    /**
+     * parameters
+     */
     private StartClass startClass;
     private Stage stage;
 
@@ -38,6 +40,10 @@ public class ChoiceScreen implements Screen {
     Label currentScore;
     Label currentScoreDigits;
 
+    /**
+     * choice screen constructor
+     * @param startClass
+     */
     public ChoiceScreen(final StartClass startClass){
         this.startClass = startClass;
         stage = new Stage(new ScreenViewport());
@@ -176,11 +182,18 @@ public class ChoiceScreen implements Screen {
             }, 2f);
     }
 
+    /**
+     * show screen
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * render screen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -216,6 +229,9 @@ public class ChoiceScreen implements Screen {
 
     }
 
+    /**
+     * dispose
+     */
     @Override
     public void dispose() {
         stage.dispose();
