@@ -8,24 +8,23 @@
     <node x="2233.0" y="738.0">com.mygdx.game.screens.GameOverScreen</node>
     <node x="2534.0" y="672.0">com.mygdx.game.screens.InfoScreen</node>
     <node x="839.0" y="1789.0">com.mygdx.game.User</node>
-    <node x="1086.0" y="2022.0">com.mygdx.game.bonuses.Multiplier</node>
-    <node x="1750.0" y="793.0">com.mygdx.game.screens.LogOutScreen</node>
-    <node x="2145.0" y="1789.0">com.mygdx.game.UserBase</node>
-    <node x="1702.0" y="2022.0">com.mygdx.game.bonuses.Jetpack</node>
-    <node x="348.0" y="1789.0">com.mygdx.game.sprites.Cloud</node>
     <node x="1991.0" y="265.0">com.mygdx.game.screens.GameScreen</node>
     <node x="591.0" y="1789.0">com.mygdx.game.sprites.Lame</node>
     <node x="1504.0" y="1789.0">com.mygdx.game.bonuses.Bonus</node>
+    <node x="1086.0" y="2022.0">com.mygdx.game.bonuses.Multiplier</node>
     <node x="536.0" y="705.0">com.mygdx.game.screens.ChoiceScreen</node>
     <node x="2370.0" y="1789.0">com.mygdx.game.Info</node>
     <node x="1508.0" y="2022.0">com.mygdx.game.bonuses.Coin</node>
+    <node x="1750.0" y="793.0">com.mygdx.game.screens.LogOutScreen</node>
     <node x="2560.0" y="1789.0">com.mygdx.game.sprites.Tube</node>
+    <node x="2145.0" y="1789.0">com.mygdx.game.UserBase</node>
     <node x="1294.5" y="0.0">com.badlogic.gdx.Screen</node>
     <node x="1260.0" y="782.0">com.mygdx.game.screens.PauseScreen</node>
-    <node x="1059.0" y="859.0">com.mygdx.game.Registration</node>
     <node x="791.0" y="529.0">com.mygdx.game.screens.ShopScreen</node>
+    <node x="1702.0" y="2022.0">com.mygdx.game.bonuses.Jetpack</node>
     <node x="255.0" y="793.0">com.mygdx.game.screens.MessageCloud</node>
     <node x="1910.0" y="2022.0">com.mygdx.game.bonuses.Magnet</node>
+    <node x="348.0" y="1789.0">com.mygdx.game.sprites.Cloud</node>
     <node x="1495.0" y="650.0">com.mygdx.game.screens.AuthorizationScreen</node>
     <node x="1306.0" y="2022.0">com.mygdx.game.bonuses.Wings</node>
   </nodes>
@@ -70,12 +69,6 @@
     <edge source="com.mygdx.game.screens.PauseScreen" target="com.badlogic.gdx.Screen">
       <point x="0.0" y="-222.5" />
       <point x="0.0" y="92.5" />
-    </edge>
-    <edge source="com.mygdx.game.Registration" target="com.badlogic.gdx.Screen">
-      <point x="0.0" y="-145.5" />
-      <point x="1149.5" y="245.0" />
-      <point x="1354.2272727272727" y="245.0" />
-      <point x="-13.272727272727252" y="92.5" />
     </edge>
     <edge source="com.mygdx.game.bonuses.Multiplier" target="com.mygdx.game.bonuses.Bonus">
       <point x="0.0" y="-26.5" />
@@ -124,7 +117,7 @@
       <point x="-39.818181818181756" y="92.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.363265306122449" x="1384.5" y="1646.0000000000002" />
+  <settings layout="Hierarchic Group" zoom="0.1533613445378151" x="1384.5" y="1656.0000000000002" />
   <SelectedNodes>
     <node>com.mygdx.game.bonuses.Wings</node>
   </SelectedNodes>
